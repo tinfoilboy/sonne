@@ -1,7 +1,11 @@
 #include "pch.hpp"
 
 #include "counter.hpp"
+#include "config.hpp"
 
+/*
+ * Main command-line entry point for the program.
+ */
 int main(int argc, char** argv)
 {
     fmt::print("computare 1.0.0\n");
@@ -31,6 +35,10 @@ int main(int argc, char** argv)
 
     auto result = options.parse(argc, argv);
 
+    Config config;
+
+    config.Parse(".computare.yml");
+
     // get the ignore flag to see whether to parse gitignore
     bool useIgnore = !(result["no-ignore"].as<bool>());
 
@@ -51,13 +59,16 @@ int main(int argc, char** argv)
 
         Counter counter(file);
         
-        FileInfo info = counter.Count();
+        FileInfo info = counter.Count(config);
 
         auto end = std::chrono::system_clock::now();
 
         std::chrono::duration<double> elapsed = end - start;
 
-        fmt::print("finished counting in {}s!\n", elapsed.count());
+        fmt::print(
+            "finished counting in {}ms!\n",
+            std::chrono::duration_cast<std::chrono::milliseconds>(elapsed).count()
+        );
 
         PrintSingleFileInfo(info);
 

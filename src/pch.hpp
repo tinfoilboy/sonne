@@ -5,10 +5,14 @@
 #include <cstdint>
 #include <string>
 #include <string_view>
+#include <map>
 #include <chrono>
+#include <memory>
+#include <algorithm>
 
 #include "cxxopt.hpp"
 #include <fmt/format.h>
+#include <yaml-cpp/yaml.h>
 
 /**
  * Print a fatal error to the console and exit the program.

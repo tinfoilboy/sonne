@@ -1,0 +1,73 @@
+languages:
+  -
+    extensions: [ 'c', 'cpp', 'cxx', 'cc', 'C' ]
+    language: C/C++ Source
+    line-comment: //
+    block-comment-begin: /*
+    block-comment-end: '*/'
+  -
+    extensions: [ 'h', 'hpp', 'hxx', 'hh', 'H' ]
+    language: C/C++ Header
+    line-comment: //
+    block-comment-begin: /*
+    block-comment-end: '*/'
+  -
+    extensions: [ 'py' ]
+    language: Python
+    line-comment: \#
+  -
+    extensions: [ 'java' ]
+    language: Java
+    line-comment: //
+    block-comment-begin: /*
+    block-comment-end: '*/'
+  -
+    extensions: [ 'kt', 'kts' ]
+    language: Kotlin
+    line-comment: //
+    block-comment-begin: /*
+    block-comment-end: '*/'
+  -
+    extensions: [ 'rs' ]
+    language: Rust
+    line-comment: //
+    block-comment-begin: /*
+    block-comment-end: '*/'
+  -
+    extensions: [ 'js' ]
+    language: JavaScript
+    line-comment: /
+    block-comment-begin: /*
+    block-comment-end: '*/'
+  -
+    extensions: [ 'css' ]
+    language: CSS
+    block-comment-begin: /*
+    block-comment-end: '*/'
+  -
+    extensions: [ 'html' ]
+    language: HTML
+    block-comment-begin: <!--
+    block-comment-end: -->
+  -
+    extensions: [ 'ts', 'tsx' ]
+    language: TypeScript
+    line-comment: //
+    block-comment-begin: /*
+    block-comment-end: '*/'
+  -
+    extensions: [ 'rb' ]
+    language: Ruby
+    line-comment: \#
+  -
+    extensions: [ 'lua' ]
+    language: Lua
+    line-comment: --
+    block-comment-begin: --[[
+    block-comment-end: --]]
+  -
+    extensions: [ 'd' ]
+    language: D
+    line-comment: //
+    block-comment-begin: /*
+    block-comment-end: '*/'
