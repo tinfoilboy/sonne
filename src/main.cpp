@@ -4,9 +4,9 @@
 
 int main(int argc, char** argv)
 {
-    Info("computare 1.0.0");
-    Info("a simple and fast way to count lines of code.");
-    Info("");
+    fmt::print("computare 1.0.0\n");
+    fmt::print("a simple and fast way to count lines of code.\n");
+    fmt::print("\n");
 
     cxxopts::Options options(
         "computare",
@@ -45,7 +45,7 @@ int main(int argc, char** argv)
     {
         std::string file = result["f"].as<std::string>();
 
-        Info("counting file " + file + "...");
+        fmt::print("counting file {}...\n", file);
 
         auto start = std::chrono::system_clock::now();
 
@@ -57,7 +57,7 @@ int main(int argc, char** argv)
 
         std::chrono::duration<double> elapsed = end - start;
 
-        Info("finished counting in " + std::to_string(elapsed.count()) + "s!");
+        fmt::print("finished counting in {}s!\n", elapsed.count());
 
         PrintSingleFileInfo(info);
 

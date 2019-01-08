@@ -12,41 +12,12 @@ struct FileInfo
 
 static inline void PrintSingleFileInfo(const FileInfo& info)
 {
-    std::cout << "Language: "
-              << termcolor::bold
-              << info.language
-              << termcolor::reset
-              << std::endl;
-
-    std::cout << "Total Line Count: "
-              << termcolor::bold
-              << info.totalLines
-              << termcolor::reset
-              << std::endl;
-
-    std::cout << "Empty Lines: "
-              << termcolor::bold
-              << info.emptyLines
-              << termcolor::reset
-              << std::endl;
-    
-    std::cout << "Code Lines: "
-              << termcolor::bold
-              << info.codeLines
-              << termcolor::reset
-              << std::endl;
-
-    std::cout << "Comment Lines: "
-              << termcolor::bold
-              << info.commentLines
-              << termcolor::reset
-              << std::endl;
-
-    std::cout << "Average Line Length: "
-              << termcolor::bold
-              << info.averageLineLength
-              << termcolor::reset
-              << std::endl;
+    fmt::print("Language: {}\n", info.language);
+    fmt::print("Total Line Count: {}\n", info.totalLines);
+    fmt::print("Empty Lines: {}\n", info.emptyLines);
+    fmt::print("Code Lines: {}\n", info.codeLines);
+    fmt::print("Comment Lines: {}\n", info.commentLines);
+    fmt::print("Average Line Length: {}\n", info.averageLineLength);
 }
 
 /**
