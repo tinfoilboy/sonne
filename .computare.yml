@@ -71,3 +71,24 @@ languages:
     line-comment: //
     block-comment-begin: /*
     block-comment-end: '*/'
+  -
+    extensions: [ 'cs' ]
+    language: C#
+    line-comment: //
+    block-comment-begin: /*
+    block-comment-end: '*/'
+  -
+    extensions: [ 'php', 'php3', 'php4', 'php5' ]
+    language: PHP
+    line-comment: //
+    block-comment-begin: /*
+    block-comment-end: '*/'
+  -
+    extensions: [ 'json' ]
+    language: JSON
+  -
+    extensions: [ 'go' ]
+    language: Go
+    line-comment: //
+    block-comment-begin: /*
+    block-comment-end: '*/'
