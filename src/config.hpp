@@ -21,9 +21,9 @@ class Config
 public:
     void Parse(const std::string& path);
 
-    bool HasLanguage(const std::string& extension);
+    bool HasLanguage(const std::string& extension) const;
 
-    std::shared_ptr<Language> GetLanguage(const std::string& extension);
+    std::shared_ptr<Language> GetLanguage(const std::string& extension) const;
 
 private:
     std::map<std::string, std::shared_ptr<Language>> m_languages;

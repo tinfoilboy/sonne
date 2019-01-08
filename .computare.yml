@@ -14,7 +14,7 @@ languages:
   -
     extensions: [ 'py' ]
     language: Python
-    line-comment: \#
+    line-comment: '#'
   -
     extensions: [ 'java' ]
     language: Java

@@ -9,6 +9,12 @@
 #include <chrono>
 #include <memory>
 #include <algorithm>
+#include <vector>
+#include <queue>
+#include <thread>
+#include <condition_variable>
+#include <mutex>
+#include <experimental/filesystem>
 
 #include "cxxopt.hpp"
 #include <fmt/format.h>

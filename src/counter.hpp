@@ -2,12 +2,24 @@
 
 struct FileInfo
 {
-    std::string language          = "";
+    std::string language          = "Plain Text";
+    size_t      files             = 0;
     size_t      totalLines        = 0;
     size_t      emptyLines        = 0;
     size_t      codeLines         = 0;
     size_t      commentLines      = 0;
     size_t      averageLineLength = 0;
+
+    FileInfo& operator+=(const FileInfo& info)
+    {
+        this->files             += info.files;
+        this->totalLines        += info.totalLines;
+        this->emptyLines        += info.emptyLines;
+        this->codeLines         += info.codeLines;
+        this->commentLines      += info.commentLines;
+
+        return *this;
+    }
 };
 
 enum class CommentCheckState : uint8_t
@@ -29,6 +41,9 @@ static inline void PrintSingleFileInfo(const FileInfo& info)
         fmt::print("Language: {}\n", info.language);
     
     fmt::print("Total Line Count: {}\n", info.totalLines);
+
+    if (info.files > 0)
+        fmt::print("Total Files: {}\n", info.files);
 
     if (info.emptyLines > 0)
         fmt::print("Empty Lines: {}\n", info.emptyLines);
@@ -61,7 +76,7 @@ public:
      * 
      * Pass in a config for language support.
      */
-    FileInfo Count(Config& config);
+    FileInfo Count(const Config& config);
 
 private:
     std::string m_path;

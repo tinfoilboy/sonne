@@ -9,7 +9,7 @@ Counter::Counter(const std::string& path)
 {
 }
 
-FileInfo Counter::Count(Config& config)
+FileInfo Counter::Count(const Config& config)
 {
     FileInfo info = {};
 
@@ -21,10 +21,7 @@ FileInfo Counter::Count(Config& config)
         language = config.GetLanguage(ext);
 
     if (language != nullptr)
-    {
         info.language = language->name;
-        fmt::print("File language: {}\n", language->name);
-    }
 
     std::ifstream in;
     in.open(m_path);
@@ -107,8 +104,30 @@ FileInfo Counter::Count(Config& config)
             )
         )
         {
-            checkState    = CommentCheckState::CHECKING;
-            currentCheck += current;
+            if (
+                lineComment.size()       == 1 ||
+                blockCommentBegin.size() == 1 ||
+                blockCommentEnd.size()   == 1
+            )
+            {
+                if (current == lineComment[0])
+                    countState = CountState::LINE_COMMENT;
+                
+                if (current == blockCommentBegin[0])
+                    countState = CountState::BLOCK_COMMENT;
+
+                if (current == blockCommentEnd[0])
+                    countState = CountState::REGULAR;
+
+                currentLineLength++;
+
+                continue;
+            }
+            else
+            {
+                checkState    = CommentCheckState::CHECKING;
+                currentCheck += current;
+            }
         }
 
         if (
@@ -155,7 +174,8 @@ FileInfo Counter::Count(Config& config)
         currentLineLength++;
     }
 
-    info.averageLineLength /= info.totalLines;
+    if (info.averageLineLength > 0)
+        info.averageLineLength /= info.totalLines;
 
     return info;
 }

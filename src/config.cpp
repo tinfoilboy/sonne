@@ -37,12 +37,12 @@ void Config::Parse(const std::string& path)
     }
 }
 
-bool Config::HasLanguage(const std::string& extension)
+bool Config::HasLanguage(const std::string& extension) const
 {
     return m_languages.count(extension) > 0;
 }
 
-std::shared_ptr<Language> Config::GetLanguage(const std::string& extension)
+std::shared_ptr<Language> Config::GetLanguage(const std::string& extension) const
 {
     return m_languages.at(extension);
 }

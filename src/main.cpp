@@ -2,6 +2,7 @@
 
 #include "counter.hpp"
 #include "config.hpp"
+#include "directory_counter.hpp"
 
 /*
  * Main command-line entry point for the program.
@@ -10,6 +11,7 @@ int main(int argc, char** argv)
 {
     fmt::print("computare 1.0.0\n");
     fmt::print("a simple and fast way to count lines of code.\n");
+    fmt::print("use -h or --help to see how to use.\n");
     fmt::print("\n");
 
     cxxopts::Options options(
@@ -31,9 +33,20 @@ int main(int argc, char** argv)
             "d,dir",
             "The directory to recursively walk and count",
             cxxopts::value<std::string>()
+        )
+        (
+            "h,help",
+            "Print help for the program"
         );
 
     auto result = options.parse(argc, argv);
+
+    if (result.count("h"))
+    {
+        fmt::print("{}\n", options.help());
+
+        return 0;
+    }
 
     Config config;
 
@@ -70,7 +83,38 @@ int main(int argc, char** argv)
             std::chrono::duration_cast<std::chrono::milliseconds>(elapsed).count()
         );
 
+        fmt::print("\n");
+
         PrintSingleFileInfo(info);
+
+        return 0;
+    }
+
+    // run the recursive directory counter on the passed in directory
+    if (result.count("d"))
+    {
+        std::string dir = result["d"].as<std::string>();
+
+        fmt::print("counting directory {}...\n", dir);
+
+        auto start = std::chrono::system_clock::now();
+
+        DirectoryCounter counter(dir);
+
+        DirectoryInfo info = counter.Run(config);
+
+        auto end = std::chrono::system_clock::now();
+
+        std::chrono::duration<double> elapsed = end - start;
+
+        fmt::print(
+            "finished counting in {}ms!\n",
+            std::chrono::duration_cast<std::chrono::milliseconds>(elapsed).count()
+        );
+
+        fmt::print("\n");
+
+        PrintDirectoryInfo(info);
 
         return 0;
     }
