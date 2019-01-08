@@ -25,14 +25,18 @@ enum class CountState : uint8_t
 
 static inline void PrintSingleFileInfo(const FileInfo& info)
 {
-    fmt::print("Language: {}\n", info.language);
-    fmt::print("Total Line Count: {}\n", info.totalLines);
-    fmt::print("Empty Lines: {}\n", info.emptyLines);
+    if (!info.language.empty())
+        fmt::print("Language: {}\n", info.language);
     
-    if (info.codeLines >= 0)
+    fmt::print("Total Line Count: {}\n", info.totalLines);
+
+    if (info.emptyLines > 0)
+        fmt::print("Empty Lines: {}\n", info.emptyLines);
+    
+    if (info.codeLines > 0)
         fmt::print("Code Lines: {}\n", info.codeLines);
     
-    if (info.commentLines >= 0)
+    if (info.commentLines > 0)
         fmt::print("Comment Lines: {}\n", info.commentLines);
     
     fmt::print("Average Line Length: {}\n", info.averageLineLength);
