@@ -9,7 +9,7 @@ Computare uses CMake for building.
 
 ## Dependencies
 
-Computare depends on [cxxopts](https://github.com/jarro2783/cxxopts) for parsing command line arguments for the program as well as [termcolor](https://github.com/ikalnytskyi/termcolor).
+Computare depends on [cxxopts](https://github.com/jarro2783/cxxopts) for parsing command line arguments for the program as well as [fmt](https://github.com/fmtlib/fmt) for nice print formatting and [yaml-cpp](https://github.com/jbeder/yaml-cpp) for the config.
 
 ## License
 
