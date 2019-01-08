@@ -34,66 +34,63 @@ DirectoryInfo DirectoryCounter::Run(const Config& config)
             {
                 std::unique_lock<std::mutex> lock(m_mutex);
 
-                m_condition.wait(lock, [this] {
-                    return this->m_finished || !this->m_fileQueue.empty();
+                m_condition.wait(lock, [this]() {
+                    return m_finished || !m_fileQueue.empty();
                 });
 
                 if (m_finished && m_fileQueue.empty())
                 {
                     break;
                 }
-
-                m_workingThreads++;
                 
-                std::string file = m_fileQueue.front();
-                    
-                m_fileQueue.pop();
-
-                Counter counter(file);
-                FileInfo counted = counter.Count(config);
-
-                counted.files = 1;
-
-                if (info.languageTotals.count(counted.language) > 0)
+                if (!m_fileQueue.empty())
                 {
-                    auto find = info.languageTotals.find(counted.language);
+                    std::string file = m_fileQueue.front();
+                        
+                    m_fileQueue.pop();
 
-                    find->second += counted;
+                    Counter counter(file);
+                    FileInfo counted = counter.Count(config);
+
+                    counted.files = 1;
+
+                    if (info.languageTotals.count(counted.language) > 0)
+                    {
+                        auto find = info.languageTotals.find(counted.language);
+
+                        find->second += counted;
+                    }
+                    else
+                    {
+                        info.languageTotals.insert(std::make_pair(
+                            counted.language,
+                            counted
+                        ));
+                    }
+
+                    info.totals += counted;
                 }
-                else
-                {
-                    info.languageTotals.insert(std::make_pair(
-                        counted.language,
-                        counted
-                    ));
-                }
-
-                info.totals += counted;
-
-                m_workingThreads--;
             }
         }));
     }
 
     for (auto& entry : std::experimental::filesystem::recursive_directory_iterator(m_path))
     {
+        std::lock_guard<std::mutex> lock(m_mutex);
         m_fileQueue.push(entry.path().string());
 
         m_condition.notify_one();
     }
 
-    while (true)
+    while (!m_fileQueue.empty())
     {
-        if (m_fileQueue.empty())
-        {
-            std::unique_lock<std::mutex> lock(m_mutex);
-            m_finished = true;
-
-            m_condition.notify_all();
-
-            break;
-        }
+        m_condition.notify_one();
     }
+
+    std::lock_guard<std::mutex> lock(m_mutex);
+    m_finished = true;
+
+    m_condition.notify_all();
 
     return info;
 }

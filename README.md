@@ -1,7 +1,7 @@
 # computare
 
 A fast and simple program for counting lines in files as an alternative to programs like cloc written in C++.
-Designed to be more extensible respecting files like `.gitignore` or a custom `.computareignore` file.
+Designed to be more extensible and to allow for 
 
 ## Building
 

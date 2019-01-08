@@ -121,6 +121,4 @@ private:
 
     bool m_finished = false;
 
-    uint32_t m_workingThreads = 0;
-
 };
