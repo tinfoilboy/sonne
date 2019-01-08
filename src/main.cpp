@@ -35,6 +35,11 @@ int main(int argc, char** argv)
             cxxopts::value<std::string>()
         )
         (
+            "c,config",
+            "A path to the config file to use for computare",
+            cxxopts::value<std::string>()
+        )
+        (
             "h,help",
             "Print help for the program"
         );
@@ -48,9 +53,14 @@ int main(int argc, char** argv)
         return 0;
     }
 
+    std::string configPath = ".computare.yml";
+
+    if (result.count("c"))
+        configPath = result["c"].as<std::string>();
+
     Config config;
 
-    config.Parse(".computare.yml");
+    config.Parse(configPath);
 
     // get the ignore flag to see whether to parse gitignore
     bool useIgnore = !(result["no-ignore"].as<bool>());
