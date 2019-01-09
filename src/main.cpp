@@ -9,26 +9,9 @@
  */
 int main(int argc, char** argv)
 {
-    fmt::print("computare 1.0.0\n");
-    fmt::print("a simple and fast way to count lines of code.\n");
-    fmt::print("use -h or --help to see how to use.\n");
-    fmt::print("\n");
-
-    char exePath[PATH_MAX + 1];
-
-#ifdef __linux__
-    realpath(argv[0], exePath);
-#elif _WIN32
-    _fullpath(exePath, argv[0], sizeof(exePath));
-#endif
-
-    fmt::print("full path: {}\n", std::experimental::filesystem::path(exePath).parent_path().string());
-
-    std::string rootPath = std::experimental::filesystem::path(exePath).parent_path().string();
-
     cxxopts::Options options(
         "computare",
-        "A fast and simple line of code counter."
+        "a simple and configurable program for counting lines in files"
     );
 
     options.add_options()
@@ -69,6 +52,21 @@ int main(int argc, char** argv)
 
         return 0;
     }
+
+    fmt::print("computare 1.0.0\n");
+    fmt::print("a simple and configurable program for counting lines in files.\n");
+    fmt::print("use -h or --help to see how to use.\n");
+    fmt::print("\n");
+
+    char exePath[PATH_MAX + 1];
+
+#ifdef __linux__
+    realpath(argv[0], exePath);
+#elif _WIN32
+    _fullpath(exePath, argv[0], sizeof(exePath));
+#endif
+
+    std::string rootPath = std::experimental::filesystem::path(exePath).parent_path().string();
 
     std::string configPath = ".computare.yml";
 

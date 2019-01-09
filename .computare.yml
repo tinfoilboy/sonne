@@ -113,6 +113,14 @@ languages:
     line-comment: //
     block-comment-begin: /*
     block-comment-end: '*/'
+  -
+    extensions: [ 'yml', 'yaml' ]
+    language: YAML
+    line-comment: '#'
+  -
+    extensions: [ 'ini' ]
+    language: INI Configuration
+    line-comment: ;
 ignore:
   - yaml-cpp/
   - CMake/
