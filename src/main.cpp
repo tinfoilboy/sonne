@@ -45,6 +45,10 @@ int main(int argc, char** argv)
             cxxopts::value<size_t>()
         )
         (
+            "h,ignore-hidden",
+            "Determines whether hidden files/directories should be skipped over"
+        )
+        (
             "h,help",
             "Print help for the program"
         );
@@ -75,6 +79,9 @@ int main(int argc, char** argv)
     {
         // todo: implement this! doing counting first
     }
+
+    if (result.count("h"))
+        config.SetIgnoreHidden(result["h"].as<bool>());
 
     if (result.count("b"))
         config.SetBlockSize(result["b"].as<size_t>());

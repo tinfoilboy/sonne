@@ -36,6 +36,7 @@ DirectoryInfo DirectoryCounter::Run(const Config& config)
             {
                 std::unique_lock<std::mutex> lock(m_mutex);
 
+                // wait for a file to process or until the finished flag is set
                 m_condition.wait(lock, [this]() {
                     return m_finished || !m_fileQueue.empty();
                 });
@@ -54,14 +55,18 @@ DirectoryInfo DirectoryCounter::Run(const Config& config)
                     Counter counter(file);
                     FileInfo counted = counter.Count(config);
 
+                    // we've processed one file thus far so set counted to that
                     counted.files = 1;
 
+                    // if this isn't the first time this language has been
+                    // counted, add the current count to the totals
                     if (info.languageTotals.count(counted.language) > 0)
                     {
                         auto find = info.languageTotals.find(counted.language);
 
                         find->second += counted;
                     }
+                    // otherwise insert the first count struct to the toals
                     else
                     {
                         info.languageTotals.insert(std::make_pair(
@@ -70,6 +75,7 @@ DirectoryInfo DirectoryCounter::Run(const Config& config)
                         ));
                     }
 
+                    // tally up the totals
                     info.totals += counted;
                 }
             }
@@ -102,10 +108,9 @@ DirectoryInfo DirectoryCounter::Run(const Config& config)
         m_condition.notify_one();
     }
 
+    // keep busy while the files are being processed
     while (!m_fileQueue.empty())
-    {
-        m_condition.notify_one();
-    }
+        asm("");
 
     std::lock_guard<std::mutex> lock(m_mutex);
     m_finished = true;
