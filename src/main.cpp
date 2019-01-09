@@ -33,10 +33,6 @@ int main(int argc, char** argv)
 
     options.add_options()
         (
-            "g,no-ignore",
-            "Stops computare from using your gitignore"
-        )
-        (
             "f,file",
             "The file to count lines from",
             cxxopts::value<std::string>()
@@ -86,6 +82,7 @@ int main(int argc, char** argv)
     if (std::experimental::filesystem::exists(rootConfig))
         config.Parse(rootConfig);
 
+    // parse a custom config from the passed in path if exists
     if (result.count("c"))
     {
         configPath = result["c"].as<std::string>();
@@ -94,18 +91,11 @@ int main(int argc, char** argv)
             config.Parse(configPath);
     }
 
-    // get the ignore flag to see whether to parse gitignore
-    bool useIgnore = !(result["no-ignore"].as<bool>());
-
-    // start by parsing the gitignore file for use in the counter
-    if (useIgnore)
-    {
-        // todo: implement this! doing counting first
-    }
-
+    // set in the configuration whether to ignore hidden files
     if (result.count("s"))
         config.SetIgnoreHidden(result["s"].as<bool>());
 
+    // set the processing block size in the config
     if (result.count("b"))
         config.SetBlockSize(result["b"].as<size_t>());
 
