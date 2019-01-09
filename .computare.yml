@@ -54,7 +54,7 @@ languages:
     block-comment-begin: /*
     block-comment-end: '*/'
   -
-    extensions: [ 'html' ]
+    extensions: [ 'html', 'htm', 'xhtml' ]
     language: HTML
     block-comment-begin: <!--
     block-comment-end: -->
