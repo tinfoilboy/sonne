@@ -121,6 +121,7 @@ languages:
     extensions: [ 'ini' ]
     language: INI Configuration
     line-comment: ;
+# Ignore the non-main source directories for accurate counting
 ignore:
   - yaml-cpp/
   - CMake/
