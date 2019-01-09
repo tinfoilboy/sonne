@@ -143,6 +143,15 @@ int main(int argc, char** argv)
     {
         std::string dir = result["d"].as<std::string>();
 
+        std::string potentialConfig = fmt::format("{}/.computare.yml", dir);
+
+        if (std::experimental::filesystem::exists(potentialConfig))
+        {
+            fmt::print("loading configuration file from {}...\n", potentialConfig);
+            
+            config.Parse(potentialConfig);
+        }
+
         fmt::print("counting directory {}...\n", dir);
 
         auto start = std::chrono::system_clock::now();

@@ -83,6 +83,8 @@ DirectoryInfo DirectoryCounter::Run(Config& config)
     }
 
     fs::recursive_directory_iterator itr(m_path);
+    
+    size_t ignoredFiles = 0;
 
     for (decltype(itr) end; itr != end; ++itr)
     {
@@ -121,8 +123,6 @@ DirectoryInfo DirectoryCounter::Run(Config& config)
             // the ignore was found, skip this file/dir
             if (path.find(key) != std::string::npos)
             {
-                fmt::print("found ignored file: {}\n", key);
-
                 if (fs::is_directory(itr->path()))
                 {
                     itr.disable_recursion_pending();
@@ -139,7 +139,11 @@ DirectoryInfo DirectoryCounter::Run(Config& config)
             std::string configPath = fmt::format("{}/.computare.yml", itr->path().string());
 
             if (fs::exists(configPath))
+            {
+                fmt::print("loading configuration file from {}...\n", configPath);
+
                 config.Parse(configPath);
+            }
 
             ignore = true;
         }
@@ -148,13 +152,19 @@ DirectoryInfo DirectoryCounter::Run(Config& config)
             ignore = true;
 
         if (ignore)
+        {
+            ignoredFiles++;
+
             continue;
+        }
 
         std::lock_guard<std::mutex> lock(m_mutex);
         m_fileQueue.push(itr->path().string());
 
         m_condition.notify_one();
     }
+
+    fmt::print("ignored {} file(s)/dir(s) when processing!\n", ignoredFiles);
 
     // keep busy while the files are being processed
     while (!m_fileQueue.empty())
