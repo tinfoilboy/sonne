@@ -45,7 +45,7 @@ languages:
   -
     extensions: [ 'js' ]
     language: JavaScript
-    line-comment: /
+    line-comment: //
     block-comment-begin: /*
     block-comment-end: '*/'
   -
