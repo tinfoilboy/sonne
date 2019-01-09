@@ -3,6 +3,8 @@
 
 #include "config.hpp"
 
+namespace fs = std::experimental::filesystem;
+
 DirectoryCounter::DirectoryCounter(const std::string& path)
     :
     m_path(path)
@@ -74,8 +76,14 @@ DirectoryInfo DirectoryCounter::Run(const Config& config)
         }));
     }
 
-    for (auto& entry : std::experimental::filesystem::recursive_directory_iterator(m_path))
+    for (auto& entry : fs::recursive_directory_iterator(m_path))
     {
+        if (fs::is_empty(entry.path()))
+            continue;
+
+        if (!fs::is_regular_file(entry.path()))
+            continue;
+
         std::lock_guard<std::mutex> lock(m_mutex);
         m_fileQueue.push(entry.path().string());
 

@@ -92,3 +92,15 @@ languages:
     line-comment: //
     block-comment-begin: /*
     block-comment-end: '*/'
+  -
+    extensions: [ 'swift' ]
+    language: Swift
+    line-comment: //
+    block-comment-begin: /*
+    block-comment-end: '*/'
+  -
+    extensions: [ 'h', 'm', 'mm', 'M' ]
+    language: Objective C
+    line-comment: //
+    block-comment-begin: /*
+    block-comment-end: '*/'
