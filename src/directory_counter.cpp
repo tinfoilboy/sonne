@@ -17,7 +17,7 @@ DirectoryCounter::~DirectoryCounter()
         thread.join();
 }
 
-DirectoryInfo DirectoryCounter::Run(const Config& config)
+DirectoryInfo DirectoryCounter::Run(Config& config)
 {
     size_t threads = std::thread::hardware_concurrency();
 
@@ -86,6 +86,8 @@ DirectoryInfo DirectoryCounter::Run(const Config& config)
 
     for (decltype(itr) end; itr != end; ++itr)
     {
+        bool ignore = false;
+
         if (IsHidden(itr->path()) && config.GetIgnoreHidden())
         {
             if (fs::is_directory(itr->path()))
@@ -93,13 +95,59 @@ DirectoryInfo DirectoryCounter::Run(const Config& config)
                 itr.disable_recursion_pending();
             }
 
-            continue;
+            ignore = true;
         }
 
         if (fs::is_empty(itr->path()))
-            continue;
+        {
+            if (fs::is_directory(itr->path()))
+            {
+                itr.disable_recursion_pending();
+            }
+
+            ignore = true;
+        }
+
+        // check if anything in this path matches the ignore
+        for (auto& kv : config.GetIgnored())
+        {
+            std::string key  = kv.first;
+            std::string path = itr->path();
+
+            // add a trailing slash to match dirs
+            if (fs::is_directory(path))
+                path += "/";
+
+            // the ignore was found, skip this file/dir
+            if (path.find(key) != std::string::npos)
+            {
+                fmt::print("found ignored file: {}\n", key);
+
+                if (fs::is_directory(itr->path()))
+                {
+                    itr.disable_recursion_pending();
+                }
+
+                ignore = true;
+
+                break;
+            }
+        }
+
+        if (fs::is_directory(itr->path()))
+        {
+            std::string configPath = fmt::format("{}/.computare.yml", itr->path().string());
+
+            if (fs::exists(configPath))
+                config.Parse(configPath);
+
+            ignore = true;
+        }
 
         if (!fs::is_regular_file(itr->path()))
+            ignore = true;
+
+        if (ignore)
             continue;
 
         std::lock_guard<std::mutex> lock(m_mutex);

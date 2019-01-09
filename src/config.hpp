@@ -15,6 +15,9 @@ struct Language
 /**
  * Parses data from a .computare.yml and stores the resulting read in this class
  * for use in counting.
+ * 
+ * Multiple configs can be loaded and stacked for per-project configuration
+ * such as custom language support or project-specific file/dir ignores.
  */
 class Config
 {
@@ -45,10 +48,17 @@ public:
         return m_blockSize;
     }
 
+    inline std::map<std::string, bool> GetIgnored()
+    {
+        return m_ignored;
+    }
+
 private:
     std::map<std::string, std::shared_ptr<Language>> m_languages;
 
-    size_t m_blockSize = 2048;
+    std::map<std::string, bool> m_ignored;
+
+    size_t m_blockSize = 4096;
 
     bool m_ignoreHidden = true;
 

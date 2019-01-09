@@ -14,6 +14,18 @@ int main(int argc, char** argv)
     fmt::print("use -h or --help to see how to use.\n");
     fmt::print("\n");
 
+    char exePath[PATH_MAX + 1];
+
+#ifdef __linux__
+    realpath(argv[0], exePath);
+#elif _WIN32
+    _fullpath(exePath, argv[0], sizeof(exePath));
+#endif
+
+    fmt::print("full path: {}\n", std::experimental::filesystem::path(exePath).parent_path().string());
+
+    std::string rootPath = std::experimental::filesystem::path(exePath).parent_path().string();
+
     cxxopts::Options options(
         "computare",
         "A fast and simple line of code counter."
@@ -64,12 +76,23 @@ int main(int argc, char** argv)
 
     std::string configPath = ".computare.yml";
 
-    if (result.count("c"))
-        configPath = result["c"].as<std::string>();
-
     Config config;
 
-    config.Parse(configPath);
+    std::string rootConfig = fmt::format("{}/.computare.yml", rootPath);
+
+    if (std::experimental::filesystem::exists(configPath))
+        config.Parse(configPath);
+
+    if (std::experimental::filesystem::exists(rootConfig))
+        config.Parse(rootConfig);
+
+    if (result.count("c"))
+    {
+        configPath = result["c"].as<std::string>();
+    
+        if (std::experimental::filesystem::exists(configPath))
+            config.Parse(configPath);
+    }
 
     // get the ignore flag to see whether to parse gitignore
     bool useIgnore = !(result["no-ignore"].as<bool>());

@@ -36,8 +36,24 @@ void Config::Parse(const std::string& path)
         }
     }
 
+    if (file["ignore"])
+    {
+        YAML::Node ignored = file["ignore"];
+
+        for (size_t index = 0; index < ignored.size(); index++)
+        {
+            YAML::Node ignoreNode = ignored[index];
+            std::string ignoreStr = ignoreNode.as<std::string>();
+
+            if (ignoreStr[0] == '!')
+                m_ignored[ignoreStr] = false;
+            else
+                m_ignored[ignoreStr] = true;
+        }
+    }
+
     if (file["block-size"])
-        m_blockSize = file["block-size"].as<size_t>();
+        m_blockSize    = file["block-size"].as<size_t>();
 
     if (file["ignore-hidden"])
         m_ignoreHidden = file["ignore-hidden"].as<bool>();

@@ -15,10 +15,16 @@
 #include <condition_variable>
 #include <mutex>
 #include <experimental/filesystem>
+#include <climits>
 
 #include "cxxopt.hpp"
 #include <fmt/format.h>
 #include <yaml-cpp/yaml.h>
+
+#ifdef _WIN32
+#include <Windows.h>
+#define PATH_MAX MAX_PATH
+#endif
 
 /**
  * Print a fatal error to the console and exit the program.

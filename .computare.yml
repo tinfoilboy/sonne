@@ -113,3 +113,12 @@ languages:
     line-comment: //
     block-comment-begin: /*
     block-comment-end: '*/'
+ignore:
+  - yaml-cpp/
+  - CMake/
+  - build/
+  - fmt/
+  - .vscode/
+  - LICENSE
+  - README.md
+  - CMakeLists.txt

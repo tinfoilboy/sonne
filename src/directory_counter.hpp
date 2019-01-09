@@ -106,7 +106,7 @@ public:
 
     ~DirectoryCounter();
 
-    DirectoryInfo Run(const Config& config);
+    DirectoryInfo Run(Config& config);
 
 private:
     std::string m_path;
