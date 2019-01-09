@@ -1,6 +1,6 @@
 # computare
 
-A fast and simple program for counting lines in files as an alternative to programs like cloc written in C++.
+A simple and configurable for counting lines in files as an alternative to programs like cloc written in C++.
 
 ## Building
 

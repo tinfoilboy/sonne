@@ -121,4 +121,6 @@ private:
 
     bool m_finished = false;
 
+    bool IsHidden(const std::experimental::filesystem::path& path);
+
 };

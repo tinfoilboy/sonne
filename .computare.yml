@@ -1,3 +1,12 @@
+# Whether or not to ignore hidden files from the counter
+ignore-hidden: true
+# The amount of characters/bytes to read from a file per iteration until the
+# end of the file. Increasing this value may speed up the counting process at
+# the price of memory usage for storing the blocks.
+block-size: 8192
+# A block of language definitions based on extension that defines the name of
+# the language, as well as its comment styles, any of these can be omitted
+# aside from the extensions and language fields.
 languages:
   -
     extensions: [ 'c', 'cpp', 'cxx', 'cc', 'C' ]

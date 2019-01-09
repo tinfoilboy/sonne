@@ -35,6 +35,12 @@ void Config::Parse(const std::string& path)
                 ));
         }
     }
+
+    if (file["block-size"])
+        m_blockSize = file["block-size"].as<size_t>();
+
+    if (file["ignore-hidden"])
+        m_ignoreHidden = file["ignore-hidden"].as<bool>();
 }
 
 bool Config::HasLanguage(const std::string& extension) const

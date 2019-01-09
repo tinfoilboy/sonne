@@ -40,6 +40,11 @@ int main(int argc, char** argv)
             cxxopts::value<std::string>()
         )
         (
+            "b,block-size",
+            "Sets the amount of characters to read per block, may increase speed",
+            cxxopts::value<size_t>()
+        )
+        (
             "h,help",
             "Print help for the program"
         );
@@ -70,7 +75,10 @@ int main(int argc, char** argv)
     {
         // todo: implement this! doing counting first
     }
-    
+
+    if (result.count("b"))
+        config.SetBlockSize(result["b"].as<size_t>());
+
     // run counter on a single file and exit when done
     if (result.count("f"))
     {

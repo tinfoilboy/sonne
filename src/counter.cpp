@@ -33,6 +33,8 @@ FileInfo Counter::Count(const Config& config)
 
     char current = '\0';
 
+    std::vector<char> readBlock(config.GetBlockSize());
+    
     CountState        countState        = CountState::REGULAR;
     CommentCheckState checkState        = CommentCheckState::NONE;
     size_t            currentLineLength = 0;
@@ -57,121 +59,132 @@ FileInfo Counter::Count(const Config& config)
         blockCommentEnd.size()
     });
 
-    while (in.get(current))
+    while (!in.eof())
     {
-        if (checkState == CommentCheckState::CHECKING)
-            currentCheck += current;
+        in.read(readBlock.data(), config.GetBlockSize());
+        
+        size_t currentSize = in.gcount();
 
-        if (current == '\n')
+        for (size_t index = 0; index < currentSize; index++)
         {
-            info.totalLines++;
+            current = readBlock[index];
 
-            if (currentLineLength <= 0)
-                info.emptyLines++;
+            if (checkState == CommentCheckState::CHECKING)
+                currentCheck += current;
 
-            if (language != nullptr && countState == CountState::REGULAR)
-                info.codeLines++;
+            if (current == '\n')
+            {
+                info.totalLines++;
+
+                if (currentLineLength <= 0)
+                    info.emptyLines++;
+
+                if (language != nullptr && countState == CountState::REGULAR)
+                    info.codeLines++;
+
+                if (
+                    language != nullptr &&
+                    (
+                        countState == CountState::LINE_COMMENT  ||
+                        countState == CountState::BLOCK_COMMENT ||
+                        wasBlockComment
+                    )
+                )
+                {
+                    if (countState == CountState::LINE_COMMENT)
+                        countState = CountState::REGULAR;
+
+                    info.commentLines++;
+                }
+
+                info.averageLineLength += currentLineLength;
+
+                currentLineLength = 0;
+
+                continue;
+            }
 
             if (
-                language != nullptr &&
+                hasComments                           &&
+                checkState == CommentCheckState::NONE &&
                 (
-                    countState == CountState::LINE_COMMENT  ||
-                    countState == CountState::BLOCK_COMMENT ||
-                    wasBlockComment
+                    current == lineComment[0]       ||
+                    current == blockCommentBegin[0] ||
+                    current == blockCommentEnd[0]
                 )
             )
             {
-                if (countState == CountState::LINE_COMMENT)
-                    countState = CountState::REGULAR;
+                if (
+                    lineComment.size()       == 1 ||
+                    blockCommentBegin.size() == 1 ||
+                    blockCommentEnd.size()   == 1
+                )
+                {
+                    if (current == lineComment[0])
+                        countState = CountState::LINE_COMMENT;
+                    
+                    if (current == blockCommentBegin[0])
+                        countState = CountState::BLOCK_COMMENT;
 
-                info.commentLines++;
+                    if (current == blockCommentEnd[0])
+                        countState = CountState::REGULAR;
+
+                    currentLineLength++;
+
+                    continue;
+                }
+                else
+                {
+                    checkState    = CommentCheckState::CHECKING;
+                    currentCheck += current;
+                }
             }
 
-            info.averageLineLength += currentLineLength;
-
-            currentLineLength = 0;
-
-            continue;
-        }
-
-        if (
-            hasComments                           &&
-            checkState == CommentCheckState::NONE &&
-            (
-                current == lineComment[0]       ||
-                current == blockCommentBegin[0] ||
-                current == blockCommentEnd[0]
-            )
-        )
-        {
             if (
-                lineComment.size()       == 1 ||
-                blockCommentBegin.size() == 1 ||
-                blockCommentEnd.size()   == 1
+                checkState          == CommentCheckState::CHECKING &&
+                currentCheck        == lineComment
             )
             {
-                if (current == lineComment[0])
-                    countState = CountState::LINE_COMMENT;
-                
-                if (current == blockCommentBegin[0])
-                    countState = CountState::BLOCK_COMMENT;
-
-                if (current == blockCommentEnd[0])
-                    countState = CountState::REGULAR;
-
+                countState   = CountState::LINE_COMMENT;
+                checkState   = CommentCheckState::NONE;
+                currentCheck = "";
+            }
+            else if (
+                checkState          == CommentCheckState::CHECKING &&
+                currentCheck        == blockCommentBegin
+            )
+            {
+                countState      = CountState::BLOCK_COMMENT;
+                checkState      = CommentCheckState::NONE;
+                currentCheck    = "";
+            }
+            else if (
+                checkState          == CommentCheckState::CHECKING &&
+                currentCheck        == blockCommentEnd
+            )
+            {
+                countState      = CountState::REGULAR;
+                checkState      = CommentCheckState::NONE;
+                currentCheck    = "";
+                wasBlockComment = true;
                 currentLineLength++;
 
                 continue;
             }
-            else
+            
+            if (hasComments && currentCheck.size() > maxCommentSize)
             {
-                checkState    = CommentCheckState::CHECKING;
-                currentCheck += current;
+                checkState   = CommentCheckState::NONE;
+                currentCheck = "";
             }
-        }
 
-        if (
-            checkState          == CommentCheckState::CHECKING &&
-            currentCheck        == lineComment
-        )
-        {
-            countState   = CountState::LINE_COMMENT;
-            checkState   = CommentCheckState::NONE;
-            currentCheck = "";
-        }
-        else if (
-            checkState          == CommentCheckState::CHECKING &&
-            currentCheck        == blockCommentBegin
-        )
-        {
-            countState      = CountState::BLOCK_COMMENT;
-            checkState      = CommentCheckState::NONE;
-            currentCheck    = "";
-        }
-        else if (
-            checkState          == CommentCheckState::CHECKING &&
-            currentCheck        == blockCommentEnd
-        )
-        {
-            countState      = CountState::REGULAR;
-            checkState      = CommentCheckState::NONE;
-            currentCheck    = "";
-            wasBlockComment = true;
+            if (wasBlockComment)
+                wasBlockComment = false;
+
             currentLineLength++;
-
-            continue;
-        }
-        
-        if (hasComments && currentCheck.size() > maxCommentSize)
-        {
-            checkState   = CommentCheckState::NONE;
-            currentCheck = "";
         }
 
-        if (wasBlockComment)
-            wasBlockComment = false;
-
-        currentLineLength++;
+        std::fill(readBlock.begin(), readBlock.end(), '\0');
     }
 
     if (info.averageLineLength > 0)

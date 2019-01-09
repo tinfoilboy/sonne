@@ -25,7 +25,31 @@ public:
 
     std::shared_ptr<Language> GetLanguage(const std::string& extension) const;
 
+    inline void SetIgnoreHidden(bool state)
+    {
+        this->m_ignoreHidden = state;
+    }
+
+    inline bool GetIgnoreHidden() const
+    {
+        return m_ignoreHidden;
+    }
+
+    inline void SetBlockSize(size_t size)
+    {
+        this->m_blockSize = size;
+    }
+
+    inline size_t GetBlockSize() const
+    {
+        return m_blockSize;
+    }
+
 private:
     std::map<std::string, std::shared_ptr<Language>> m_languages;
+
+    size_t m_blockSize = 2048;
+
+    bool m_ignoreHidden = true;
 
 };

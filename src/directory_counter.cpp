@@ -76,16 +76,28 @@ DirectoryInfo DirectoryCounter::Run(const Config& config)
         }));
     }
 
-    for (auto& entry : fs::recursive_directory_iterator(m_path))
+    fs::recursive_directory_iterator itr(m_path);
+
+    for (decltype(itr) end; itr != end; ++itr)
     {
-        if (fs::is_empty(entry.path()))
+        if (IsHidden(itr->path()) && config.GetIgnoreHidden())
+        {
+            if (fs::is_directory(itr->path()))
+            {
+                itr.disable_recursion_pending();
+            }
+
+            continue;
+        }
+
+        if (fs::is_empty(itr->path()))
             continue;
 
-        if (!fs::is_regular_file(entry.path()))
+        if (!fs::is_regular_file(itr->path()))
             continue;
 
         std::lock_guard<std::mutex> lock(m_mutex);
-        m_fileQueue.push(entry.path().string());
+        m_fileQueue.push(itr->path().string());
 
         m_condition.notify_one();
     }
@@ -101,4 +113,11 @@ DirectoryInfo DirectoryCounter::Run(const Config& config)
     m_condition.notify_all();
 
     return info;
+}
+
+bool DirectoryCounter::IsHidden(const fs::path& path)
+{
+    const std::string name = path.filename();
+
+    return name == "." || name == ".." || name[0] == '.';
 }
