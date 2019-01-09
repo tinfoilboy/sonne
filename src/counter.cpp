@@ -187,6 +187,9 @@ FileInfo Counter::Count(const Config& config)
         std::fill(readBlock.begin(), readBlock.end(), '\0');
     }
 
+    // add a single line for eof
+    info.totalLines++;
+
     if (info.averageLineLength > 0)
         info.averageLineLength /= info.totalLines;
 
