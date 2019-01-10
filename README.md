@@ -6,7 +6,7 @@ A simple and configurable for counting lines in files as an alternative to progr
 
 ## Installing
 
-Either download the latest binary release in the [releases](https://github.com/tinfoilboy/computare/releases) page, or if you use Ubuntu/Debian you can download the program from `apt`.
+Download the latest binary release in the [releases](https://github.com/tinfoilboy/computare/releases) page.
 
 ## Building
 
