@@ -55,37 +55,46 @@ int main(int argc, char** argv)
 
     fmt::print("computare 1.0.0\n");
     fmt::print("a simple and configurable program for counting lines in files.\n");
-    fmt::print("use -h or --help to see how to use.\n");
-    fmt::print("\n");
+    fmt::print("use -h or --help to see how to use.\n\n");
 
-    char exePath[PATH_MAX + 1];
-
-#ifdef __linux__
-    realpath(argv[0], exePath);
-#elif _WIN32
-    _fullpath(exePath, argv[0], sizeof(exePath));
-#endif
-
-    std::string rootPath = std::experimental::filesystem::path(exePath).parent_path().string();
-
-    std::string configPath = ".computare.yml";
+    std::string globalConfig = "";
+    std::string configPath   = ".computare.yml";
 
     Config config;
 
-    std::string rootConfig = fmt::format("{}/.computare.yml", rootPath);
+// on linux systems, the config should be placed in the user home directory
+// which evaluates to ~ in paths, thus place a default config there if one
+// doesn't exist, as well as load the config at that path
+#ifdef __linux__
+    globalConfig = fmt::format("{}/.computare.yml", getenv("HOME"));
+#elif _WIN32
+    globalConfig = fmt::format("{}/.computare.yml", getenv("USERPROFILE"));
+#endif
 
-    if (std::experimental::filesystem::exists(configPath))
+    fmt::print("global computare config location: {}\n\n", globalConfig);
+
+    if (!fs::exists(globalConfig))
+    {
+        std::ofstream out(globalConfig);
+
+        std::string config = "{{ default_config }}";
+
+        out << config;
+
+        out.close();
+    }
+
+    config.Parse(globalConfig);
+
+    if (fs::exists(configPath))
         config.Parse(configPath);
-
-    if (std::experimental::filesystem::exists(rootConfig))
-        config.Parse(rootConfig);
 
     // parse a custom config from the passed in path if exists
     if (result.count("c"))
     {
         configPath = result["c"].as<std::string>();
     
-        if (std::experimental::filesystem::exists(configPath))
+        if (fs::exists(configPath))
             config.Parse(configPath);
     }
 
@@ -102,7 +111,7 @@ int main(int argc, char** argv)
     {
         std::string file = result["f"].as<std::string>();
 
-        fmt::print("counting file {}...\n", file);
+        fmt::print("counting in file '{}'...\n", file);
 
         auto start = std::chrono::system_clock::now();
 
@@ -133,14 +142,14 @@ int main(int argc, char** argv)
 
         std::string potentialConfig = fmt::format("{}/.computare.yml", dir);
 
-        if (std::experimental::filesystem::exists(potentialConfig))
+        if (fs::exists(potentialConfig))
         {
-            fmt::print("loading configuration file from {}...\n", potentialConfig);
+            fmt::print("loading configuration file from '{}'...\n", potentialConfig);
             
             config.Parse(potentialConfig);
         }
 
-        fmt::print("counting directory {}...\n", dir);
+        fmt::print("counting lines from files in directory '{}'...\n", dir);
 
         auto start = std::chrono::system_clock::now();
 

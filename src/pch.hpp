@@ -14,12 +14,14 @@
 #include <thread>
 #include <condition_variable>
 #include <mutex>
-#include <experimental/filesystem>
+#include <filesystem>
 #include <climits>
 
 #include "cxxopt.hpp"
 #include <fmt/format.h>
 #include <yaml-cpp/yaml.h>
+
+namespace fs = std::filesystem;
 
 #ifdef _WIN32
 #include <Windows.h>

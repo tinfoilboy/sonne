@@ -3,8 +3,6 @@
 
 #include "config.hpp"
 
-namespace fs = std::experimental::filesystem;
-
 DirectoryCounter::DirectoryCounter(const std::string& path)
     :
     m_path(path)
