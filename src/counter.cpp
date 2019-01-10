@@ -183,8 +183,6 @@ FileInfo Counter::Count(const Config& config)
 
             currentLineLength++;
         }
-
-        std::fill(readBlock.begin(), readBlock.end(), '\0');
     }
 
     // add a single line for eof

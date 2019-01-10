@@ -192,7 +192,7 @@ DirectoryInfo DirectoryCounter::Run(Config& config)
 
     // keep busy while the files are being processed
     while (!m_fileQueue.empty() || m_currentDirectories > 0)
-        m_condition.notify_one();
+        asm("");
 
     if (newConfigs > 0)
         fmt::print("\n");
