@@ -15,6 +15,7 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(YAML_CPP_BUILD_TESTS OFF)
 set(YAML_CPP_BUILD_TOOLS OFF)
 set(FMT_TEST OFF)
+set(FMT_DOC OFF)
 
 add_subdirectory(fmt)
 add_subdirectory(yaml-cpp)
