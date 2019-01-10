@@ -24,7 +24,7 @@ You may use the `-h` or `--help` flags to see the full list of switches for the 
 
 ## Configuration
 
-Computare is meant to be configured to change languages supported or files to ignore. These options are configured with a file named `.computare.yml`. These are the supported options.
+Computare is meant to be configured to change languages supported or files to ignore. These options are configured with a file named `.computare.yml`. These are the supported options. A default configuration is placed into your home directory at "~/.computare.yml" with language definitions and default settings.
 
 ### `block-size`
 
