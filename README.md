@@ -1,10 +1,17 @@
 # computare
 
+[![Github Releases](https://img.shields.io/github/release/tinfoilboy/computare.svg)](https://github.com/tinfoilboy/computare/releases)
+
 A simple and configurable for counting lines in files as an alternative to programs like cloc written in C++. I was becoming bothered with how cloc handled ignoring files, as I'll integrate some libraries directly in my source folder as opposed to an external folder, thus I wanted to mainly ignore specific files. I also wanted something faster and more extensible, so I made this.
+
+## Installing
+
+Either download the latest binary release in the [releases](https://github.com/tinfoilboy/computare/releases) page, or if you use Ubuntu/Debian you can download the program from `apt`.
 
 ## Building
 
 Computare uses CMake for building. Build using your favorite compiler chain and run the executable that results from the build.
+On my personal development machine, I compile this using Clang 7 on KUbuntu 18.10, which works well.
 
 ## Dependencies
 
