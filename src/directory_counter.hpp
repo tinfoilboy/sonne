@@ -9,6 +9,18 @@ struct DirectoryInfo
     FileInfo totals;
 };
 
+enum class CounterQueueType : uint8_t
+{
+    FILE,
+    DIRECTORY
+};
+
+struct CounterQueue
+{
+    CounterQueueType type;
+    std::string      path;
+};
+
 inline void PrintDirectoryInfo(const DirectoryInfo& info)
 {
     // the largest cell thus far is the comment lines cell, which is 15 chars
@@ -113,7 +125,7 @@ private:
 
     std::vector<std::thread> m_threads;
 
-    std::queue<std::string>  m_fileQueue;
+    std::queue<CounterQueue>  m_fileQueue;
 
     std::mutex m_mutex;
 
@@ -121,6 +133,15 @@ private:
 
     bool m_finished = false;
 
+    size_t m_currentDirectories = 0;
+
     bool IsHidden(const fs::path& path);
+
+    void AddDirectoryContentToQueue(
+        Config& config,
+        const std::string& path,
+        size_t* ignoredFiles,
+        size_t* newConfigs
+    );
 
 };

@@ -53,7 +53,7 @@ int main(int argc, char** argv)
         return 0;
     }
 
-    fmt::print("computare 1.0.0\n");
+    fmt::print("computare 1.0.1\n");
     fmt::print("a simple and configurable program for counting lines in files.\n");
     fmt::print("use -h or --help to see how to use.\n\n");
 
@@ -71,13 +71,13 @@ int main(int argc, char** argv)
     globalConfig = fmt::format("{}/.computare.yml", getenv("USERPROFILE"));
 #endif
 
-    fmt::print("global computare config location: {}\n\n", globalConfig);
+    fmt::print("global computare config location: {}\n", globalConfig);
 
     if (!fs::exists(globalConfig))
     {
         std::ofstream out(globalConfig);
 
-        std::string config = "{{ default_config }}";
+        std::string config = "# Whether or not to ignore hidden files from the counter\nignore-hidden: true\n# The amount of characters/bytes to read from a file per iteration until the\n# end of the file. Increasing this value may speed up the counting process at\n# the price of memory usage for storing the blocks.\nblock-size: 131072\n# A block of language definitions based on extension that defines the name of\n# the language, as well as its comment styles, any of these can be omitted\n# aside from the extensions and language fields.\nlanguages:\n  -\n    extensions: [ 'c', 'cpp', 'cxx', 'cc', 'C' ]\n    language: C/C++ Source\n    line-comment: //\n    block-comment-begin: /*\n    block-comment-end: '*/'\n  -\n    extensions: [ 'h', 'hpp', 'hxx', 'hh', 'H' ]\n    language: C/C++ Header\n    line-comment: //\n    block-comment-begin: /*\n    block-comment-end: '*/'\n  -\n    extensions: [ 'py' ]\n    language: Python\n    line-comment: '#'\n  -\n    extensions: [ 'java' ]\n    language: Java\n    line-comment: //\n    block-comment-begin: /*\n    block-comment-end: '*/'\n  -\n    extensions: [ 'kt', 'kts' ]\n    language: Kotlin\n    line-comment: //\n    block-comment-begin: /*\n    block-comment-end: '*/'\n  -\n    extensions: [ 'rs' ]\n    language: Rust\n    line-comment: //\n    block-comment-begin: /*\n    block-comment-end: '*/'\n  -\n    extensions: [ 'js' ]\n    language: JavaScript\n    line-comment: //\n    block-comment-begin: /*\n    block-comment-end: '*/'\n  -\n    extensions: [ 'css' ]\n    language: CSS\n    block-comment-begin: /*\n    block-comment-end: '*/'\n  -\n    extensions: [ 'html', 'htm', 'xhtml' ]\n    language: HTML\n    block-comment-begin: <!--\n    block-comment-end: -->\n  -\n    extensions: [ 'ts', 'tsx' ]\n    language: TypeScript\n    line-comment: //\n    block-comment-begin: /*\n    block-comment-end: '*/'\n  -\n    extensions: [ 'rb' ]\n    language: Ruby\n    line-comment: '#'\n  -\n    extensions: [ 'lua' ]\n    language: Lua\n    line-comment: --\n    block-comment-begin: --[[\n    block-comment-end: --]]\n  -\n    extensions: [ 'd' ]\n    language: D\n    line-comment: //\n    block-comment-begin: /*\n    block-comment-end: '*/'\n  -\n    extensions: [ 'cs' ]\n    language: C#\n    line-comment: //\n    block-comment-begin: /*\n    block-comment-end: '*/'\n  -\n    extensions: [ 'php', 'php3', 'php4', 'php5' ]\n    language: PHP\n    line-comment: //\n    block-comment-begin: /*\n    block-comment-end: '*/'\n  -\n    extensions: [ 'json' ]\n    language: JSON\n  -\n    extensions: [ 'go' ]\n    language: Go\n    line-comment: //\n    block-comment-begin: /*\n    block-comment-end: '*/'\n  -\n    extensions: [ 'swift' ]\n    language: Swift\n    line-comment: //\n    block-comment-begin: /*\n    block-comment-end: '*/'\n  -\n    extensions: [ 'h', 'm', 'mm', 'M' ]\n    language: Objective C\n    line-comment: //\n    block-comment-begin: /*\n    block-comment-end: '*/'\n  -\n    extensions: [ 'yml', 'yaml' ]\n    language: YAML\n    line-comment: '#'\n  -\n    extensions: [ 'ini' ]\n    language: INI Configuration\n    line-comment: ;";
 
         out << config;
 
@@ -111,7 +111,7 @@ int main(int argc, char** argv)
     {
         std::string file = result["f"].as<std::string>();
 
-        fmt::print("counting in file '{}'...\n", file);
+        fmt::print("counting in file '{}'\n", file);
 
         auto start = std::chrono::system_clock::now();
 
@@ -144,12 +144,14 @@ int main(int argc, char** argv)
 
         if (fs::exists(potentialConfig))
         {
-            fmt::print("loading configuration file from '{}'...\n", potentialConfig);
+            fmt::print("loading configuration file from '{}'\n\n", potentialConfig);
             
             config.Parse(potentialConfig);
         }
+        else
+            fmt::print("\n");
 
-        fmt::print("counting lines from files in directory '{}'...\n", dir);
+        fmt::print("counting lines from files in directory '{}'\n", dir);
 
         auto start = std::chrono::system_clock::now();
 
@@ -162,7 +164,7 @@ int main(int argc, char** argv)
         std::chrono::duration<double> elapsed = end - start;
 
         fmt::print(
-            "finished counting in {}ms!\n",
+            "finished counting in {}ms\n",
             std::chrono::duration_cast<std::chrono::milliseconds>(elapsed).count()
         );
 
