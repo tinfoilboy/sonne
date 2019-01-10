@@ -1,3 +1,6 @@
 [submodule "yaml-cpp"]
 	path = yaml-cpp
 	url = https://github.com/jbeder/yaml-cpp
+[submodule "fmt"]
+	path = fmt
+	url = https://github.com/fmtlib/fmt.git
