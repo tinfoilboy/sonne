@@ -23,13 +23,14 @@ FileInfo Counter::Count(const Config& config)
     if (language != nullptr)
         info.language = language->name;
 
+    if (fs::is_directory(m_path))
+        Fatal("Tried to pass a directory in as a file!");
+
     std::ifstream in;
     in.open(m_path);
 
     if (!in.good())
-    {
         Fatal("Failed to open file at path: " + m_path);
-    }
 
     char current = '\0';
 

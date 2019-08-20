@@ -53,7 +53,7 @@ int main(int argc, char** argv)
         return 0;
     }
 
-    fmt::print("computare 1.0.2\n");
+    fmt::print("computare 1.0.3\n");
     fmt::print("a simple and configurable program for counting lines in files.\n");
     fmt::print("use -h or --help to see how to use.\n\n");
 

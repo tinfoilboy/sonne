@@ -30,6 +30,9 @@ DirectoryInfo DirectoryCounter::Run(Config& config)
     size_t ignoredFiles    = 0;
     size_t newConfigs      = 0;
 
+    if (!fs::is_directory(m_path))
+        Fatal("Passed a file in as a directory!");
+
     // push back a max number of worker threads for running counters on dir
     // entries and totalling up directory information
     for (size_t index = 0; index < threads; index++)
