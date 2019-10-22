@@ -77,7 +77,7 @@ int main(int argc, char** argv)
     {
         std::ofstream out(globalConfig);
 
-        std::string config = "{{ default_config }}";
+	std::string config = "{{ default_config }}";
 
         out << config;
 

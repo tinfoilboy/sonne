@@ -1,6 +1,8 @@
 cmake_minimum_required(VERSION 3.0)
 
-include(CMake/PrecompiledHeader.cmake)
+set (CMAKE_MODULE_PATH "${CMAKE_SOURCE_DIR}/CMake")
+
+include(cotire)
 project(computare)
 
 find_package(Threads)
@@ -37,6 +39,7 @@ add_custom_command(
 )
 
 target_link_libraries(computare fmt::fmt yaml-cpp ${CMAKE_THREAD_LIBS_INIT} stdc++fs)
+set_target_properties(computare PROPERTIES COTIRE_CXX_PREFIX_HEADER_INIT "src/pch.hpp")
 
 if (CMAKE_COMPILER_IS_GNUCC OR CMAKE_CXX_COMPILER_ID MATCHES "Clang")
     target_compile_options(computare PRIVATE "-Wall")
@@ -46,4 +49,4 @@ if (MSVC)
     target_compile_options(computare PRIVATE "/W4")
 endif()
 
-add_precompiled_header(computare pch.hpp FORCEINCLUDE)
+cotire(computare)
