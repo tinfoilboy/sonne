@@ -1,11 +1,9 @@
-#include "pch.hpp"
-#include "directory_counter.hpp"
+#include "computare/pch.hpp"
+#include "computare/directory_counter.hpp"
 
-#include "config.hpp"
+#include "computare/config.hpp"
 
-#ifdef __linux__
-#include <dirent.h>
-#endif
+
 
 DirectoryCounter::DirectoryCounter(const std::string& path)
     :

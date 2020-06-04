@@ -1,5 +1,5 @@
 #pragma once
-#include "counter.hpp"
+#include "computare/counter.hpp"
 
 class Config;
 

@@ -1,5 +1,5 @@
-#include "pch.hpp"
-#include "config.hpp"
+#include "computare/pch.hpp"
+#include "computare/config.hpp"
 
 void Config::Parse(const std::string& path)
 {
@@ -18,21 +18,26 @@ void Config::Parse(const std::string& path)
             language->name = langNode["language"].as<std::string>();
 
             if (langNode["line-comment"])
+            {
                 language->lineComment = langNode["line-comment"].as<std::string>();
+            }
             
             if (langNode["block-comment-begin"])
+            {
                 language->blockCommentBegin = langNode["block-comment-begin"].as<std::string>();
+            }
             
             if (langNode["block-comment-end"])
+            {
                 language->blockCommentEnd = langNode["block-comment-end"].as<std::string>();
+            }
         
             // iterate through the extensions and add each to the map with their
             // the same language struct pointer to conserve some memory
             for (size_t index = 0; index < langNode["extensions"].size(); index++)
-                m_languages.insert(std::pair<std::string, std::shared_ptr<Language>>(
-                    langNode["extensions"][index].as<std::string>(),
-                    language
-                ));
+            {
+                m_languages.insert(std::pair<std::string, std::shared_ptr<Language>>(langNode["extensions"][index].as<std::string>(), language));
+            }
         }
     }
 
@@ -45,18 +50,27 @@ void Config::Parse(const std::string& path)
             YAML::Node ignoreNode = ignored[index];
             std::string ignoreStr = ignoreNode.as<std::string>();
 
+            // if the ignore string starts with an exclamation point, do not ignore that file/folder
             if (ignoreStr[0] == '!')
+            {
                 m_ignored[ignoreStr] = false;
+            }
             else
+            {
                 m_ignored[ignoreStr] = true;
+            }
         }
     }
 
     if (file["block-size"])
-        m_blockSize    = file["block-size"].as<size_t>();
+    {
+        m_blockSize = file["block-size"].as<size_t>();
+    }
 
     if (file["ignore-hidden"])
+    {
         m_ignoreHidden = file["ignore-hidden"].as<bool>();
+    }
 }
 
 bool Config::HasLanguage(const std::string& extension) const

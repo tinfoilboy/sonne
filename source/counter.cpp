@@ -1,7 +1,7 @@
-#include "pch.hpp"
-#include "counter.hpp"
+#include "computare/pch.hpp"
+#include "computare/counter.hpp"
 
-#include "config.hpp"
+#include "computare/config.hpp"
 
 Counter::Counter(const std::string& path)
     :

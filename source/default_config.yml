@@ -82,7 +82,7 @@ languages:
     block-comment-end: '*/'
   -
     extensions: [ 'cs' ]
-    language: C#
+    language: 'C#'
     line-comment: //
     block-comment-begin: /*
     block-comment-end: '*/'
