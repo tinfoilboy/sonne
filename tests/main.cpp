@@ -71,6 +71,9 @@ TEST_CASE("directory counter works properly")
     // separate the previous case with two newlines
     fmt::print("\n\n");
 
+    // grab the running path for the test runner, used for comparing if the right paths are grabbed
+    std::string runningPath = GetRunningPath();
+
     std::shared_ptr<Config> config = std::make_shared<Config>();
 
     SECTION("path walking returns correct entries")
@@ -88,14 +91,40 @@ TEST_CASE("directory counter works properly")
 
         std::vector<std::string> paths;
 
+        // make sure that the walked paths match that of the local test runner
+        std::vector<std::string> expectedPaths = {
+            fmt::format("{}{}samples{}fun.java", runningPath, Separator, Separator),
+            fmt::format("{}{}samples{}test.py", runningPath, Separator, Separator),
+            fmt::format("{}{}samples{}python{}program.py", runningPath, Separator, Separator, Separator)
+        };
+
         counter.WalkForPaths(entries, paths, newConfigs, ignoredFiles);
+
+        REQUIRE(paths.size() == 3);
+
+        size_t pathsMatch = 0; // paths match must be the same number as expected paths to pass
 
         for (size_t index = 0; index < paths.size(); index++)
         {
-            fmt::print("path {}: {}\n", index, paths[index]);
+            std::string& path = paths.at(index);
+
+            fmt::print("Included path for {}: {}\n", index, path);
+
+            for (size_t matcher = 0; matcher < expectedPaths.size(); matcher++)
+            {
+                std::string& expected = expectedPaths.at(matcher);
+
+                if (expected == path)
+                {
+                    pathsMatch++;
+
+                    break; // break out of loop to do the next path to match
+                }
+            }
         }
 
-        REQUIRE(paths.size() == 3);
+        REQUIRE(pathsMatch == expectedPaths.size());
+
         REQUIRE(newConfigs == 1);
         REQUIRE(ignoredFiles == 3);
     }

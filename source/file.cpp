@@ -43,6 +43,41 @@ void Computare::SetEntryFromHandle(
 }
 #endif
 
+std::string Computare::GetRunningPath()
+{
+    std::string path = "";
+
+#ifdef _WIN32
+    char pathBuffer[MAX_PATH];
+
+    int size = GetModuleFileName(NULL, pathBuffer, MAX_PATH);
+
+    // if we have anything in the buffer, copy to string and return
+    if (size >= 1)
+    {
+        path = std::string(pathBuffer);
+    }
+#else
+    char pathBuffer[PATH_MAX];
+
+    int size = readlink("/proc/self/exe", pathBuffer, PATH_MAX);
+
+    if (size >= 0)
+    {
+        pathBuffer[size] = '\0';
+    
+        path = std::string(pathBuffer);
+    }
+#endif
+
+    // cut off the executable name from the path
+    size_t last = path.find_last_of(Separator);
+
+    path = path.substr(0, last);
+
+    return path;
+}
+
 Entry Computare::GetFSEntry(const std::string& path, bool shouldClose)
 {
     Entry entry;

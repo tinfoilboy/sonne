@@ -46,17 +46,24 @@ namespace Computare
 #endif
 
     /**
-     * Grab an entry from the filesystem, with information about that entry.
+     Grab the current running path for the executable.
+
+     Returns a blank string if not able to be found.
+     */
+    std::string GetRunningPath();
+
+    /**
+     Grab an entry from the filesystem, with information about that entry.
      */
     Entry GetFSEntry(const std::string& path, bool shouldClose=true);
 
     /**
-     * Grab an entry that is in a sequence from a directory.
+     Grab an entry that is in a sequence from a directory.
      */
     Entry GetNextEntry(const std::string& rootDir, Entry& previous);
 
     /**
-     * Gets a vector of each entry in a directory, recursing through subfolders and appending to the entry children.
+     Gets a vector of each entry in a directory, recursing through subfolders and appending to the entry children.
      */
     std::vector<Entry> WalkDirectory(const std::string& path);
 
