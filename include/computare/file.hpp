@@ -56,6 +56,6 @@ namespace computare {
     /**
      * Gets a vector of each entry in a directory, recursing through subfolders and appending to the entry children.
      */
-    std::vector<Entry> ListDirectory(const std::string& path);
+    std::vector<Entry> WalkDirectory(const std::string& path);
 
 };

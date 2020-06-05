@@ -109,7 +109,7 @@ Entry computare::GetFSEntry(const std::string& path, bool shouldClose)
     {
         DIR* directoryHandle;
 
-        if ((directoryHandle = opendir(entry.fullPath)) == NULL)
+        if ((directoryHandle = opendir(entry.fullPath.c_str())) == NULL)
         {
             fmt::print("Failed to open directory at path: {}\n", entry.fullPath);
 
