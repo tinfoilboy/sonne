@@ -11,6 +11,10 @@ inline void CountSubdirectory(Entry& directory, size_t nestAmt, size_t& totalEnt
     for (size_t index = 0; index < directory.children.size(); index++)
     {
         Entry entry = directory.children[index];
+
+        std::string type = (entry.isDirectory) ? "DIRECTORY" : "FILE";
+
+        fmt::print("{}- {}; {}\n", std::string(nestAmt, ' '), type, entry.fullPath);
         
         if (entry.isDirectory && !entry.children.empty())
         {
@@ -42,6 +46,10 @@ TEST_CASE("filesystem custom functions work correctly")
         for (size_t index = 0; index < entries.size(); index++)
         {
             Entry entry = entries[index];
+
+            std::string type = (entry.isDirectory) ? "DIRECTORY" : "FILE";
+
+            fmt::print("- {}; {}\n", type, entry.fullPath);
             
             if (entry.isDirectory && !entry.children.empty())
             {
