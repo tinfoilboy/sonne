@@ -20,12 +20,15 @@
 #define PATH_MAX MAX_PATH
 #else
 #include <dirent.h>
+#include <sys/types.h>
+#include <sys/stat.h>
+#include <unistd.h>
 #endif
 
 /**
  * Print a fatal error to the console and exit the program.
  */
-inline static void Fatal(std::string_view message, int code=-1)
+inline static void Fatal(const std::string& message, int code=-1)
 {
     fmt::print("[error]: {}\n", message);
 

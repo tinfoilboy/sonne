@@ -2,9 +2,7 @@ cmake_minimum_required(VERSION 3.0)
 
 project(computare VERSION 2.0.0)
 
-find_package(Threads)
-
-set(CMAKE_CXX_STANDARD 17)
+set(CMAKE_CXX_STANDARD 11)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
 set(YAML_CPP_BUILD_TESTS OFF CACHE BOOL "disable yaml tests")
@@ -19,13 +17,11 @@ add_subdirectory(yaml-cpp)
 add_executable(computare 
     source/main.cpp
     source/pch.cpp
-    source/directory_counter.cpp
-    source/counter.cpp
-    source/config.cpp)
+    source/file.cpp)
 
 target_include_directories(computare PRIVATE ${CMAKE_SOURCE_DIR}/include)
 
-target_link_libraries(computare fmt::fmt yaml-cpp ${CMAKE_THREAD_LIBS_INIT} stdc++fs)
+target_link_libraries(computare fmt::fmt yaml-cpp)
 
 if (MSVC)
     target_compile_options(computare PRIVATE "/W4")

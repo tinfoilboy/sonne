@@ -1,15 +1,25 @@
 #include "computare/pch.hpp"
 
-#include "computare/counter.hpp"
+/*#include "computare/counter.hpp"
 #include "computare/config.hpp"
-#include "computare/directory_counter.hpp"
+#include "computare/directory_counter.hpp"*/
+#include "computare/file.hpp"
 
 /*
  * Main command-line entry point for the program.
  */
 int main(int argc, char** argv)
 {
-    cxxopts::Options options(
+    computare::Entry entry = computare::GetFSEntry("../../../source");
+
+    fmt::print("is valid: {}\n", entry.isValid);
+    fmt::print("{} bytes long\n", entry.fileSize);
+    fmt::print("is directory: {}\n", entry.isDirectory);
+    fmt::print("full path: {}\n", entry.fullPath);
+
+    return 0;
+
+    /*cxxopts::Options options(
         "computare",
         "a simple and configurable program for counting lines in files"
     );
@@ -31,7 +41,7 @@ int main(int argc, char** argv)
         return 0;
     }
 
-    fmt::print("computare 1.0.3\n");
+    fmt::print("computare 2.0.0\n");
     fmt::print("a simple and configurable program for counting lines in files.\n");
     fmt::print("use -h or --help to see how to use.\n\n");
 
@@ -155,5 +165,5 @@ int main(int argc, char** argv)
         return 0;
     }
 
-    return 0;
+    return 0;*/
 }

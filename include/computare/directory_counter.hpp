@@ -1,5 +1,4 @@
 #pragma once
-#include "computare/counter.hpp"
 
 class Config;
 
@@ -108,32 +107,16 @@ inline void PrintDirectoryInfo(const DirectoryInfo& info)
 /**
  * Takes in a path to a directory and tries to walk that directory, counting
  * each file that it finds for lines.
- * 
- * Uses a thread pool to execute these tasks.
  */
 class DirectoryCounter
 {
 public:
     DirectoryCounter(const std::string& path);
 
-    ~DirectoryCounter();
-
     DirectoryInfo Run(Config& config);
 
 private:
     std::string m_path;
-
-    std::vector<std::thread> m_threads;
-
-    std::queue<CounterQueue>  m_fileQueue;
-
-    std::mutex m_mutex;
-
-    std::condition_variable m_condition;
-
-    bool m_finished = false;
-
-    size_t m_currentDirectories = 0;
 
     bool IsHidden(const fs::path& path);
 

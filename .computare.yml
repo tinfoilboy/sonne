@@ -5,6 +5,8 @@ ignore:
   - build/
   - fmt/
   - .vscode/
+  - .vs/
+  - out/
   - LICENSE
   - README.md
   - CMakeLists.txt

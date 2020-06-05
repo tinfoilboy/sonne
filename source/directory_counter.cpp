@@ -2,8 +2,7 @@
 #include "computare/directory_counter.hpp"
 
 #include "computare/config.hpp"
-
-
+#include "computare/counter.hpp"
 
 DirectoryCounter::DirectoryCounter(const std::string& path)
     :
@@ -11,17 +10,9 @@ DirectoryCounter::DirectoryCounter(const std::string& path)
 {
 }
 
-DirectoryCounter::~DirectoryCounter()
-{
-    for (auto& thread : m_threads)
-        thread.join();
-}
-
 DirectoryInfo DirectoryCounter::Run(Config& config)
 {
-    size_t threads = std::thread::hardware_concurrency();
-
-    fmt::print("counting from directory with {} threads\n\n", threads);
+    fmt::print("Counting from directory...\n\n", threads);
 
     DirectoryInfo info = {};
 
