@@ -10,7 +10,7 @@
  */
 int main(int argc, char** argv)
 {
-    computare::Entry entry = computare::GetFSEntry("../../../source");
+    Computare::Entry entry = Computare::GetFSEntry("../../../source");
 
     fmt::print("is valid: {}\n", entry.isValid);
     fmt::print("{} bytes long\n", entry.fileSize);
