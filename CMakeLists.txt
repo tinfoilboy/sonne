@@ -44,4 +44,5 @@ if (COMPUTARE_BUILD_TESTS)
     target_link_libraries (computare_test fmt::fmt yaml-cpp Catch2::Catch2)
 
     file (COPY ${CMAKE_SOURCE_DIR}/tests/samples DESTINATION ${CMAKE_CURRENT_BINARY_DIR})
+    file (COPY ${CMAKE_SOURCE_DIR}/tests/dir_walk DESTINATION ${CMAKE_CURRENT_BINARY_DIR})
 endif()
