@@ -51,7 +51,7 @@ Entry computare::GetFSEntry(const std::string& path)
 
     FindClose(fileHandle);
 #else
-    stat statBuffer;
+    struct stat statBuffer;
 
     int err = stat(path.c_str(), &statBuffer);
 
@@ -71,9 +71,9 @@ Entry computare::GetFSEntry(const std::string& path)
     // grab the full path for the file
     char canonicalPath[PATH_MAX];
 
-    char* pathPtr = realPath(path.c_str(), canonicalPath);
+    char* pathPtr = realpath(path.c_str(), canonicalPath);
 
-    if (pathStr == nullptr)
+    if (pathPtr == nullptr)
     {
         fmt::print("Failed to get full path for file: {}", path);
 
