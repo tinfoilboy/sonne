@@ -1,11 +1,12 @@
 #pragma once
 
-namespace computare {
+namespace Computare
+{
     
 #ifdef _WIN32
-    static constexpr const char* Separator = "\\";
+    static constexpr const char Separator = '\\';
 #else
-    static constexpr const char* Separator = "/";
+    static constexpr const char Separator = '/';
 #endif
 
     struct Entry {
@@ -21,6 +22,7 @@ namespace computare {
         bool isHidden = false; // this attribute only really matters on windows
 
         std::string fullPath = "";
+        std::string fileName = ""; // only used for GetNextEntry calls
 
         size_t fileSize = 0;
 
@@ -58,4 +60,4 @@ namespace computare {
      */
     std::vector<Entry> WalkDirectory(const std::string& path);
 
-};
+}

@@ -1,0 +1,4 @@
+ignore:
+  - ignored_dir/
+  - python/program.pyc
+  - ignore.cpp

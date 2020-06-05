@@ -1,7 +1,10 @@
 #include "computare/pch.hpp"
 #include "computare/counter.hpp"
 
+#include "computare/file.hpp"
 #include "computare/config.hpp"
+
+using namespace Computare;
 
 Counter::Counter(const std::string& path)
     :
@@ -18,13 +21,21 @@ FileInfo Counter::Count(const Config& config)
     std::shared_ptr<Language> language = nullptr;
 
     if (config.HasLanguage(ext))
+    {
         language = config.GetLanguage(ext);
+    }
 
     if (language != nullptr)
+    {
         info.language = language->name;
+    }
 
-    if (fs::is_directory(m_path))
-        Fatal("Tried to pass a directory in as a file!");
+    Entry file = GetFSEntry(m_path);
+
+    if (!file.isValid || file.isDirectory)
+    {
+        Fatal(fmt::format("Invalid file passed to counter! Path: {}\n", file.fullPath));
+    }
 
     std::ifstream in;
     in.open(m_path);
@@ -54,11 +65,17 @@ FileInfo Counter::Count(const Config& config)
         blockCommentEnd   = language->blockCommentEnd;
     }
 
-    size_t maxCommentSize = std::max({
-        lineComment.size(),
-        blockCommentBegin.size(),
-        blockCommentEnd.size()
-    });
+    size_t maxCommentSize = lineComment.size();
+
+    if (maxCommentSize < blockCommentBegin.size())
+    {
+        maxCommentSize = blockCommentBegin.size();
+    }
+
+    if (maxCommentSize < blockCommentEnd.size())
+    {
+        maxCommentSize = blockCommentEnd.size();
+    }
 
     while (!in.eof())
     {

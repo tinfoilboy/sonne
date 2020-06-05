@@ -1,6 +1,8 @@
 #include "computare/pch.hpp"
 #include "computare/config.hpp"
 
+using namespace Computare;
+
 void Config::Parse(const std::string& path)
 {
     YAML::Node file = YAML::LoadFile(path);

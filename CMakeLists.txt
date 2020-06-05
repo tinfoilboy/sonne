@@ -2,11 +2,14 @@ cmake_minimum_required(VERSION 3.0)
 
 project (computare LANGUAGES CXX VERSION 2.0.0)
 
-set (CMAKE_CXX_STANDARD 11)
+set (CMAKE_CXX_STANDARD 14)
 set (CMAKE_CXX_STANDARD_REQUIRED ON)
 
 set (COMPUTARE_BASE_SOURCE 
-    ${CMAKE_SOURCE_DIR}/source/file.cpp)
+    ${CMAKE_SOURCE_DIR}/source/file.cpp
+    ${CMAKE_SOURCE_DIR}/source/directory_counter.cpp
+    ${CMAKE_SOURCE_DIR}/source/counter.cpp
+    ${CMAKE_SOURCE_DIR}/source/config.cpp)
 
 set (YAML_CPP_BUILD_TESTS OFF CACHE BOOL "disable yaml tests")
 set (YAML_CPP_BUILD_TOOLS OFF CACHE BOOL "disable yaml tools")

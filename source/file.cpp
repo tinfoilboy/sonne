@@ -1,10 +1,10 @@
 #include "computare/pch.hpp"
 #include "computare/file.hpp"
 
-using namespace computare;
+using namespace Computare;
 
 #ifdef _WIN32
-void computare::SetEntryFromHandle(
+void Computare::SetEntryFromHandle(
     HANDLE file,
     const std::string& path,
     Entry& entry,
@@ -43,7 +43,7 @@ void computare::SetEntryFromHandle(
 }
 #endif
 
-Entry computare::GetFSEntry(const std::string& path, bool shouldClose)
+Entry Computare::GetFSEntry(const std::string& path, bool shouldClose)
 {
     Entry entry;
 
@@ -59,8 +59,6 @@ Entry computare::GetFSEntry(const std::string& path, bool shouldClose)
 
     if (!entry.isValid)
     {
-        fmt::print("not a valid entry at path {}! code: {}\n", path, GetLastError());
-
         return entry;
     }
 
@@ -77,8 +75,6 @@ Entry computare::GetFSEntry(const std::string& path, bool shouldClose)
 
     if (err < 0)
     {
-        fmt::print("Failed to stat at path: {}\n", path);
-
         entry.isValid = false;
 
         return entry;
@@ -125,7 +121,7 @@ Entry computare::GetFSEntry(const std::string& path, bool shouldClose)
     return entry;
 }
 
-Entry computare::GetNextEntry(const std::string& rootDir, Entry& previous)
+Entry Computare::GetNextEntry(const std::string& rootDir, Entry& previous)
 {
     Entry next;
 
@@ -155,8 +151,16 @@ Entry computare::GetNextEntry(const std::string& rootDir, Entry& previous)
         next.isSpecialDirectory = true;
     }
 
+    next.fileName = std::string(data.cFileName);
+
     // concatenate the full path to be the root dir and the file name
-    next.fullPath = rootDir + Separator + std::string(data.cFileName);
+    next.fullPath = rootDir + Separator + next.fileName;
+
+    // append a separator to the file name if this is a directory
+    if (next.isDirectory)
+    {
+        next.fileName += Separator;
+    }
 #else
     dirent* direntEntry = readdir(previous.direntHandle);
 
@@ -191,13 +195,21 @@ Entry computare::GetNextEntry(const std::string& rootDir, Entry& previous)
         next.isDirectory = true;
     }
 
-    next.fullPath = rootDir + Separator + std::string(direntEntry->d_name);
+    next.fileName = std::string(direntEntry->d_name);
+
+    next.fullPath = rootDir + Separator + next.fileName;
+
+    // append a separator to the file name if this is a directory
+    if (next.isDirectory)
+    {
+        next.fileName += Separator;
+    }
 #endif
 
     return next;
 }
 
-std::vector<Entry> computare::WalkDirectory(const std::string& path)
+std::vector<Entry> Computare::WalkDirectory(const std::string& path)
 {
     std::vector<Entry> entries;
 
