@@ -71,9 +71,12 @@ std::string Computare::GetRunningPath()
 #endif
 
     // cut off the executable name from the path
-    size_t last = path.find_last_of(Separator);
+    if (!path.empty())
+    {
+        size_t last = path.find_last_of(Separator);
 
-    path = path.substr(0, last);
+        path = path.substr(0, last);
+    }
 
     return path;
 }
