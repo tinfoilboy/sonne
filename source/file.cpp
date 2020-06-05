@@ -186,10 +186,12 @@ Entry computare::GetNextEntry(const std::string& rootDir, Entry& previous)
         next.isHidden = true;
     }
 
-    if (fileEntry->d_type == DT_DIR)
+    if (direntEntry->d_type == DT_DIR)
     {
         next.isDirectory = true;
     }
+
+    next.fullPath = rootDir + Separator + std::string(direntEntry.d_name);
 #endif
 
     return next;
