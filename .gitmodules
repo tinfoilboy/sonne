@@ -1,6 +1,9 @@
 [submodule "yaml-cpp"]
-	path = yaml-cpp
+	path = extern/yaml-cpp
 	url = https://github.com/jbeder/yaml-cpp
 [submodule "fmt"]
-	path = fmt
+	path = extern/fmt
 	url = https://github.com/fmtlib/fmt.git
+[submodule "Catch2"]
+	path = extern/Catch2
+	url = git@github.com:catchorg/Catch2.git
