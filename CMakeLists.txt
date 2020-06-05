@@ -1,30 +1,47 @@
 cmake_minimum_required(VERSION 3.0)
 
-project(computare VERSION 2.0.0)
+project (computare LANGUAGES CXX VERSION 2.0.0)
 
-set(CMAKE_CXX_STANDARD 11)
-set(CMAKE_CXX_STANDARD_REQUIRED ON)
+set (CMAKE_CXX_STANDARD 11)
+set (CMAKE_CXX_STANDARD_REQUIRED ON)
 
-set(YAML_CPP_BUILD_TESTS OFF CACHE BOOL "disable yaml tests")
-set(YAML_CPP_BUILD_TOOLS OFF CACHE BOOL "disable yaml tools")
-set(YAML_CPP_BUILD_CONTRIB OFF CACHE BOOL "disable yaml contrib")
-set(FMT_TEST OFF CACHE BOOL "disable fmt tests")
-set(FMT_DOC OFF CACHE BOOL "disable fmt docs")
+set (COMPUTARE_BASE_SOURCE 
+    ${CMAKE_SOURCE_DIR}/source/file.cpp)
 
-add_subdirectory(fmt)
-add_subdirectory(yaml-cpp)
+set (YAML_CPP_BUILD_TESTS OFF CACHE BOOL "disable yaml tests")
+set (YAML_CPP_BUILD_TOOLS OFF CACHE BOOL "disable yaml tools")
+set (YAML_CPP_BUILD_CONTRIB OFF CACHE BOOL "disable yaml contrib")
+set (FMT_TEST OFF CACHE BOOL "disable fmt tests")
+set (FMT_DOC OFF CACHE BOOL "disable fmt docs")
 
-add_executable(computare 
-    source/main.cpp
-    source/pch.cpp
-    source/file.cpp)
+option (COMPUTARE_BUILD_TESTS "Whether to enable the test suite for computare" ON)
 
-target_include_directories(computare PRIVATE ${CMAKE_SOURCE_DIR}/include)
+add_subdirectory (extern/fmt)
+add_subdirectory (extern/yaml-cpp)
+add_subdirectory (extern/Catch2)
 
-target_link_libraries(computare fmt::fmt yaml-cpp)
+add_executable (computare 
+    ${COMPUTARE_BASE_SOURCE}
+    ${CMAKE_SOURCE_DIR}/source/main.cpp)
+
+target_include_directories (computare PUBLIC ${CMAKE_SOURCE_DIR}/include)
+
+target_link_libraries (computare fmt::fmt yaml-cpp)
 
 if (MSVC)
-    target_compile_options(computare PRIVATE "/W4")
+    target_compile_options (computare PRIVATE "/W4")
 else()
-    target_compile_options(computare PRIVATE "-Wall")
+    target_compile_options (computare PRIVATE "-Wall")
+endif()
+
+if (COMPUTARE_BUILD_TESTS)
+    add_executable (computare_test
+        ${COMPUTARE_BASE_SOURCE}
+        ${CMAKE_SOURCE_DIR}/tests/main.cpp)
+
+    target_include_directories (computare_test PUBLIC ${CMAKE_SOURCE_DIR}/include)
+
+    target_link_libraries (computare_test fmt::fmt yaml-cpp Catch2::Catch2)
+
+    file (COPY ${CMAKE_SOURCE_DIR}/tests/samples DESTINATION ${CMAKE_CURRENT_BINARY_DIR})
 endif()

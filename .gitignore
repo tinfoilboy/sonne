@@ -3,3 +3,4 @@ build/
 .vs/
 out/
 .editorconfig
+cpp.hint
