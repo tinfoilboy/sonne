@@ -191,7 +191,7 @@ Entry computare::GetNextEntry(const std::string& rootDir, Entry& previous)
         next.isDirectory = true;
     }
 
-    next.fullPath = rootDir + Separator + std::string(direntEntry.d_name);
+    next.fullPath = rootDir + Separator + std::string(direntEntry->d_name);
 #endif
 
     return next;
