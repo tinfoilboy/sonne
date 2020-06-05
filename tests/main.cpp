@@ -128,4 +128,13 @@ TEST_CASE("directory counter works properly")
         REQUIRE(newConfigs == 1);
         REQUIRE(ignoredFiles == 3);
     }
+
+    SECTION("directory counter gets correct counts for files")
+    {
+        DirectoryCounter counter("samples", config);
+
+        DirectoryInfo info = counter.Run();
+
+        fmt::print("Counter ran successfully!\n");
+    }
 }

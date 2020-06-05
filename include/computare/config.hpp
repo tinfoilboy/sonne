@@ -15,6 +15,9 @@ namespace Computare
         std::string blockCommentBegin = "";
         std::string blockCommentEnd   = "";
 
+        // a list of strings for defining strings in the corresponding language. used for validating comments.
+        std::vector<std::string> stringDelimiters;
+
     };
 
     /**

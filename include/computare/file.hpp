@@ -9,7 +9,8 @@ namespace Computare
     static constexpr const char Separator = '/';
 #endif
 
-    struct Entry {
+    struct Entry
+    {
 
         bool isValid = true;
 

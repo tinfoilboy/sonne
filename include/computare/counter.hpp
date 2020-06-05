@@ -83,13 +83,13 @@ namespace Computare
          *
          * Pass in a config for language support.
          */
-        FileInfo Count(const Config& config);
+        FileInfo Count(std::shared_ptr<Config> config);
 
     private:
 
         std::string m_path;
 
-        std::string GetExtension(const std::string& path);
+        std::string _GetExtension(const std::string& path);
 
     };
 }

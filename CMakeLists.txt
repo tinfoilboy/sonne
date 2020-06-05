@@ -16,12 +16,13 @@ set (YAML_CPP_BUILD_TOOLS OFF CACHE BOOL "disable yaml tools")
 set (YAML_CPP_BUILD_CONTRIB OFF CACHE BOOL "disable yaml contrib")
 set (FMT_TEST OFF CACHE BOOL "disable fmt tests")
 set (FMT_DOC OFF CACHE BOOL "disable fmt docs")
+set (JSON_BuildTests OFF CACHE INTERNAL "")
 
 option (COMPUTARE_BUILD_TESTS "Whether to enable the test suite for computare" ON)
 
 add_subdirectory (extern/fmt)
-add_subdirectory (extern/yaml-cpp)
 add_subdirectory (extern/Catch2)
+add_subdirectory (extern/json)
 
 add_executable (computare 
     ${COMPUTARE_BASE_SOURCE}
@@ -29,7 +30,7 @@ add_executable (computare
 
 target_include_directories (computare PUBLIC ${CMAKE_SOURCE_DIR}/include)
 
-target_link_libraries (computare fmt::fmt yaml-cpp)
+target_link_libraries (computare nlohmann_json::nlohmann_json fmt::fmt)
 
 if (MSVC)
     target_compile_options (computare PRIVATE "/W4")
@@ -44,7 +45,7 @@ if (COMPUTARE_BUILD_TESTS)
 
     target_include_directories (computare_test PUBLIC ${CMAKE_SOURCE_DIR}/include)
 
-    target_link_libraries (computare_test fmt::fmt yaml-cpp Catch2::Catch2)
+    target_link_libraries (computare_test fmt::fmt nlohmann_json::nlohmann_json Catch2::Catch2)
 
     file (COPY ${CMAKE_SOURCE_DIR}/tests/samples DESTINATION ${CMAKE_CURRENT_BINARY_DIR})
     file (COPY ${CMAKE_SOURCE_DIR}/tests/dir_walk DESTINATION ${CMAKE_CURRENT_BINARY_DIR})

@@ -1,0 +1,14 @@
+{
+    "ignore": [
+        "yaml-cpp/",
+        "CMake/",
+        "build/",
+        ".vscode/",
+        ".vs/",
+        "out/",
+        "extern/",
+        "LICENSE",
+        "README.md",
+        "CMakeLists.txt"
+    ]
+}

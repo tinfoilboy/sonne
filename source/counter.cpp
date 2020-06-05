@@ -12,17 +12,17 @@ Counter::Counter(const std::string& path)
 {
 }
 
-FileInfo Counter::Count(const Config& config)
+FileInfo Counter::Count(std::shared_ptr<Config> config)
 {
     FileInfo info = {};
 
-    std::string ext = GetExtension(m_path);
+    std::string ext = _GetExtension(m_path);
 
     std::shared_ptr<Language> language = nullptr;
 
-    if (config.HasLanguage(ext))
+    if (config->HasLanguage(ext))
     {
-        language = config.GetLanguage(ext);
+        language = config->GetLanguage(ext);
     }
 
     if (language != nullptr)
@@ -45,7 +45,7 @@ FileInfo Counter::Count(const Config& config)
 
     char current = '\0';
 
-    std::vector<char> readBlock(config.GetBlockSize());
+    std::vector<char> readBlock(config->GetBlockSize());
     
     CountState        countState        = CountState::REGULAR;
     CommentCheckState checkState        = CommentCheckState::NONE;
@@ -79,7 +79,7 @@ FileInfo Counter::Count(const Config& config)
 
     while (!in.eof())
     {
-        in.read(readBlock.data(), config.GetBlockSize());
+        in.read(readBlock.data(), config->GetBlockSize());
         
         size_t currentSize = in.gcount();
 
@@ -212,7 +212,7 @@ FileInfo Counter::Count(const Config& config)
     return info;
 }
 
-std::string Counter::GetExtension(const std::string& path)
+std::string Counter::_GetExtension(const std::string& path)
 {
     auto lastPeriod = path.find_last_of('.');
 

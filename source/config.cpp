@@ -5,52 +5,78 @@ using namespace Computare;
 
 void Config::Parse(const std::string& path)
 {
-    YAML::Node file = YAML::LoadFile(path);
+    nlohmann::json configJSON;
+
+    std::ifstream in(path);
+
+    if (!in.good())
+    {
+        Fatal("Failed to open config file!\n");
+    }
+
+    in >> configJSON;
 
     // Load each language into the language map
-    if (file["languages"])
+    if (configJSON.contains("languages"))
     {
-        YAML::Node languages = file["languages"];
+        nlohmann::json languagesArray = configJSON["languages"];
 
-        for (size_t index = 0; index < languages.size(); index++)
+        if (!languagesArray.is_array())
         {
-            YAML::Node langNode = languages[index];
+            Fatal("Languages JSON element in config must be an array!\n");
+        }
+
+        for (size_t index = 0; index < languagesArray.size(); index++)
+        {
+            nlohmann::json& languageNode = languagesArray.at(index);
+
             std::shared_ptr<Language> language = std::make_shared<Language>();
 
-            language->name = langNode["language"].as<std::string>();
+            language->name = languageNode["language"].get<std::string>();
 
-            if (langNode["line-comment"])
+            if (languageNode.contains("lineComment"))
             {
-                language->lineComment = langNode["line-comment"].as<std::string>();
+                language->lineComment = languageNode["lineComment"].get<std::string>();
             }
             
-            if (langNode["block-comment-begin"])
+            if (languageNode.contains("blockCommentBegin"))
             {
-                language->blockCommentBegin = langNode["block-comment-begin"].as<std::string>();
+                language->blockCommentBegin = languageNode["blockCommentBegin"].get<std::string>();
             }
             
-            if (langNode["block-comment-end"])
+            if (languageNode.contains("blockCommentEnd"))
             {
-                language->blockCommentEnd = langNode["block-comment-end"].as<std::string>();
+                language->blockCommentEnd = languageNode["blockCommentEnd"].get<std::string>();
             }
-        
-            // iterate through the extensions and add each to the map with their
-            // the same language struct pointer to conserve some memory
-            for (size_t index = 0; index < langNode["extensions"].size(); index++)
+
+            if (languageNode.contains("stringDelimiters"))
             {
-                m_languages.insert(std::pair<std::string, std::shared_ptr<Language>>(langNode["extensions"][index].as<std::string>(), language));
+                nlohmann::json stringDelimiters = languageNode["stringDelimiters"];
+
+                for (auto& node : stringDelimiters)
+                {
+                    language->stringDelimiters.push_back(node.get<std::string>());
+                }
+            }
+
+            nlohmann::json extensions = languageNode["extensions"];
+
+            for (auto& node : extensions)
+            {
+                std::string extension = node.get<std::string>();
+
+                m_languages.insert(std::pair<std::string, std::shared_ptr<Language>>(extension, language));
             }
         }
     }
 
-    if (file["ignore"])
+    if (configJSON.contains("ignore"))
     {
-        YAML::Node ignored = file["ignore"];
+        nlohmann::json ignored = configJSON["ignore"];
 
-        for (size_t index = 0; index < ignored.size(); index++)
+        for (auto& node : ignored)
         {
-            YAML::Node ignoreNode = ignored[index];
-            std::string ignoreStr = ignoreNode.as<std::string>();
+            std::string ignoreStr = node.get<std::string>();
 
             // if the ignore string starts with an exclamation point, do not ignore that file/folder
             if (ignoreStr[0] == '!')
@@ -64,14 +90,14 @@ void Config::Parse(const std::string& path)
         }
     }
 
-    if (file["block-size"])
+    if (configJSON.contains("blockSize"))
     {
-        m_blockSize = file["block-size"].as<size_t>();
+        m_blockSize = configJSON["blockSize"].get<size_t>();
     }
 
-    if (file["ignore-hidden"])
+    if (configJSON.contains("ignoreHidden"))
     {
-        m_ignoreHidden = file["ignore-hidden"].as<bool>();
+        m_ignoreHidden = configJSON["ignoreHidden"].get<bool>();
     }
 }
 

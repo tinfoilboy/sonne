@@ -1,0 +1,158 @@
+{
+    "ignoreHidden": true,
+    "blockSize": 131072,
+
+    "languages": [
+        {
+            "name": "C/C++ Source",
+            "extensions": [ "c", "cpp", "cxx", "cc" ],
+            "lineComment": "//",
+            "blockCommentBegin": "/*",
+            "blockCommentEnd": "*/",
+            "stringDelimiters": [ "\"" ]
+        },
+        {
+            "name": "C/C++ Header",
+            "extensions": [ "h", "hpp", "hxx", "hh" ],
+            "lineComment": "//",
+            "blockCommentBegin": "/*",
+            "blockCommentEnd": "*/",
+            "stringDelimiters": [ "\"" ]
+        },
+        {
+            "name": "Python",
+            "extensions": [ "py" ],
+            "lineComment": "#",
+            "stringDelimiters": [ "\"", "'" ]
+        },
+        {
+            "name": "Java",
+            "extensions": [ "java" ],
+            "lineComment": "//",
+            "blockCommentBegin": "/*",
+            "blockCommentEnd": "*/",
+            "stringDelimiters": [ "\"" ]
+        },
+        {
+            "name": "Kotlin",
+            "extensions": [ "kt", "kts" ],
+            "lineComment": "//",
+            "blockCommentBegin": "/*",
+            "blockCommentEnd": "*/",
+            "stringDelimiters": [ "\"" ]
+        },
+        {
+            "name": "Rust",
+            "extensions": [ "rs" ],
+            "lineComment": "//",
+            "blockCommentBegin": "/*",
+            "blockCommentEnd": "*/",
+            "stringDelimiters": [ "\"" ]
+        },
+        {
+            "name": "JavaScript",
+            "extensions": [ "js" ],
+            "lineComment": "//",
+            "blockCommentBegin": "/*",
+            "blockCommentEnd": "*/",
+            "stringDelimiters": [ "\"", "'" ]
+        },
+        {
+            "name": "CSS",
+            "extensions": [ "css" ],
+            "blockCommentBegin": "/*",
+            "blockCommentEnd": "*/"
+        },
+        {
+            "name": "HTML",
+            "extensions": [ "html", "htm", "xhtml" ],
+            "blockCommentBegin": "<!--",
+            "blockCommentEnd": "-->"
+        },
+        {
+            "name": "TypeScript",
+            "extensions": [ "ts", "tsx" ],
+            "lineComment": "//",
+            "blockCommentBegin": "/*",
+            "blockCommentEnd": "*/",
+            "stringDelimiters": [ "\"", "'" ]
+        },
+        {
+            "name": "Ruby",
+            "extensions": [ "rb" ],
+            "lineComment": "#",
+            "stringDelimiters": [ "\"" ]
+        },
+        {
+            "name": "Lua",
+            "extensions": [ "lua" ],
+            "lineComment": "--",
+            "blockCommentBegin": "--[[",
+            "blockCommentEnd": "--]]",
+            "stringDelimiters": [ "\"", "'" ]
+        },
+        {
+            "name": "D",
+            "extensions": [ "d" ],
+            "lineComment": "//",
+            "blockCommentBegin": "/*",
+            "blockCommentEnd": "*/",
+            "stringDelimiters": [ "\"" ]
+        },
+        {
+            "name": "C#",
+            "extensions": [ "cs" ],
+            "lineComment": "//",
+            "blockCommentBegin": "/*",
+            "blockCommentEnd": "*/",
+            "stringDelimiters": [ "\"" ]
+        },
+        {
+            "name": "PHP",
+            "extensions": [ "php", "php3", "php4", "php5" ],
+            "lineComment": "//",
+            "blockCommentBegin": "/*",
+            "blockCommentEnd": "*/",
+            "stringDelimiters": [ "\"", "'" ]
+        },
+        {
+            "name": "JSON",
+            "extensions": [ "php", "php3", "php4", "php5" ]
+        },
+        {
+            "name": "Go",
+            "extensions": [ "go" ],
+            "lineComment": "//",
+            "blockCommentBegin": "/*",
+            "blockCommentEnd": "*/",
+            "stringDelimiters": [ "\"" ]
+        },
+        {
+            "name": "Swift",
+            "extensions": [ "swift" ],
+            "lineComment": "//",
+            "blockCommentBegin": "/*",
+            "blockCommentEnd": "*/",
+            "stringDelimiters": [ "\"" ]
+        },
+        {
+            "name": "Objective-C",
+            "extensions": [ "h", "m", "mm" ],
+            "lineComment": "//",
+            "blockCommentBegin": "/*",
+            "blockCommentEnd": "*/",
+            "stringDelimiters": [ "\"" ]
+        },
+        {
+            "name": "YAML",
+            "extensions": [ "yml", "yaml" ],
+            "lineComment": "#",
+            "stringDelimiters": [ "\"", "'" ]
+        },
+        {
+            "name": "INI",
+            "extensions": [ "ini" ],
+            "lineComment": ";"
+        }
+    ]
+}
