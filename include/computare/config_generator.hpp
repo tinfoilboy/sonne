@@ -9,5 +9,5 @@ namespace Computare
 
      This is a generated function!
      */
-    extern inline std::shared_ptr<Config> GenerateDefaultConfig();
+    extern std::shared_ptr<Config> GenerateDefaultConfig();
 }
