@@ -11,6 +11,7 @@ the path for the config_generator.cpp file.
 import json
 import random
 import sys
+import re
 import string
 
 CONFIG_FILE_PATH    = sys.argv[1]
@@ -42,13 +43,6 @@ std::shared_ptr<Config> Computare::GenerateDefaultConfig()
 
 # an indent of four spaces for the lines in the function
 FUNCTION_INDENT = "    "
-
-def generate_name(length=16):
-    """
-    Method for generating a random variable name for a language pointer
-    """
-
-    return ''.join(random.choice(string.ascii_letters) for i in range(length))
 
 def get_cpp_bool(bool):
     """
@@ -83,7 +77,9 @@ if "languages" in config:
     for language in languages:
         GENERATOR_FILE_CONTENTS += "\n" # add extra newline to separate
 
-        var_name = generate_name()
+        # if the language contains any special characters or numbers, just remove them for the variable name
+        var_name = re.sub('\W+', '', language["name"])
+        var_name = re.sub('\s+', '_', var_name)
 
         # instantiate the language pointer
         GENERATOR_FILE_CONTENTS += FUNCTION_INDENT + "std::shared_ptr<Language> {} = std::make_shared<Language>();\n\n".format(var_name)

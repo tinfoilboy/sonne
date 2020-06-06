@@ -18,256 +18,256 @@ std::shared_ptr<Config> Computare::GenerateDefaultConfig()
     config->SetIgnoreHidden(true);
     config->SetBlockSize(131072);
 
-    std::shared_ptr<Language> LZGkRkkoyJzZbERk = std::make_shared<Language>();
+    std::shared_ptr<Language> CCSource = std::make_shared<Language>();
 
-    LZGkRkkoyJzZbERk->name = "C/C++ Source";
-    LZGkRkkoyJzZbERk->extensions = {
+    CCSource->name = "C/C++ Source";
+    CCSource->extensions = {
         "c",
         "cpp",
         "cxx",
         "cc"
     };
 
-    LZGkRkkoyJzZbERk->lineComment = "//";
-    LZGkRkkoyJzZbERk->blockCommentBegin = "/*";
-    LZGkRkkoyJzZbERk->blockCommentEnd = "*/";
-    LZGkRkkoyJzZbERk->stringDelimiters = {
+    CCSource->lineComment = "//";
+    CCSource->blockCommentBegin = "/*";
+    CCSource->blockCommentEnd = "*/";
+    CCSource->stringDelimiters = {
         "\""
     };
 
-    config->AddLanguage(LZGkRkkoyJzZbERk);
+    config->AddLanguage(CCSource);
 
-    std::shared_ptr<Language> hGgCCSWbgOgTHBPh = std::make_shared<Language>();
+    std::shared_ptr<Language> CCHeader = std::make_shared<Language>();
 
-    hGgCCSWbgOgTHBPh->name = "C/C++ Header";
-    hGgCCSWbgOgTHBPh->extensions = {
+    CCHeader->name = "C/C++ Header";
+    CCHeader->extensions = {
         "h",
         "hpp",
         "hxx",
         "hh"
     };
 
-    hGgCCSWbgOgTHBPh->lineComment = "//";
-    hGgCCSWbgOgTHBPh->blockCommentBegin = "/*";
-    hGgCCSWbgOgTHBPh->blockCommentEnd = "*/";
-    hGgCCSWbgOgTHBPh->stringDelimiters = {
+    CCHeader->lineComment = "//";
+    CCHeader->blockCommentBegin = "/*";
+    CCHeader->blockCommentEnd = "*/";
+    CCHeader->stringDelimiters = {
         "\""
     };
 
-    config->AddLanguage(hGgCCSWbgOgTHBPh);
+    config->AddLanguage(CCHeader);
 
-    std::shared_ptr<Language> rxAvOPfMAykxmClo = std::make_shared<Language>();
+    std::shared_ptr<Language> Python = std::make_shared<Language>();
 
-    rxAvOPfMAykxmClo->name = "Python";
-    rxAvOPfMAykxmClo->extensions = {
+    Python->name = "Python";
+    Python->extensions = {
         "py"
     };
 
-    rxAvOPfMAykxmClo->lineComment = "#";
-    rxAvOPfMAykxmClo->stringDelimiters = {
+    Python->lineComment = "#";
+    Python->stringDelimiters = {
         "\"",
         "'"
     };
 
-    config->AddLanguage(rxAvOPfMAykxmClo);
+    config->AddLanguage(Python);
 
-    std::shared_ptr<Language> frbjKrHynnngxHJu = std::make_shared<Language>();
+    std::shared_ptr<Language> Java = std::make_shared<Language>();
 
-    frbjKrHynnngxHJu->name = "Java";
-    frbjKrHynnngxHJu->extensions = {
+    Java->name = "Java";
+    Java->extensions = {
         "java"
     };
 
-    frbjKrHynnngxHJu->lineComment = "//";
-    frbjKrHynnngxHJu->blockCommentBegin = "/*";
-    frbjKrHynnngxHJu->blockCommentEnd = "*/";
-    frbjKrHynnngxHJu->stringDelimiters = {
+    Java->lineComment = "//";
+    Java->blockCommentBegin = "/*";
+    Java->blockCommentEnd = "*/";
+    Java->stringDelimiters = {
         "\""
     };
 
-    config->AddLanguage(frbjKrHynnngxHJu);
+    config->AddLanguage(Java);
 
-    std::shared_ptr<Language> MwHIisXFDHiUOoZk = std::make_shared<Language>();
+    std::shared_ptr<Language> Kotlin = std::make_shared<Language>();
 
-    MwHIisXFDHiUOoZk->name = "Kotlin";
-    MwHIisXFDHiUOoZk->extensions = {
+    Kotlin->name = "Kotlin";
+    Kotlin->extensions = {
         "kt",
         "kts"
     };
 
-    MwHIisXFDHiUOoZk->lineComment = "//";
-    MwHIisXFDHiUOoZk->blockCommentBegin = "/*";
-    MwHIisXFDHiUOoZk->blockCommentEnd = "*/";
-    MwHIisXFDHiUOoZk->stringDelimiters = {
+    Kotlin->lineComment = "//";
+    Kotlin->blockCommentBegin = "/*";
+    Kotlin->blockCommentEnd = "*/";
+    Kotlin->stringDelimiters = {
         "\""
     };
 
-    config->AddLanguage(MwHIisXFDHiUOoZk);
+    config->AddLanguage(Kotlin);
 
-    std::shared_ptr<Language> PllcwnoKcZwYAgXM = std::make_shared<Language>();
+    std::shared_ptr<Language> Rust = std::make_shared<Language>();
 
-    PllcwnoKcZwYAgXM->name = "Rust";
-    PllcwnoKcZwYAgXM->extensions = {
+    Rust->name = "Rust";
+    Rust->extensions = {
         "rs"
     };
 
-    PllcwnoKcZwYAgXM->lineComment = "//";
-    PllcwnoKcZwYAgXM->blockCommentBegin = "/*";
-    PllcwnoKcZwYAgXM->blockCommentEnd = "*/";
-    PllcwnoKcZwYAgXM->stringDelimiters = {
+    Rust->lineComment = "//";
+    Rust->blockCommentBegin = "/*";
+    Rust->blockCommentEnd = "*/";
+    Rust->stringDelimiters = {
         "\""
     };
 
-    config->AddLanguage(PllcwnoKcZwYAgXM);
+    config->AddLanguage(Rust);
 
-    std::shared_ptr<Language> zuVFKNngsIafNqmJ = std::make_shared<Language>();
+    std::shared_ptr<Language> JavaScript = std::make_shared<Language>();
 
-    zuVFKNngsIafNqmJ->name = "JavaScript";
-    zuVFKNngsIafNqmJ->extensions = {
+    JavaScript->name = "JavaScript";
+    JavaScript->extensions = {
         "js"
     };
 
-    zuVFKNngsIafNqmJ->lineComment = "//";
-    zuVFKNngsIafNqmJ->blockCommentBegin = "/*";
-    zuVFKNngsIafNqmJ->blockCommentEnd = "*/";
-    zuVFKNngsIafNqmJ->stringDelimiters = {
+    JavaScript->lineComment = "//";
+    JavaScript->blockCommentBegin = "/*";
+    JavaScript->blockCommentEnd = "*/";
+    JavaScript->stringDelimiters = {
         "\"",
         "'"
     };
 
-    config->AddLanguage(zuVFKNngsIafNqmJ);
+    config->AddLanguage(JavaScript);
 
-    std::shared_ptr<Language> DykcyFLmwBMoIrhV = std::make_shared<Language>();
+    std::shared_ptr<Language> CSS = std::make_shared<Language>();
 
-    DykcyFLmwBMoIrhV->name = "CSS";
-    DykcyFLmwBMoIrhV->extensions = {
+    CSS->name = "CSS";
+    CSS->extensions = {
         "css"
     };
 
-    DykcyFLmwBMoIrhV->blockCommentBegin = "/*";
-    DykcyFLmwBMoIrhV->blockCommentEnd = "*/";
+    CSS->blockCommentBegin = "/*";
+    CSS->blockCommentEnd = "*/";
 
-    config->AddLanguage(DykcyFLmwBMoIrhV);
+    config->AddLanguage(CSS);
 
-    std::shared_ptr<Language> yTiRHAIXLQyRFzmm = std::make_shared<Language>();
+    std::shared_ptr<Language> HTML = std::make_shared<Language>();
 
-    yTiRHAIXLQyRFzmm->name = "HTML";
-    yTiRHAIXLQyRFzmm->extensions = {
+    HTML->name = "HTML";
+    HTML->extensions = {
         "html",
         "htm",
         "xhtml"
     };
 
-    yTiRHAIXLQyRFzmm->blockCommentBegin = "<!--";
-    yTiRHAIXLQyRFzmm->blockCommentEnd = "-->";
+    HTML->blockCommentBegin = "<!--";
+    HTML->blockCommentEnd = "-->";
 
-    config->AddLanguage(yTiRHAIXLQyRFzmm);
+    config->AddLanguage(HTML);
 
-    std::shared_ptr<Language> fqkvyrIQecwPVujF = std::make_shared<Language>();
+    std::shared_ptr<Language> TypeScript = std::make_shared<Language>();
 
-    fqkvyrIQecwPVujF->name = "TypeScript";
-    fqkvyrIQecwPVujF->extensions = {
+    TypeScript->name = "TypeScript";
+    TypeScript->extensions = {
         "ts",
         "tsx"
     };
 
-    fqkvyrIQecwPVujF->lineComment = "//";
-    fqkvyrIQecwPVujF->blockCommentBegin = "/*";
-    fqkvyrIQecwPVujF->blockCommentEnd = "*/";
-    fqkvyrIQecwPVujF->stringDelimiters = {
+    TypeScript->lineComment = "//";
+    TypeScript->blockCommentBegin = "/*";
+    TypeScript->blockCommentEnd = "*/";
+    TypeScript->stringDelimiters = {
         "\"",
         "'"
     };
 
-    config->AddLanguage(fqkvyrIQecwPVujF);
+    config->AddLanguage(TypeScript);
 
-    std::shared_ptr<Language> LmCFGZyONPFzPlmO = std::make_shared<Language>();
+    std::shared_ptr<Language> Ruby = std::make_shared<Language>();
 
-    LmCFGZyONPFzPlmO->name = "Ruby";
-    LmCFGZyONPFzPlmO->extensions = {
+    Ruby->name = "Ruby";
+    Ruby->extensions = {
         "rb"
     };
 
-    LmCFGZyONPFzPlmO->lineComment = "#";
-    LmCFGZyONPFzPlmO->stringDelimiters = {
+    Ruby->lineComment = "#";
+    Ruby->stringDelimiters = {
         "\""
     };
 
-    config->AddLanguage(LmCFGZyONPFzPlmO);
+    config->AddLanguage(Ruby);
 
-    std::shared_ptr<Language> NmITtaRopoOSCEEQ = std::make_shared<Language>();
+    std::shared_ptr<Language> Lua = std::make_shared<Language>();
 
-    NmITtaRopoOSCEEQ->name = "Lua";
-    NmITtaRopoOSCEEQ->extensions = {
+    Lua->name = "Lua";
+    Lua->extensions = {
         "lua"
     };
 
-    NmITtaRopoOSCEEQ->lineComment = "--";
-    NmITtaRopoOSCEEQ->blockCommentBegin = "--[[";
-    NmITtaRopoOSCEEQ->blockCommentEnd = "--]]";
-    NmITtaRopoOSCEEQ->stringDelimiters = {
+    Lua->lineComment = "--";
+    Lua->blockCommentBegin = "--[[";
+    Lua->blockCommentEnd = "--]]";
+    Lua->stringDelimiters = {
         "\"",
         "'"
     };
 
-    config->AddLanguage(NmITtaRopoOSCEEQ);
+    config->AddLanguage(Lua);
 
-    std::shared_ptr<Language> yRhsmmXRQQbXElFE = std::make_shared<Language>();
+    std::shared_ptr<Language> D = std::make_shared<Language>();
 
-    yRhsmmXRQQbXElFE->name = "D";
-    yRhsmmXRQQbXElFE->extensions = {
+    D->name = "D";
+    D->extensions = {
         "d"
     };
 
-    yRhsmmXRQQbXElFE->lineComment = "//";
-    yRhsmmXRQQbXElFE->blockCommentBegin = "/*";
-    yRhsmmXRQQbXElFE->blockCommentEnd = "*/";
-    yRhsmmXRQQbXElFE->stringDelimiters = {
+    D->lineComment = "//";
+    D->blockCommentBegin = "/*";
+    D->blockCommentEnd = "*/";
+    D->stringDelimiters = {
         "\""
     };
 
-    config->AddLanguage(yRhsmmXRQQbXElFE);
+    config->AddLanguage(D);
 
-    std::shared_ptr<Language> XDgXsZBhxLhRuvhp = std::make_shared<Language>();
+    std::shared_ptr<Language> C = std::make_shared<Language>();
 
-    XDgXsZBhxLhRuvhp->name = "C#";
-    XDgXsZBhxLhRuvhp->extensions = {
+    C->name = "C#";
+    C->extensions = {
         "cs"
     };
 
-    XDgXsZBhxLhRuvhp->lineComment = "//";
-    XDgXsZBhxLhRuvhp->blockCommentBegin = "/*";
-    XDgXsZBhxLhRuvhp->blockCommentEnd = "*/";
-    XDgXsZBhxLhRuvhp->stringDelimiters = {
+    C->lineComment = "//";
+    C->blockCommentBegin = "/*";
+    C->blockCommentEnd = "*/";
+    C->stringDelimiters = {
         "\""
     };
 
-    config->AddLanguage(XDgXsZBhxLhRuvhp);
+    config->AddLanguage(C);
 
-    std::shared_ptr<Language> fAutOVtxEIMghDxV = std::make_shared<Language>();
+    std::shared_ptr<Language> PHP = std::make_shared<Language>();
 
-    fAutOVtxEIMghDxV->name = "PHP";
-    fAutOVtxEIMghDxV->extensions = {
+    PHP->name = "PHP";
+    PHP->extensions = {
         "php",
         "php3",
         "php4",
         "php5"
     };
 
-    fAutOVtxEIMghDxV->lineComment = "//";
-    fAutOVtxEIMghDxV->blockCommentBegin = "/*";
-    fAutOVtxEIMghDxV->blockCommentEnd = "*/";
-    fAutOVtxEIMghDxV->stringDelimiters = {
+    PHP->lineComment = "//";
+    PHP->blockCommentBegin = "/*";
+    PHP->blockCommentEnd = "*/";
+    PHP->stringDelimiters = {
         "\"",
         "'"
     };
 
-    config->AddLanguage(fAutOVtxEIMghDxV);
+    config->AddLanguage(PHP);
 
-    std::shared_ptr<Language> iIyjnxANVOWEOvxy = std::make_shared<Language>();
+    std::shared_ptr<Language> JSON = std::make_shared<Language>();
 
-    iIyjnxANVOWEOvxy->name = "JSON";
-    iIyjnxANVOWEOvxy->extensions = {
+    JSON->name = "JSON";
+    JSON->extensions = {
         "php",
         "php3",
         "php4",
@@ -275,84 +275,84 @@ std::shared_ptr<Config> Computare::GenerateDefaultConfig()
     };
 
 
-    config->AddLanguage(iIyjnxANVOWEOvxy);
+    config->AddLanguage(JSON);
 
-    std::shared_ptr<Language> aRDiXhrCglDndjsg = std::make_shared<Language>();
+    std::shared_ptr<Language> Go = std::make_shared<Language>();
 
-    aRDiXhrCglDndjsg->name = "Go";
-    aRDiXhrCglDndjsg->extensions = {
+    Go->name = "Go";
+    Go->extensions = {
         "go"
     };
 
-    aRDiXhrCglDndjsg->lineComment = "//";
-    aRDiXhrCglDndjsg->blockCommentBegin = "/*";
-    aRDiXhrCglDndjsg->blockCommentEnd = "*/";
-    aRDiXhrCglDndjsg->stringDelimiters = {
+    Go->lineComment = "//";
+    Go->blockCommentBegin = "/*";
+    Go->blockCommentEnd = "*/";
+    Go->stringDelimiters = {
         "\""
     };
 
-    config->AddLanguage(aRDiXhrCglDndjsg);
+    config->AddLanguage(Go);
 
-    std::shared_ptr<Language> qeMxzXbhjZTnGYtS = std::make_shared<Language>();
+    std::shared_ptr<Language> Swift = std::make_shared<Language>();
 
-    qeMxzXbhjZTnGYtS->name = "Swift";
-    qeMxzXbhjZTnGYtS->extensions = {
+    Swift->name = "Swift";
+    Swift->extensions = {
         "swift"
     };
 
-    qeMxzXbhjZTnGYtS->lineComment = "//";
-    qeMxzXbhjZTnGYtS->blockCommentBegin = "/*";
-    qeMxzXbhjZTnGYtS->blockCommentEnd = "*/";
-    qeMxzXbhjZTnGYtS->stringDelimiters = {
+    Swift->lineComment = "//";
+    Swift->blockCommentBegin = "/*";
+    Swift->blockCommentEnd = "*/";
+    Swift->stringDelimiters = {
         "\""
     };
 
-    config->AddLanguage(qeMxzXbhjZTnGYtS);
+    config->AddLanguage(Swift);
 
-    std::shared_ptr<Language> lXTrCLSMfmnlRvik = std::make_shared<Language>();
+    std::shared_ptr<Language> ObjectiveC = std::make_shared<Language>();
 
-    lXTrCLSMfmnlRvik->name = "Objective-C";
-    lXTrCLSMfmnlRvik->extensions = {
+    ObjectiveC->name = "Objective-C";
+    ObjectiveC->extensions = {
         "h",
         "m",
         "mm"
     };
 
-    lXTrCLSMfmnlRvik->lineComment = "//";
-    lXTrCLSMfmnlRvik->blockCommentBegin = "/*";
-    lXTrCLSMfmnlRvik->blockCommentEnd = "*/";
-    lXTrCLSMfmnlRvik->stringDelimiters = {
+    ObjectiveC->lineComment = "//";
+    ObjectiveC->blockCommentBegin = "/*";
+    ObjectiveC->blockCommentEnd = "*/";
+    ObjectiveC->stringDelimiters = {
         "\""
     };
 
-    config->AddLanguage(lXTrCLSMfmnlRvik);
+    config->AddLanguage(ObjectiveC);
 
-    std::shared_ptr<Language> ZzuZMEjQKsOfhbPq = std::make_shared<Language>();
+    std::shared_ptr<Language> YAML = std::make_shared<Language>();
 
-    ZzuZMEjQKsOfhbPq->name = "YAML";
-    ZzuZMEjQKsOfhbPq->extensions = {
+    YAML->name = "YAML";
+    YAML->extensions = {
         "yml",
         "yaml"
     };
 
-    ZzuZMEjQKsOfhbPq->lineComment = "#";
-    ZzuZMEjQKsOfhbPq->stringDelimiters = {
+    YAML->lineComment = "#";
+    YAML->stringDelimiters = {
         "\"",
         "'"
     };
 
-    config->AddLanguage(ZzuZMEjQKsOfhbPq);
+    config->AddLanguage(YAML);
 
-    std::shared_ptr<Language> dYZmBBrgHRpRITqa = std::make_shared<Language>();
+    std::shared_ptr<Language> INI = std::make_shared<Language>();
 
-    dYZmBBrgHRpRITqa->name = "INI";
-    dYZmBBrgHRpRITqa->extensions = {
+    INI->name = "INI";
+    INI->extensions = {
         "ini"
     };
 
-    dYZmBBrgHRpRITqa->lineComment = ";";
+    INI->lineComment = ";";
 
-    config->AddLanguage(dYZmBBrgHRpRITqa);
+    config->AddLanguage(INI);
 
     return config;
 }
