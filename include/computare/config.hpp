@@ -15,6 +15,9 @@ namespace Computare
         std::string blockCommentBegin = "";
         std::string blockCommentEnd   = "";
 
+        // a list of file extensions that this language is able to parse to
+        std::vector<std::string> extensions;
+
         // a list of strings for defining strings in the corresponding language. used for validating comments.
         std::vector<std::string> stringDelimiters;
 
@@ -38,6 +41,14 @@ namespace Computare
 
         std::shared_ptr<Language> GetLanguage(const std::string& extension) const;
 
+        inline void AddLanguage(std::shared_ptr<Language> language)
+        {
+            for (auto& extension : language->extensions)
+            {
+                this->m_languages.insert(std::make_pair(extension, language));
+            }
+        }
+
         inline void SetIgnoreHidden(bool state)
         {
             this->m_ignoreHidden = state;
@@ -58,7 +69,12 @@ namespace Computare
             return m_blockSize;
         }
 
-        inline std::map<std::string, bool> GetIgnored()
+        inline void AddIgnored(std::string path, bool ignore)
+        {
+            m_ignored.insert(std::make_pair(path, ignore));
+        }
+
+        inline std::map<std::string, bool>& GetIgnored()
         {
             return m_ignored;
         }

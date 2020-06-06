@@ -6,8 +6,10 @@ set (CMAKE_CXX_STANDARD 11)
 set (CMAKE_CXX_STANDARD_REQUIRED ON)
 
 set (COMPUTARE_BASE_SOURCE 
+    ${CMAKE_SOURCE_DIR}/source/pch.cpp
     ${CMAKE_SOURCE_DIR}/source/file.cpp
     ${CMAKE_SOURCE_DIR}/source/directory_counter.cpp
+    ${CMAKE_SOURCE_DIR}/source/config_generator.cpp
     ${CMAKE_SOURCE_DIR}/source/counter.cpp
     ${CMAKE_SOURCE_DIR}/source/config.cpp)
 
@@ -23,6 +25,13 @@ option (COMPUTARE_BUILD_TESTS "Whether to enable the test suite for computare" O
 add_subdirectory (extern/fmt)
 add_subdirectory (extern/Catch2)
 add_subdirectory (extern/json)
+
+# execute the embed config script at configure time to keep up to date with default config
+execute_process(
+    COMMAND python
+    ${CMAKE_SOURCE_DIR}/embed_config.py
+    ${CMAKE_SOURCE_DIR}/default_config.json
+    ${CMAKE_SOURCE_DIR}/source/config_generator.cpp)
 
 add_executable (computare 
     ${COMPUTARE_BASE_SOURCE}

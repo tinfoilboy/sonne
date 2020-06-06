@@ -114,8 +114,10 @@ void DirectoryCounter::WalkForPaths(
             // grab a substring of the file path without the root path for matching
             std::string relativePath = entry.fullPath.substr(m_path.size() + 1, entry.fullPath.size() - m_path.size());
 
-            // the ignore was found, skip this file/dir
-            if (relativePath.find(key) != std::string::npos)
+            size_t find = relativePath.find(key);
+
+            // the ignore was found, skip this file/dir if the ignore directive is true
+            if (find != std::string::npos && relativePath.at(find))
             {
                 ignored++;
 

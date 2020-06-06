@@ -65,6 +65,8 @@ void Config::Parse(const std::string& path)
             {
                 std::string extension = node.get<std::string>();
 
+                language->extensions.push_back(extension);
+
                 m_languages.insert(std::pair<std::string, std::shared_ptr<Language>>(extension, language));
             }
         }
@@ -81,6 +83,8 @@ void Config::Parse(const std::string& path)
             // if the ignore string starts with an exclamation point, do not ignore that file/folder
             if (ignoreStr[0] == '!')
             {
+                ignoreStr = ignoreStr.substr(1);
+
                 m_ignored[ignoreStr] = false;
             }
             else

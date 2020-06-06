@@ -4,6 +4,7 @@
 
 #include <computare/file.hpp>
 #include <computare/config.hpp>
+#include <computare/config_generator.hpp>
 #include <computare/directory_counter.hpp>
 
 using namespace Computare;
@@ -74,7 +75,7 @@ TEST_CASE("directory counter works properly")
     // grab the running path for the test runner, used for comparing if the right paths are grabbed
     std::string runningPath = GetRunningPath();
 
-    std::shared_ptr<Config> config = std::make_shared<Config>();
+    std::shared_ptr<Config> config = GenerateDefaultConfig();
 
     SECTION("path walking returns correct entries")
     {
@@ -129,11 +130,18 @@ TEST_CASE("directory counter works properly")
         REQUIRE(ignoredFiles == 3);
     }
 
+    config = GenerateDefaultConfig(); // regenerate config to reset ignores
+
     SECTION("directory counter gets correct counts for files")
     {
         DirectoryCounter counter("samples", config);
 
         DirectoryInfo info = counter.Run();
+
+        for (auto language : info.totals)
+        {
+            fmt::print("{} with {} total lines\n", language.second.language, language.second.totalLines);
+        }
 
         fmt::print("Counter ran successfully!\n");
     }
