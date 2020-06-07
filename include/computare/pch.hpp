@@ -9,6 +9,7 @@
 #include <memory>
 #include <algorithm>
 #include <vector>
+#include <cmath>
 #include <climits>
 
 #include "cxxopt.hpp"

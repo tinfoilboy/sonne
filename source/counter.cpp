@@ -12,9 +12,9 @@ Counter::Counter(const std::string& path)
 {
 }
 
-FileInfo Counter::Count(std::shared_ptr<Config> config)
+CountInfo Counter::Count(std::shared_ptr<Config> config)
 {
-    FileInfo info = {};
+    CountInfo info = {};
 
     std::string ext = _GetExtension(m_path);
 
@@ -37,177 +37,30 @@ FileInfo Counter::Count(std::shared_ptr<Config> config)
         Fatal(fmt::format("Invalid file passed to counter! Path: {}\n", file.fullPath));
     }
 
-    std::ifstream in;
-    in.open(m_path);
+    std::ifstream in(m_path);
 
     if (!in.good())
+    {
         Fatal("Failed to open file at path: " + m_path);
+    }
 
-    char current = '\0';
+    in.seekg(0, std::ios::end); // seek to the end of the buffer to grab size
 
-    std::vector<char> readBlock(config->GetBlockSize());
+    size_t bufferSize = static_cast<size_t>(in.tellg());
+
+    std::vector<char> buffer(bufferSize);
     
-    CountState        countState        = CountState::REGULAR;
-    CommentCheckState checkState        = CommentCheckState::NONE;
-    size_t            currentLineLength = 0;
-    bool              hasComments       = false;
-    std::string       lineComment       = "";
-    std::string       blockCommentBegin = "";
-    std::string       blockCommentEnd   = "";
-    std::string       currentCheck      = "";
-    bool              wasBlockComment   = false;
+    in.seekg(0); // go back to beginning of buffer
 
-    if (language != nullptr)
-    {
-        hasComments       = true;
-        lineComment       = language->lineComment;
-        blockCommentBegin = language->blockCommentBegin;
-        blockCommentEnd   = language->blockCommentEnd;
-    }
+    in.read(buffer.data(), bufferSize);
 
-    size_t maxCommentSize = lineComment.size();
-
-    if (maxCommentSize < blockCommentBegin.size())
-    {
-        maxCommentSize = blockCommentBegin.size();
-    }
-
-    if (maxCommentSize < blockCommentEnd.size())
-    {
-        maxCommentSize = blockCommentEnd.size();
-    }
-
-    while (!in.eof())
-    {
-        in.read(readBlock.data(), config->GetBlockSize());
-        
-        size_t currentSize = in.gcount();
-
-        for (size_t index = 0; index < currentSize; index++)
-        {
-            current = readBlock[index];
-
-            if (checkState == CommentCheckState::CHECKING)
-                currentCheck += current;
-
-            if (current == '\n')
-            {
-                info.totalLines++;
-
-                if (currentLineLength <= 0)
-                    info.emptyLines++;
-
-                if (language != nullptr && countState == CountState::REGULAR)
-                    info.codeLines++;
-
-                if (
-                    language != nullptr &&
-                    (
-                        countState == CountState::LINE_COMMENT  ||
-                        countState == CountState::BLOCK_COMMENT ||
-                        wasBlockComment
-                    )
-                )
-                {
-                    if (countState == CountState::LINE_COMMENT)
-                        countState = CountState::REGULAR;
-
-                    info.commentLines++;
-                }
-
-                info.averageLineLength += currentLineLength;
-
-                currentLineLength = 0;
-
-                continue;
-            }
-
-            if (
-                hasComments                           &&
-                checkState == CommentCheckState::NONE &&
-                (
-                    current == lineComment[0]       ||
-                    current == blockCommentBegin[0] ||
-                    current == blockCommentEnd[0]
-                )
-            )
-            {
-                if (
-                    lineComment.size()       == 1 ||
-                    blockCommentBegin.size() == 1 ||
-                    blockCommentEnd.size()   == 1
-                )
-                {
-                    if (current == lineComment[0])
-                        countState = CountState::LINE_COMMENT;
-                    
-                    if (current == blockCommentBegin[0])
-                        countState = CountState::BLOCK_COMMENT;
-
-                    if (current == blockCommentEnd[0])
-                        countState = CountState::REGULAR;
-
-                    currentLineLength++;
-
-                    continue;
-                }
-                else
-                {
-                    checkState    = CommentCheckState::CHECKING;
-                    currentCheck += current;
-                }
-            }
-
-            if (
-                checkState          == CommentCheckState::CHECKING &&
-                currentCheck        == lineComment
-            )
-            {
-                countState   = CountState::LINE_COMMENT;
-                checkState   = CommentCheckState::NONE;
-                currentCheck = "";
-            }
-            else if (
-                checkState          == CommentCheckState::CHECKING &&
-                currentCheck        == blockCommentBegin
-            )
-            {
-                countState      = CountState::BLOCK_COMMENT;
-                checkState      = CommentCheckState::NONE;
-                currentCheck    = "";
-            }
-            else if (
-                checkState          == CommentCheckState::CHECKING &&
-                currentCheck        == blockCommentEnd
-            )
-            {
-                countState      = CountState::REGULAR;
-                checkState      = CommentCheckState::NONE;
-                currentCheck    = "";
-                wasBlockComment = true;
-                currentLineLength++;
-
-                continue;
-            }
-            
-            if (hasComments && currentCheck.size() > maxCommentSize)
-            {
-                checkState   = CommentCheckState::NONE;
-                currentCheck = "";
-            }
-
-            if (wasBlockComment)
-                wasBlockComment = false;
-
-            currentLineLength++;
-        }
-    }
-
-    // add a single line for eof
-    info.totalLines++;
+    _CountFromBuffer(buffer, language, info);
 
     if (info.averageLineLength > 0)
-        info.averageLineLength /= info.totalLines;
+    {
+        info.averageLineLength =
+            static_cast<size_t>(std::roundf(static_cast<float>(info.averageLineLength) / static_cast<float>(info.totalLines)));
+    }
 
     return info;
 }
@@ -220,4 +73,243 @@ std::string Counter::_GetExtension(const std::string& path)
         return path.substr(lastPeriod + 1, path.size() - (lastPeriod + 1));
 
     return "";
+}
+
+char Counter::_GetBufferLookahead(std::vector<char>& buffer, const size_t& index)
+{
+    return ((index < buffer.size()) ? buffer.at(index) : '\0');
+}
+
+void Counter::_CountFromBuffer(std::vector<char>& buffer, std::shared_ptr<Language> language, CountInfo& info)
+{
+    CountData data = {
+        0, // lineLength
+        0, // lineLengthWithoutWhitespace
+        0, // index
+        CountState::NORMAL, // state
+        true, // shouldCountBlockLine
+        false, // wasBlockComment
+        language,
+        info,
+        buffer
+    };
+
+    for (size_t index = 0; index < buffer.size(); index++)
+    {
+        data.index = index;
+
+        char current = buffer.at(index); // grab the current character
+
+        // skip past carriage return
+        if (current == '\r')
+        {
+            continue;
+        }
+
+        if (current == '\n')
+        {
+            info.totalLines++;
+
+            if (data.lineLengthWithoutWhitespace == 0)
+            {
+                info.emptyLines++;
+            }
+
+            _LanguageNewLineCheck(data);
+
+            info.averageLineLength += data.lineLength;
+
+            // reset both line lengths
+            data.lineLength = 0;
+            data.lineLengthWithoutWhitespace = 0;
+
+            continue;
+        }
+
+        bool skip = _LanguageCommentStringChecks(data);
+
+        if (current != ' ' && current != '\t')
+        {
+            data.lineLengthWithoutWhitespace++;
+        }
+
+        data.lineLength++;
+
+        if (skip)
+        {
+            continue;
+        }
+    }
+
+    // interpret the last line of the file as there's no \n to piggyback on
+    info.totalLines++;
+
+    _LanguageNewLineCheck(data);
+
+    if (data.lineLengthWithoutWhitespace == 0)
+    {
+        info.emptyLines++; // increment the empty lines for the last line as it has no \n char
+    }
+
+    info.averageLineLength += data.lineLength; // increment the line lengths for the last line
+}
+
+void Counter::_LanguageNewLineCheck(CountData& data)
+{
+    if (data.language == nullptr)
+    {
+        return; // only do these operations if a language is currently set
+    }
+
+    bool shouldCountAsCode = true;
+
+    if (data.state == CountState::LINE_COMMENT || (data.state == CountState::BLOCK_COMMENT && data.shouldCountBlockLine) ||
+        (data.wasBlockComment && data.lineLengthWithoutWhitespace == data.language->blockCommentEnd.size()))
+    {
+        data.info.commentLines++;
+
+        if (data.wasBlockComment)
+        {
+            data.wasBlockComment = false;
+            
+            shouldCountAsCode = false; // since this is just a line with the end of a block comment in it, don't count
+        }
+    }
+
+    if ((data.state == CountState::NORMAL || data.state == CountState::STRING) && data.lineLengthWithoutWhitespace > 0 && shouldCountAsCode)
+    {
+        data.info.codeLines++; // increment the lines of source code if we are not in a comment and if line is not empty
+    }
+
+    if (data.state == CountState::LINE_COMMENT)
+    {
+        data.state = CountState::NORMAL; // reset the state of the language count parser to normal text
+    }
+
+    if (!m_shouldCountBlockLine)
+    {
+        m_shouldCountBlockLine = true; // block comment lines should now be counted after the first line not counted
+    }
+}
+
+bool Counter::_CompareStringToBuffer(std::vector<char>& buffer, std::string& compare, const size_t& start)
+{
+    // check if the first character matches, and if not we can already say that the string doesn't match
+    if (buffer[start] != compare[0])
+    {
+        return false;
+    }
+
+    for (size_t i = 1; i < compare.size(); i++)
+    {
+        char& compareChar = compare.at(i);
+
+        if (_GetBufferLookahead(buffer, start + i) != compareChar)
+        {
+            return false; // the current character is not the same of that in the buffer, so no match
+        }
+    }
+
+    return true;
+}
+
+bool Counter::_CheckStringDelimiter(std::vector<char>& buffer, std::vector<std::string>& delimiters, const size_t& start)
+{
+    for (auto& delimiter : delimiters) // check all string delimiters for a string begin
+    {
+        bool hasDelimiter = _CompareStringToBuffer(buffer, delimiter, start);
+
+        if (hasDelimiter)
+        {
+            return true;
+        }
+    }
+
+    return false;
+}
+
+bool Counter::_LanguageCommentStringChecks(CountData& data)
+{
+    if (data.language == nullptr)
+    {
+        return false; // return out and do not skip if we do not have a language set
+    }
+
+    // we are already in a line comment, thus we can just add to the line length and ignore the rest of the chars
+    if (data.state == CountState::LINE_COMMENT)
+    {
+        return true;
+    }
+
+    if (data.state == CountState::NORMAL)
+    {
+        if (!(data.language)->stringDelimiters.empty()) // check if we are about to begin a string
+        {
+            bool hasDelimiter = _CheckStringDelimiter(data.buffer, data.language->stringDelimiters, data.index);
+
+            if (hasDelimiter)
+            {
+                data.state = CountState::STRING;
+                
+                return true; // skip over the delimiter for this string
+            }
+        }
+
+        // only check for a line comment only if it occurs at the beginning of the line excluding whitespace
+        if (data.lineLengthWithoutWhitespace == 0 && !data.language->lineComment.empty())
+        {
+            bool hasLineComment = _CompareStringToBuffer(data.buffer, data.language->lineComment, data.index);
+
+            if (hasLineComment)
+            {
+                data.state = CountState::LINE_COMMENT;
+
+                return true; // skip over this character as we know we are in a line comment
+            }
+        }
+
+        if (!data.language->blockCommentBegin.empty())
+        {
+            bool hasBlockCommentBeginning = _CompareStringToBuffer(data.buffer, data.language->blockCommentBegin, data.index);
+
+            if (hasBlockCommentBeginning)
+            {
+                // only count the first line of a block comment if it is at the start of the line excluding whitespace
+                m_shouldCountBlockLine = (data.lineLengthWithoutWhitespace == 0);
+
+                data.state = CountState::BLOCK_COMMENT;
+
+                return true; // skip the rest of this characters processing
+            }
+        }
+    }
+
+    if (data.state == CountState::STRING && !data.language->stringDelimiters.empty()) // check if we are at the end of a string
+    {
+        bool hasDelimiter = _CheckStringDelimiter(data.buffer, data.language->stringDelimiters, data.index);
+
+        if (hasDelimiter)
+        {
+            data.state = CountState::NORMAL;
+
+            return true; // skip over the ending delimiter for this string
+        }
+    }
+
+    // if we have endings for block comments, check if we are at a block ender if currently counting a block comment
+    if (data.state == CountState::BLOCK_COMMENT && !data.language->blockCommentEnd.empty())
+    {
+        bool hasBlockCommentEnding = _CompareStringToBuffer(data.buffer, data.language->blockCommentEnd, data.index);
+
+        if (hasBlockCommentEnding)
+        {
+            data.state = CountState::NORMAL;
+
+            data.wasBlockComment = true;
+            
+            return true; // skip this character as we know it ends a block comment
+        }
+    }
+
+    return false;
 }

@@ -37,7 +37,7 @@ TEST_CASE("filesystem custom functions work correctly")
         REQUIRE(entry.isValid == true);
 
         // file size of the test.py file (unless updated) should always be 142
-        REQUIRE(entry.fileSize == 142);
+        REQUIRE(entry.fileSize == 171);
     }
 
     SECTION("directory crawling works")
@@ -67,6 +67,38 @@ TEST_CASE("filesystem custom functions work correctly")
     }
 }
 
+TEST_CASE("counter works properly")
+{
+    std::shared_ptr<Config> config = GenerateDefaultConfig();
+
+    SECTION("count plain text reports correctly")
+    {
+        Counter counter("samples/test.txt");
+
+        CountInfo info = counter.Count(config);
+
+        REQUIRE(info.language == "Plain Text");
+        REQUIRE(info.files == 1);
+        REQUIRE(info.totalLines == 5);
+        REQUIRE(info.emptyLines == 1);
+        REQUIRE(info.averageLineLength == 39);
+    }
+
+    SECTION("count code reports correctly")
+    {
+        Counter counter("samples/test.cpp");
+
+        CountInfo info = counter.Count(config);
+
+        REQUIRE(info.language == "C/C++ Source");
+        REQUIRE(info.files == 1);
+        REQUIRE(info.totalLines == 18);
+        REQUIRE(info.codeLines == 8);
+        REQUIRE(info.emptyLines == 4);
+        REQUIRE(info.commentLines == 6);
+    }
+}
+
 TEST_CASE("directory counter works properly")
 {
     // separate the previous case with two newlines
@@ -83,8 +115,8 @@ TEST_CASE("directory counter works properly")
 
         DirectoryCounter counter(dir.fullPath, config);
 
-        size_t ignoredFiles = 0;
-        size_t newConfigs = 0;
+        size_t ignoredPaths = 0;
+        size_t newConfigs   = 0;
 
         counter.ParseConfigAtEntry(dir, newConfigs);
 
@@ -94,14 +126,17 @@ TEST_CASE("directory counter works properly")
 
         // make sure that the walked paths match that of the local test runner
         std::vector<std::string> expectedPaths = {
-            fmt::format("{}{}samples{}fun.java", runningPath, Separator, Separator),
+            fmt::format("{}{}samples{}test.java", runningPath, Separator, Separator),
             fmt::format("{}{}samples{}test.py", runningPath, Separator, Separator),
+            fmt::format("{}{}samples{}test.cpp", runningPath, Separator, Separator),
+            fmt::format("{}{}samples{}test.hpp", runningPath, Separator, Separator),
+            fmt::format("{}{}samples{}test.txt", runningPath, Separator, Separator),
             fmt::format("{}{}samples{}python{}program.py", runningPath, Separator, Separator, Separator)
         };
 
-        counter.WalkForPaths(entries, paths, newConfigs, ignoredFiles);
+        counter.WalkForPaths(entries, paths, newConfigs, ignoredPaths);
 
-        REQUIRE(paths.size() == 3);
+        REQUIRE(paths.size() == 6);
 
         size_t pathsMatch = 0; // paths match must be the same number as expected paths to pass
 
@@ -127,7 +162,7 @@ TEST_CASE("directory counter works properly")
         REQUIRE(pathsMatch == expectedPaths.size());
 
         REQUIRE(newConfigs == 1);
-        REQUIRE(ignoredFiles == 3);
+        REQUIRE(ignoredPaths == 2);
     }
 
     config = GenerateDefaultConfig(); // regenerate config to reset ignores

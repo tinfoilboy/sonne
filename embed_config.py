@@ -53,9 +53,6 @@ def get_cpp_bool(bool):
 
 if "ignoreHidden" in config:
     GENERATOR_FILE_CONTENTS += FUNCTION_INDENT + "config->SetIgnoreHidden({});\n".format(get_cpp_bool(config["ignoreHidden"]))
-    
-if "blockSize" in config:
-    GENERATOR_FILE_CONTENTS += FUNCTION_INDENT + "config->SetBlockSize({});\n".format(int(config["blockSize"]))
 
 if "ignore" in config:
     ignoreArray = config["ignore"]

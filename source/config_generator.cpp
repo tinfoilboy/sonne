@@ -16,7 +16,6 @@ std::shared_ptr<Config> Computare::GenerateDefaultConfig()
     std::shared_ptr<Config> config = std::make_shared<Config>();
 
     config->SetIgnoreHidden(true);
-    config->SetBlockSize(131072);
 
     std::shared_ptr<Language> CCSource = std::make_shared<Language>();
 

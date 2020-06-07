@@ -10,6 +10,6 @@ public class Main
     public static void main(String[] args)
     {
         // print the word test!
-        System.out.println("Test!");
+        System.out.println("Test!"); // don't count this comment as it is preceeded by a source line
     }
 }

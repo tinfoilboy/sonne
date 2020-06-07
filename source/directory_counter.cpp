@@ -18,8 +18,8 @@ DirectoryInfo DirectoryCounter::Run()
     DirectoryInfo info = {};
 
     // create a file info struct for the counts of the totals
-    FileInfo total = {};
-    total.language = "Totals";
+    CountInfo total = {};
+    total.language  = "Totals";
 
     size_t ignoredFiles = 0; // the amount of files/directories ignored by the user configs
     size_t newConfigs   = 0; // the amount of new configs loaded as the directory was walked
@@ -49,9 +49,7 @@ DirectoryInfo DirectoryCounter::Run()
 
         Counter counter(path);
 
-        FileInfo count = counter.Count(m_config);
-
-        count.files = 1; // setting files to one on the count increments it in the totals
+        CountInfo count = counter.Count(m_config);
 
         // if this language has occurred before in the counter, just append to the counts for that language
         if (info.totals.count(count.language) > 0)

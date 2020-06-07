@@ -12,7 +12,7 @@ namespace Computare
     struct DirectoryInfo
     {
 
-        std::map<std::string, FileInfo> totals;
+        std::map<std::string, CountInfo> totals;
     
     };
 

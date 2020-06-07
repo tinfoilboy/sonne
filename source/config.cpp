@@ -94,11 +94,6 @@ void Config::Parse(const std::string& path)
         }
     }
 
-    if (configJSON.contains("blockSize"))
-    {
-        m_blockSize = configJSON["blockSize"].get<size_t>();
-    }
-
     if (configJSON.contains("ignoreHidden"))
     {
         m_ignoreHidden = configJSON["ignoreHidden"].get<bool>();
