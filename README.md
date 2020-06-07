@@ -27,19 +27,17 @@ To use sonne, just provide the path to the file or folder you wish to run it on.
 
 ## Configuration
 
-sonne is meant to be configured to change languages supported or files to ignore. These options are configured with a file named `.sonne.yml`. These are the supported options. A default configuration is placed into your home directory at `~/.sonne.yml` with language definitions and default settings.
+sonne is meant to be configured to change languages supported or files to ignore. These options are configured with a file named `.sonne.json`. These are the supported options. A default configuration is placed into your home directory at `~/.sonne.json` with language definitions and default settings.
 
 ### `ignore-hidden`
 
 Specifies whether or not hidden files and directories should be ignored.
-Default:
-
-    ignore-hidden: true
+Default is true.
 
 ### `languages`
 
 An array of language blocks containing information on language name, associated extensions, and comment tokens.
-Check the root `.sonne.yml` to see how to structure these blocks and add your own.
+Check the root `.sonne.json` to see how to structure these blocks and add your own.
 
 ### `ignore`
 
