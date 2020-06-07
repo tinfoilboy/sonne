@@ -1,10 +1,10 @@
-#include "computare/pch.hpp"
-#include "computare/counter.hpp"
+#include "sonne/pch.hpp"
+#include "sonne/counter.hpp"
 
-#include "computare/file.hpp"
-#include "computare/config.hpp"
+#include "sonne/file.hpp"
+#include "sonne/config.hpp"
 
-using namespace Computare;
+using namespace Sonne;
 
 Counter::Counter(const std::string& path)
     :

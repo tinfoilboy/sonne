@@ -1,16 +1,16 @@
-#include "computare/pch.hpp"
+#include "sonne/pch.hpp"
 
 /*#include "computare/counter.hpp"
 #include "computare/config.hpp"
 #include "computare/directory_counter.hpp"*/
-#include "computare/file.hpp"
+#include "sonne/file.hpp"
 
 /*
  * Main command-line entry point for the program.
  */
 int main(int argc, char** argv)
 {
-    Computare::Entry entry = Computare::GetFSEntry("../../../source");
+    Sonne::Entry entry = Sonne::GetFSEntry("../../../source");
 
     fmt::print("is valid: {}\n", entry.isValid);
     fmt::print("{} bytes long\n", entry.fileSize);

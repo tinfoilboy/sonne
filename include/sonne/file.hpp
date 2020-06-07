@@ -1,6 +1,6 @@
 #pragma once
 
-namespace Computare
+namespace Sonne
 {
     
 #ifdef _WIN32

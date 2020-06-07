@@ -1,10 +1,10 @@
-#include "computare/pch.hpp"
-#include "computare/file.hpp"
+#include "sonne/pch.hpp"
+#include "sonne/file.hpp"
 
-using namespace Computare;
+using namespace Sonne;
 
 #ifdef _WIN32
-void Computare::SetEntryFromHandle(
+void Sonne::SetEntryFromHandle(
     HANDLE file,
     const std::string& path,
     Entry& entry,
@@ -43,7 +43,7 @@ void Computare::SetEntryFromHandle(
 }
 #endif
 
-std::string Computare::GetRunningPath()
+std::string Sonne::GetRunningPath()
 {
     std::string path = "";
 
@@ -81,7 +81,7 @@ std::string Computare::GetRunningPath()
     return path;
 }
 
-Entry Computare::GetFSEntry(const std::string& path, bool shouldClose)
+Entry Sonne::GetFSEntry(const std::string& path, bool shouldClose)
 {
     Entry entry;
 
@@ -159,7 +159,7 @@ Entry Computare::GetFSEntry(const std::string& path, bool shouldClose)
     return entry;
 }
 
-Entry Computare::GetNextEntry(const std::string& rootDir, Entry& previous)
+Entry Sonne::GetNextEntry(const std::string& rootDir, Entry& previous)
 {
     Entry next;
 
@@ -247,7 +247,7 @@ Entry Computare::GetNextEntry(const std::string& rootDir, Entry& previous)
     return next;
 }
 
-std::vector<Entry> Computare::WalkDirectory(const std::string& path)
+std::vector<Entry> Sonne::WalkDirectory(const std::string& path)
 {
     std::vector<Entry> entries;
 

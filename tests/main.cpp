@@ -1,13 +1,13 @@
 #define CATCH_CONFIG_MAIN
 #include <catch2/catch.hpp>
-#include <computare/pch.hpp>
+#include <sonne/pch.hpp>
 
-#include <computare/file.hpp>
-#include <computare/config.hpp>
-#include <computare/config_generator.hpp>
-#include <computare/directory_counter.hpp>
+#include <sonne/file.hpp>
+#include <sonne/config.hpp>
+#include <sonne/config_generator.hpp>
+#include <sonne/directory_counter.hpp>
 
-using namespace Computare;
+using namespace Sonne;
 
 inline void CountSubdirectory(Entry& directory, size_t nestAmt, size_t& totalEntries)
 {

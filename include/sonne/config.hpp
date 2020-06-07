@@ -1,6 +1,6 @@
 #pragma once
 
-namespace Computare
+namespace Sonne
 {
 
     /**
@@ -24,7 +24,7 @@ namespace Computare
     };
 
     /**
-     Parses data from a .computare.yml and stores the resulting read in this class
+     Parses data from a .sonne.json and stores the resulting read in this class
      for use in counting.
      
      Multiple configs can be loaded and stacked for per-project configuration

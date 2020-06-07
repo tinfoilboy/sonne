@@ -1,7 +1,7 @@
-#include "computare/pch.hpp"
-#include "computare/config.hpp"
+#include "sonne/pch.hpp"
+#include "sonne/config.hpp"
 
-using namespace Computare;
+using namespace Sonne;
 
 void Config::Parse(const std::string& path)
 {

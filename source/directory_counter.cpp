@@ -1,10 +1,10 @@
-#include "computare/pch.hpp"
-#include "computare/directory_counter.hpp"
+#include "sonne/pch.hpp"
+#include "sonne/directory_counter.hpp"
 
-#include "computare/file.hpp"
-#include "computare/config.hpp"
+#include "sonne/file.hpp"
+#include "sonne/config.hpp"
 
-using namespace Computare;
+using namespace Sonne;
 
 DirectoryCounter::DirectoryCounter(const std::string& path, std::shared_ptr<Config> config)
     :
@@ -90,7 +90,7 @@ void DirectoryCounter::WalkForPaths(
         bool ignore = (entry.isHidden && m_config->GetIgnoreHidden());
 
         // skip a config file if it comes up
-        if (entry.fileName == ".computare.json")
+        if (entry.fileName == ".sonne.json")
         {
             continue;
         }
@@ -153,7 +153,7 @@ void DirectoryCounter::ParseConfigAtEntry(Entry& entry, size_t& configs)
         return;
     }
 
-    std::string potentialConfigPath = fmt::format("{}/.computare.json", entry.fullPath);
+    std::string potentialConfigPath = fmt::format("{}/.sonne.json", entry.fullPath);
 
     Entry potentialConfig = GetFSEntry(potentialConfigPath);
 

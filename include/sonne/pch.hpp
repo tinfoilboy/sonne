@@ -27,7 +27,7 @@
 #endif
 
 /**
- * Print a fatal error to the console and exit the program.
+ Print a fatal error to the console and exit the program.
  */
 inline static void Fatal(const std::string& message, int code=-1)
 {
