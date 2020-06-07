@@ -19,6 +19,25 @@ namespace Sonne
         size_t      codeLines = 0;
         size_t      commentLines = 0;
 
+        CountInfo() = default;
+
+        CountInfo(
+            std::string language,
+            size_t files,
+            size_t totalLines,
+            size_t emptyLines,
+            size_t codeLines,
+            size_t commentLines)
+            :
+            language(language),
+            files(files),
+            totalLines(totalLines),
+            emptyLines(emptyLines),
+            codeLines(codeLines),
+            commentLines(commentLines)
+        {
+        }
+
         CountInfo& operator+=(const CountInfo& info)
         {
             this->files += info.files;
