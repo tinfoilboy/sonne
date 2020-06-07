@@ -40,7 +40,7 @@ TEST_CASE("filesystem custom functions work correctly")
         REQUIRE(entry.fileSize == 171);
     }
 
-    SECTION("directory crawling works")
+    SECTION("filesystem walk works")
     {
         std::vector<Entry> entries = WalkDirectory("dir_walk");
         
@@ -110,7 +110,7 @@ TEST_CASE("directory counter works properly")
 
     SECTION("path walking returns correct entries")
     {
-        Entry dir = GetFSEntry("samples");
+        Entry dir = GetFSEntry("ignore_test");
 
         DirectoryCounter counter(dir.fullPath, config);
 
@@ -119,23 +119,19 @@ TEST_CASE("directory counter works properly")
 
         counter.ParseConfigAtEntry(dir, newConfigs);
 
-        std::vector<Entry> entries = WalkDirectory(dir.fullPath);
-
         std::vector<std::string> paths;
 
         // make sure that the walked paths match that of the local test runner
         std::vector<std::string> expectedPaths = {
-            fmt::format("{}{}samples{}test.java", runningPath, Separator, Separator),
-            fmt::format("{}{}samples{}test.py", runningPath, Separator, Separator),
-            fmt::format("{}{}samples{}test.cpp", runningPath, Separator, Separator),
-            fmt::format("{}{}samples{}test.hpp", runningPath, Separator, Separator),
-            fmt::format("{}{}samples{}test.txt", runningPath, Separator, Separator),
-            fmt::format("{}{}samples{}python{}program.py", runningPath, Separator, Separator, Separator)
+            fmt::format("{}{}ignore_test{}queen.py", runningPath, Separator, Separator),
+            fmt::format("{}{}ignore_test{}afile.cpp", runningPath, Separator, Separator)
         };
+
+        std::vector<Entry> entries = WalkDirectory(dir.fullPath);
 
         counter.WalkForPaths(entries, paths, newConfigs, ignoredPaths);
 
-        REQUIRE(paths.size() == 6);
+        REQUIRE(paths.size() == 2); // we should only have two paths, 'afile.cpp' and 'queen.py'
 
         size_t pathsMatch = 0; // paths match must be the same number as expected paths to pass
 
@@ -161,7 +157,7 @@ TEST_CASE("directory counter works properly")
         REQUIRE(pathsMatch == expectedPaths.size());
 
         REQUIRE(newConfigs == 1);
-        REQUIRE(ignoredPaths == 2);
+        REQUIRE(ignoredPaths == 3); // ignoring both files in 'ignore' as well as 'ignored.java'
     }
 
     config = GenerateDefaultConfig(); // regenerate config to reset ignores

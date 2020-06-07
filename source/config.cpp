@@ -80,17 +80,7 @@ void Config::Parse(const std::string& path)
         {
             std::string ignoreStr = node.get<std::string>();
 
-            // if the ignore string starts with an exclamation point, do not ignore that file/folder
-            if (ignoreStr[0] == '!')
-            {
-                ignoreStr = ignoreStr.substr(1);
-
-                m_ignored[ignoreStr] = false;
-            }
-            else
-            {
-                m_ignored[ignoreStr] = true;
-            }
+            m_ignored[ignoreStr] = true;
         }
     }
 

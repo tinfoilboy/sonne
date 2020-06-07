@@ -115,7 +115,7 @@ void DirectoryCounter::WalkForPaths(
             size_t find = relativePath.find(key);
 
             // the ignore was found, skip this file/dir if the ignore directive is true
-            if (find != std::string::npos && relativePath.at(find))
+            if (find != std::string::npos)
             {
                 ignored++;
 
