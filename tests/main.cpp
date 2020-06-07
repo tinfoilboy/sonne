@@ -200,7 +200,7 @@ TEST_CASE("directory counter works properly")
 
         expected.totals = std::map<std::string, CountInfo>();
 
-        expected.totals.insert(std::make_pair<std::string, CountInfo>("C/C++ Source", {
+        expected.totals.insert(std::make_pair("C/C++ Source", CountInfo {
             "C/C++ Source",
             1, // files
             22, // total lines
@@ -209,7 +209,7 @@ TEST_CASE("directory counter works properly")
             7 // comment lines
         }));
         
-        expected.totals.insert(std::make_pair<std::string, CountInfo>("C/C++ Header", {
+        expected.totals.insert(std::make_pair("C/C++ Header", CountInfo {
             "C/C++ Header",
             1, // files
             10, // total lines
@@ -218,7 +218,7 @@ TEST_CASE("directory counter works properly")
             6 // comment lines
         }));
         
-        expected.totals.insert(std::make_pair<std::string, CountInfo>("Java", {
+        expected.totals.insert(std::make_pair("Java", CountInfo {
             "Java",
             1, // files
             23, // total lines
@@ -227,7 +227,7 @@ TEST_CASE("directory counter works properly")
             9 // comment lines
         }));
 
-        expected.totals.insert(std::make_pair<std::string, CountInfo>("Lua", {
+        expected.totals.insert(std::make_pair("Lua", CountInfo {
             "Lua",
             1, // files
             13, // total lines
@@ -236,7 +236,7 @@ TEST_CASE("directory counter works properly")
             6 // comment lines
         }));
         
-        expected.totals.insert(std::make_pair<std::string, CountInfo>("Python", {
+        expected.totals.insert(std::make_pair("Python", CountInfo {
             "Python",
             1, // files
             11, // total lines
@@ -245,7 +245,7 @@ TEST_CASE("directory counter works properly")
             2 // comment lines
         }));
 
-        expected.totals.insert(std::make_pair<std::string, CountInfo>("Plain Text", {
+        expected.totals.insert(std::make_pair("Plain Text", CountInfo {
             "Plain Text",
             1, // files
             5, // total lines
@@ -254,7 +254,7 @@ TEST_CASE("directory counter works properly")
             0 // comment lines
         }));
 
-        expected.totals.insert(std::make_pair<std::string, CountInfo>("Totals", {
+        expected.totals.insert(std::make_pair("Totals", CountInfo {
             "Totals",
             6, // files
             84, // total lines
