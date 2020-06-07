@@ -115,13 +115,6 @@ namespace Computare
         */
         std::string m_path = "";
 
-        /*
-        Whether or not the current block comment line should count toward the comment count.
-
-        Only should be false when it isn't defined at the beginning of a line.
-        */
-        bool m_shouldCountBlockLine = true;
-
         /**
          Try and grab a file extension from the path specified.
          */

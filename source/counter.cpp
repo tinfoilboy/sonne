@@ -41,7 +41,7 @@ CountInfo Counter::Count(std::shared_ptr<Config> config)
 
     if (!in.good())
     {
-        Fatal("Failed to open file at path: " + m_path);
+        Fatal(fmt::format("Failed to open file at path: '{}'", m_path));
     }
 
     in.seekg(0, std::ios::end); // seek to the end of the buffer to grab size
@@ -151,22 +151,26 @@ void Counter::_LanguageNewLineCheck(CountData& data)
         return; // only do these operations if a language is currently set
     }
 
-    bool shouldCountAsCode = true;
+    bool shouldCountAsCode = false; // an override to count a line as code, used for block comments
 
     if (data.state == CountState::LINE_COMMENT || (data.state == CountState::BLOCK_COMMENT && data.shouldCountBlockLine) ||
-        (data.wasBlockComment && data.lineLengthWithoutWhitespace == data.language->blockCommentEnd.size()))
+        data.wasBlockComment)
     {
-        data.info.commentLines++;
-
         if (data.wasBlockComment)
         {
             data.wasBlockComment = false;
             
-            shouldCountAsCode = false; // since this is just a line with the end of a block comment in it, don't count
+            // force the line to count as code if the end delimiter is not the only thing on the line
+            shouldCountAsCode = (data.lineLengthWithoutWhitespace != data.language->blockCommentEnd.size());        
+        }
+
+        if (!shouldCountAsCode)
+        {
+            data.info.commentLines++; // only add a comment line if it is a pure comment line
         }
     }
 
-    if ((data.state == CountState::NORMAL || data.state == CountState::STRING) && data.lineLengthWithoutWhitespace > 0 && shouldCountAsCode)
+    if ((data.state == CountState::NORMAL || data.state == CountState::STRING) && data.lineLengthWithoutWhitespace > 0 || shouldCountAsCode)
     {
         data.info.codeLines++; // increment the lines of source code if we are not in a comment and if line is not empty
     }
@@ -176,9 +180,9 @@ void Counter::_LanguageNewLineCheck(CountData& data)
         data.state = CountState::NORMAL; // reset the state of the language count parser to normal text
     }
 
-    if (!m_shouldCountBlockLine)
+    if (!data.shouldCountBlockLine)
     {
-        m_shouldCountBlockLine = true; // block comment lines should now be counted after the first line not counted
+        data.shouldCountBlockLine = true; // block comment lines should now be counted after the first line not counted
     }
 }
 
@@ -265,7 +269,7 @@ bool Counter::_LanguageCommentStringChecks(CountData& data)
             if (hasBlockCommentBeginning)
             {
                 // only count the first line of a block comment if it is at the start of the line excluding whitespace
-                m_shouldCountBlockLine = (data.lineLengthWithoutWhitespace == 0);
+                data.shouldCountBlockLine = (data.lineLengthWithoutWhitespace == 0);
 
                 data.state = CountState::BLOCK_COMMENT;
 

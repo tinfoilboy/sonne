@@ -91,10 +91,10 @@ TEST_CASE("counter works properly")
 
         REQUIRE(info.language == "C/C++ Source");
         REQUIRE(info.files == 1);
-        REQUIRE(info.totalLines == 18);
-        REQUIRE(info.codeLines == 8);
-        REQUIRE(info.emptyLines == 4);
-        REQUIRE(info.commentLines == 6);
+        REQUIRE(info.totalLines == 22);
+        REQUIRE(info.codeLines == 10);
+        REQUIRE(info.emptyLines == 5);
+        REQUIRE(info.commentLines == 7);
     }
 }
 
