@@ -198,64 +198,70 @@ TEST_CASE("directory counter works properly")
 
         DirectoryInfo expected = {};
 
-        expected.totals = {
-            std::make_pair<std::string, CountInfo>("C/C++ Source", {
-                "C/C++ Source",
-                1, // files
-                22, // total lines
-                5, // empty lines
-                10, // code lines
-                7 // comment lines
-            }),
-            std::make_pair<std::string, CountInfo>("C/C++ Header", {
-                "C/C++ Header",
-                1, // files
-                10, // total lines
-                2, // empty lines
-                2, // code lines
-                6 // comment lines
-            }),
-            std::make_pair<std::string, CountInfo>("Java", {
-                "Java",
-                1, // files
-                23, // total lines
-                4, // empty lines
-                10, // code lines
-                9 // comment lines
-            }),
-            std::make_pair<std::string, CountInfo>("Lua", {
-                "Lua",
-                1, // files
-                13, // total lines
-                3, // empty lines
-                4, // code lines
-                6 // comment lines
-            }),
-            std::make_pair<std::string, CountInfo>("Python", {
-                "Python",
-                1, // files
-                11, // total lines
-                3, // empty lines
-                6, // code lines
-                2 // comment lines
-            }),
-            std::make_pair<std::string, CountInfo>("Plain Text", {
-                "Plain Text",
-                1, // files
-                5, // total lines
-                1, // empty lines
-                0, // code lines
-                0 // comment lines
-            }),
-            std::make_pair<std::string, CountInfo>("Totals", {
-                "Totals",
-                6, // files
-                84, // total lines
-                18, // empty lines
-                32, // code lines
-                30 // comment lines
-            })
-        };
+        expected.totals = std::map<std::string, CountInfo>();
+
+        expected.totals.insert(std::make_pair<std::string, CountInfo>("C/C++ Source", {
+            "C/C++ Source",
+            1, // files
+            22, // total lines
+            5, // empty lines
+            10, // code lines
+            7 // comment lines
+        }));
+        
+        expected.totals.insert(std::make_pair<std::string, CountInfo>("C/C++ Header", {
+            "C/C++ Header",
+            1, // files
+            10, // total lines
+            2, // empty lines
+            2, // code lines
+            6 // comment lines
+        }));
+        
+        expected.totals.insert(std::make_pair<std::string, CountInfo>("Java", {
+            "Java",
+            1, // files
+            23, // total lines
+            4, // empty lines
+            10, // code lines
+            9 // comment lines
+        }));
+
+        expected.totals.insert(std::make_pair<std::string, CountInfo>("Lua", {
+            "Lua",
+            1, // files
+            13, // total lines
+            3, // empty lines
+            4, // code lines
+            6 // comment lines
+        }));
+        
+        expected.totals.insert(std::make_pair<std::string, CountInfo>("Python", {
+            "Python",
+            1, // files
+            11, // total lines
+            3, // empty lines
+            6, // code lines
+            2 // comment lines
+        }));
+
+        expected.totals.insert(std::make_pair<std::string, CountInfo>("Plain Text", {
+            "Plain Text",
+            1, // files
+            5, // total lines
+            1, // empty lines
+            0, // code lines
+            0 // comment lines
+        }));
+
+        expected.totals.insert(std::make_pair<std::string, CountInfo>("Totals", {
+            "Totals",
+            6, // files
+            84, // total lines
+            18, // empty lines
+            32, // code lines
+            30 // comment lines
+        }));
 
         bool entryNotFound = false;
 
