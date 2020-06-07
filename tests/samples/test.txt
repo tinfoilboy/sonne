@@ -1,5 +1,5 @@
 this is a plain text test for the counter
-here's a couple lines for you based on this count stuff
+here's a couple lines for you based on this count stuff. 5 total lines, 1 empty.
 it is currently June 6, 2020, little time capsule here if you look at this in the
 
 fuuuuuuturrree

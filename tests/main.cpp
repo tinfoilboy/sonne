@@ -37,7 +37,7 @@ TEST_CASE("filesystem custom functions work correctly")
         REQUIRE(entry.isValid == true);
 
         // file size of the test.py file (unless updated) should always be 142
-        REQUIRE(entry.fileSize == 171);
+        REQUIRE(entry.fileSize == 262);
     }
 
     SECTION("filesystem walk works")
@@ -196,11 +196,83 @@ TEST_CASE("directory counter works properly")
 
         DirectoryInfo info = counter.Run();
 
-        for (auto language : info.totals)
-        {
-            fmt::print("{} with {} total lines\n", language.second.language, language.second.totalLines);
-        }
+        DirectoryInfo expected = {};
 
-        fmt::print("Counter ran successfully!\n");
+        expected.totals = {
+            { "C/C++ Source", {
+                "C/C++ Source",
+                1, // files
+                22, // total lines
+                5, // empty lines
+                10, // code lines
+                7 // comment lines
+            }},
+            { "C/C++ Header", {
+                "C/C++ Header",
+                1, // files
+                10, // total lines
+                2, // empty lines
+                2, // code lines
+                6 // comment lines
+            }},
+            { "Java", {
+                "Java",
+                1, // files
+                23, // total lines
+                4, // empty lines
+                10, // code lines
+                9 // comment lines
+            }},
+            { "Lua", {
+                "Lua",
+                1, // files
+                13, // total lines
+                3, // empty lines
+                4, // code lines
+                6 // comment lines
+            }},
+            { "Python", {
+                "Python",
+                1, // files
+                11, // total lines
+                3, // empty lines
+                6, // code lines
+                2 // comment lines
+            }},
+            { "Plain Text", {
+                "Plain Text",
+                1, // files
+                5, // total lines
+                1, // empty lines
+                0, // code lines
+                0 // comment lines
+            }},
+            { "Totals", {
+                "Totals",
+                6, // files
+                84, // total lines
+                18, // empty lines
+                32, // code lines
+                30 // comment lines
+            }}
+        };
+
+        bool entryNotFound = false;
+
+        // iterate through each language returned by the counter (including the totals) and compare with the map
+        // of expected info values for each language
+        for (auto entry : info.totals)
+        {
+            REQUIRE(expected.totals.count(entry.first) > 0); // make sure that we have the expected value in the totals
+            
+            CountInfo& expectInfo = expected.totals.at(entry.first);
+
+            REQUIRE(expectInfo.language == entry.second.language);
+            REQUIRE(expectInfo.files == entry.second.files);
+            REQUIRE(expectInfo.totalLines == entry.second.totalLines);
+            REQUIRE(expectInfo.emptyLines == entry.second.emptyLines);
+            REQUIRE(expectInfo.codeLines == entry.second.codeLines);
+            REQUIRE(expectInfo.commentLines == entry.second.commentLines);
+        }
     }
 }

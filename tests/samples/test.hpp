@@ -1,5 +1,7 @@
 /**
  * Test file for C/C++ headers!
+ *
+ * This file should have 10 total lines, 2 code lines, 6 comment lines, and 2 empty lines.
  */
 
 #pragma once

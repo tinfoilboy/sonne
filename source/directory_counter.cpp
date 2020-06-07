@@ -21,6 +21,8 @@ DirectoryInfo DirectoryCounter::Run()
     CountInfo total = {};
     total.language  = "Totals";
 
+    total.files = 0; // make sure the total doesn't start with any file counts
+
     size_t ignoredFiles = 0; // the amount of files/directories ignored by the user configs
     size_t newConfigs   = 0; // the amount of new configs loaded as the directory was walked
 
