@@ -61,6 +61,30 @@ namespace Computare
         CountInfo& info;
 
         std::vector<char>& buffer;
+
+        CountData(
+            size_t lineLength,
+            size_t lineLengthWithoutWhitespace,
+            size_t index,
+            CountState state,
+            bool shouldCountBlockLine,
+            bool wasBlockComment,
+            std::shared_ptr<Language> language,
+            CountInfo& info,
+            std::vector<char>& buffer
+        )
+            :
+            lineLength(lineLength),
+            lineLengthWithoutWhitespace(lineLengthWithoutWhitespace),
+            index(index),
+            state(state),
+            shouldCountBlockLine(shouldCountBlockLine),
+            wasBlockComment(wasBlockComment),
+            language(language),
+            info(info),
+            buffer(buffer)
+        {
+        }
     
     };
 

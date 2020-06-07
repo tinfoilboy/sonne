@@ -82,7 +82,7 @@ char Counter::_GetBufferLookahead(std::vector<char>& buffer, const size_t& index
 
 void Counter::_CountFromBuffer(std::vector<char>& buffer, std::shared_ptr<Language> language, CountInfo& info)
 {
-    CountData data = {
+    CountData data(
         0, // lineLength
         0, // lineLengthWithoutWhitespace
         0, // index
@@ -92,7 +92,7 @@ void Counter::_CountFromBuffer(std::vector<char>& buffer, std::shared_ptr<Langua
         language,
         info,
         buffer
-    };
+    );
 
     for (size_t index = 0; index < buffer.size(); index++)
     {
