@@ -81,7 +81,6 @@ TEST_CASE("counter works properly")
         REQUIRE(info.files == 1);
         REQUIRE(info.totalLines == 5);
         REQUIRE(info.emptyLines == 1);
-        REQUIRE(info.averageLineLength == 39);
     }
 
     SECTION("count code reports correctly")

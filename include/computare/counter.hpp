@@ -18,7 +18,6 @@ namespace Computare
         size_t      emptyLines = 0;
         size_t      codeLines = 0;
         size_t      commentLines = 0;
-        size_t      averageLineLength = 0;
 
         CountInfo& operator+=(const CountInfo& info)
         {

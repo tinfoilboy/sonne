@@ -56,12 +56,6 @@ CountInfo Counter::Count(std::shared_ptr<Config> config)
 
     _CountFromBuffer(buffer, language, info);
 
-    if (info.averageLineLength > 0)
-    {
-        info.averageLineLength =
-            static_cast<size_t>(std::roundf(static_cast<float>(info.averageLineLength) / static_cast<float>(info.totalLines)));
-    }
-
     return info;
 }
 
@@ -117,8 +111,6 @@ void Counter::_CountFromBuffer(std::vector<char>& buffer, std::shared_ptr<Langua
 
             _LanguageNewLineCheck(data);
 
-            info.averageLineLength += data.lineLength;
-
             // reset both line lengths
             data.lineLength = 0;
             data.lineLengthWithoutWhitespace = 0;
@@ -150,8 +142,6 @@ void Counter::_CountFromBuffer(std::vector<char>& buffer, std::shared_ptr<Langua
     {
         info.emptyLines++; // increment the empty lines for the last line as it has no \n char
     }
-
-    info.averageLineLength += data.lineLength; // increment the line lengths for the last line
 }
 
 void Counter::_LanguageNewLineCheck(CountData& data)
