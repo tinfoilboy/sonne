@@ -32,14 +32,12 @@ sonne is meant to be configured to change languages supported or files to ignore
 ### `ignore-hidden`
 
 Specifies whether or not hidden files and directories should be ignored.
-Default:
-
-    ignore-hidden: true
+Default is true.
 
 ### `languages`
 
 An array of language blocks containing information on language name, associated extensions, and comment tokens.
-Check the root `.sonne.yml` to see how to structure these blocks and add your own.
+Check the root `.sonne.json` to see how to structure these blocks and add your own.
 
 ### `ignore`
 
