@@ -153,8 +153,10 @@ void Counter::_LanguageNewLineCheck(CountData& data)
 
     bool shouldCountAsCode = false; // an override to count a line as code, used for block comments
 
-    if (data.state == CountState::LINE_COMMENT || (data.state == CountState::BLOCK_COMMENT && data.shouldCountBlockLine) ||
-        data.wasBlockComment)
+    // parameters for counting a block comment while state is still block comment
+    bool blockCommentParams = (data.state == CountState::BLOCK_COMMENT && data.shouldCountBlockLine);
+
+    if (data.state == CountState::LINE_COMMENT || blockCommentParams || data.wasBlockComment)
     {
         if (data.wasBlockComment)
         {
@@ -170,7 +172,9 @@ void Counter::_LanguageNewLineCheck(CountData& data)
         }
     }
 
-    if ((data.state == CountState::NORMAL || data.state == CountState::STRING) && data.lineLengthWithoutWhitespace > 0 || shouldCountAsCode)
+    bool isNormalParse = (data.state == CountState::NORMAL || data.state == CountState::STRING);
+
+    if ((isNormalParse && data.lineLengthWithoutWhitespace > 0) || shouldCountAsCode)
     {
         data.info.codeLines++; // increment the lines of source code if we are not in a comment and if line is not empty
     }
@@ -207,7 +211,10 @@ bool Counter::_CompareStringToBuffer(std::vector<char>& buffer, std::string& com
     return true;
 }
 
-bool Counter::_CheckStringDelimiter(std::vector<char>& buffer, std::vector<std::string>& delimiters, const size_t& start)
+bool Counter::_CheckStringDelimiter(
+    std::vector<char>& buffer,
+    std::vector<std::string>& delimiters,
+    const size_t& start)
 {
     for (auto& delimiter : delimiters) // check all string delimiters for a string begin
     {
@@ -264,7 +271,10 @@ bool Counter::_LanguageCommentStringChecks(CountData& data)
 
         if (!data.language->blockCommentBegin.empty())
         {
-            bool hasBlockCommentBeginning = _CompareStringToBuffer(data.buffer, data.language->blockCommentBegin, data.index);
+            bool hasBlockCommentBeginning = _CompareStringToBuffer(
+                data.buffer,
+                data.language->blockCommentBegin,
+                data.index);
 
             if (hasBlockCommentBeginning)
             {
@@ -278,7 +288,8 @@ bool Counter::_LanguageCommentStringChecks(CountData& data)
         }
     }
 
-    if (data.state == CountState::STRING && !data.language->stringDelimiters.empty()) // check if we are at the end of a string
+    // check if we are at the end of a string and if so move to normal counting
+    if (data.state == CountState::STRING && !data.language->stringDelimiters.empty())
     {
         bool hasDelimiter = _CheckStringDelimiter(data.buffer, data.language->stringDelimiters, data.index);
 
