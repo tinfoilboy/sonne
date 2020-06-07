@@ -34,7 +34,7 @@ CountInfo Counter::Count(std::shared_ptr<Config> config)
 
     if (!file.isValid || file.isDirectory)
     {
-        Fatal(fmt::format("Invalid file passed to counter! Path: {}\n", file.fullPath));
+        Fatal(fmt::format("Invalid file passed to counter! Path: {}\n", m_path));
     }
 
     std::ifstream in(m_path);
@@ -151,17 +151,17 @@ void Counter::_LanguageNewLineCheck(CountData& data)
         return; // only do these operations if a language is currently set
     }
 
-    bool shouldCountAsCode = false; // an override to count a line as code, used for block comments
+    bool shouldCountAsCode = true; // an override to count a line as code, used for block comments
 
     // parameters for counting a block comment while state is still block comment
     bool blockCommentParams = (data.state == CountState::BLOCK_COMMENT && data.shouldCountBlockLine);
 
     if (data.state == CountState::LINE_COMMENT || blockCommentParams || data.wasBlockComment)
     {
+        shouldCountAsCode = false;
+
         if (data.wasBlockComment)
         {
-            data.wasBlockComment = false;
-            
             // force the line to count as code if the end delimiter is not the only thing on the line
             shouldCountAsCode = (data.lineLengthWithoutWhitespace != data.language->blockCommentEnd.size());        
         }
@@ -174,7 +174,10 @@ void Counter::_LanguageNewLineCheck(CountData& data)
 
     bool isNormalParse = (data.state == CountState::NORMAL || data.state == CountState::STRING);
 
-    if ((isNormalParse && data.lineLengthWithoutWhitespace > 0) || shouldCountAsCode)
+    // add to code lines if we are in a block comments and it should count as code or if normally would be code
+    // the first case is allowing for trailing blockCommentBegin delimiters at the end of a code line.
+    if ((data.state == CountState::BLOCK_COMMENT && shouldCountAsCode) ||
+        (isNormalParse && data.lineLengthWithoutWhitespace > 0 && shouldCountAsCode))
     {
         data.info.codeLines++; // increment the lines of source code if we are not in a comment and if line is not empty
     }
@@ -187,6 +190,11 @@ void Counter::_LanguageNewLineCheck(CountData& data)
     if (!data.shouldCountBlockLine)
     {
         data.shouldCountBlockLine = true; // block comment lines should now be counted after the first line not counted
+    }
+
+    if (data.wasBlockComment)
+    {
+        data.wasBlockComment = false;
     }
 }
 
@@ -256,19 +264,7 @@ bool Counter::_LanguageCommentStringChecks(CountData& data)
             }
         }
 
-        // only check for a line comment only if it occurs at the beginning of the line excluding whitespace
-        if (data.lineLengthWithoutWhitespace == 0 && !data.language->lineComment.empty())
-        {
-            bool hasLineComment = _CompareStringToBuffer(data.buffer, data.language->lineComment, data.index);
-
-            if (hasLineComment)
-            {
-                data.state = CountState::LINE_COMMENT;
-
-                return true; // skip over this character as we know we are in a line comment
-            }
-        }
-
+        // look for block comments before line comments, for languages like lua that have the same beginning for both
         if (!data.language->blockCommentBegin.empty())
         {
             bool hasBlockCommentBeginning = _CompareStringToBuffer(
@@ -284,6 +280,19 @@ bool Counter::_LanguageCommentStringChecks(CountData& data)
                 data.state = CountState::BLOCK_COMMENT;
 
                 return true; // skip the rest of this characters processing
+            }
+        }
+
+        // only check for a line comment only if it occurs at the beginning of the line excluding whitespace
+        if (data.lineLengthWithoutWhitespace == 0 && !data.language->lineComment.empty())
+        {
+            bool hasLineComment = _CompareStringToBuffer(data.buffer, data.language->lineComment, data.index);
+
+            if (hasLineComment)
+            {
+                data.state = CountState::LINE_COMMENT;
+
+                return true; // skip over this character as we know we are in a line comment
             }
         }
     }

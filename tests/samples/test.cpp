@@ -14,7 +14,7 @@ int main()
     std::cout << "woah here's a line comment delimiter in a string //" << std::endl; // that embeded comment shouldn't count
     std::cout << "woah here's a block comment /**/ in a string!" << std::endl;
 
-    std::cout << "this has a block at the end!" << std::endl; /*
+    std::cout << "this has a block at the end!" << std::endl;/*
     the first line should still be counted as code, this line should be a comment, and the following should be code
     */std::cout << "i wrote this directly after a block comment end delimiter!" << std::endl;
 

@@ -83,7 +83,7 @@ TEST_CASE("counter works properly")
         REQUIRE(info.emptyLines == 1);
     }
 
-    SECTION("count code reports correctly")
+    SECTION("count code reports correctly for test.cpp")
     {
         Counter counter("samples/test.cpp");
 
@@ -95,6 +95,34 @@ TEST_CASE("counter works properly")
         REQUIRE(info.codeLines == 10);
         REQUIRE(info.emptyLines == 5);
         REQUIRE(info.commentLines == 7);
+    }
+
+    SECTION("count code reports correctly for test.java")
+    {
+        Counter counter("samples/test.java");
+
+        CountInfo info = counter.Count(config);
+
+        REQUIRE(info.language == "Java");
+        REQUIRE(info.files == 1);
+        REQUIRE(info.totalLines == 23);
+        REQUIRE(info.codeLines == 10);
+        REQUIRE(info.emptyLines == 4);
+        REQUIRE(info.commentLines == 9);
+    }
+
+    SECTION("count code reports correctly for test.lua")
+    {
+        Counter counter("samples/test.lua");
+
+        CountInfo info = counter.Count(config);
+
+        REQUIRE(info.language == "Lua");
+        REQUIRE(info.files == 1);
+        REQUIRE(info.totalLines == 13);
+        REQUIRE(info.codeLines == 4);
+        REQUIRE(info.emptyLines == 3);
+        REQUIRE(info.commentLines == 6);
     }
 }
 
