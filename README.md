@@ -3,7 +3,7 @@
 
 [![Github Releases](https://img.shields.io/github/release/tinfoilboy/sonne.svg)](https://github.com/tinfoilboy/sonne/releases)
 
-A simple and configurable for counting lines in files as an alternative to programs like cloc written in C++. I was becoming bothered with how cloc handled ignoring files, as I'll integrate some libraries directly in my source folder as opposed to an external folder, thus I wanted to mainly ignore specific files. I also wanted something faster and more extensible, so I made this.
+sonne is a simple and fast lines of code counter that is very configurable and easy to use. It is able to count plain text lines, as well as code lines including comments using configurable language definitions. These language definitions can be added to any config at will, allowing for custom code counting at any scope.
 
 ## Installing
 
@@ -11,35 +11,23 @@ Download the latest binary release in the [releases](https://github.com/tinfoilb
 
 ## Building
 
-sonne uses CMake for building. Build using your favorite compiler chain and run the executable that results from the build.
-On my personal development machine, I compile this using Clang 7 on KUbuntu 18.10, which works well.
+First, clone the repository using `--recurse-submodules` to get all of the submoduled dependencies
+Then create a `build` or `out` folder and run CMake in it.
+Then compile and run!
 
 ## Dependencies
 
-sonne depends on [cxxopts](https://github.com/jarro2783/cxxopts) for parsing command line arguments for the program as well as [fmt](https://github.com/fmtlib/fmt) for nice print formatting and [yaml-cpp](https://github.com/jbeder/yaml-cpp) for the config.
+sonne depends on [fmt](https://github.com/fmtlib/fmt) for formatting strings, [json](https://github.com/nlohmann/json) for parsing configs, [Catch2](https://github.com/catchorg/Catch2) for testing, and [cxxopts](https://github.com/jarro2783/cxxopts) for parsing commands.
 
 ## Usage
 
-To use sonne, you can run the program with a single file using the `-f` switch and then the path to the file, an example is below:
+To use sonne, just provide the path to the file or folder you wish to run it on.
 
-    sonne -f main.cpp
-
-Though, the main function of this program is the directory walker for a project's source code, this can be specified with the `-d` flag with the path to the directory to walk recursively. An example is below to walk the current directory:
-
-    sonne -d .
-
-You may use the `-h` or `--help` flags to see the full list of switches for the program.
+    sonne <path>
 
 ## Configuration
 
 sonne is meant to be configured to change languages supported or files to ignore. These options are configured with a file named `.sonne.yml`. These are the supported options. A default configuration is placed into your home directory at `~/.sonne.yml` with language definitions and default settings.
-
-### `block-size`
-
-Changes the size of blocks to be read from a file when counting lines.
-Default:
-
-    block-size: 131072
 
 ### `ignore-hidden`
 
