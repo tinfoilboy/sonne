@@ -1,5 +1,4 @@
 # sonne
-### (formerly known as computare)
 
 [![Github Releases](https://img.shields.io/github/release/tinfoilboy/sonne.svg)](https://github.com/tinfoilboy/sonne/releases)
 
