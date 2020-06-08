@@ -135,7 +135,7 @@ int main(int argc, char** argv)
 
     size_t columns = config->GetColumns();
 
-    fmt::print("{: ^{}}\n", "Sonne 2.0.0", columns);
+    fmt::print("{: ^{}}\n", "Sonne 2.1.0", columns);
     fmt::print("{: ^{}}\n\n", "Simple extensible LOC counter.", columns);
 
     // set in the configuration whether to ignore hidden files
@@ -164,8 +164,17 @@ int main(int argc, char** argv)
 
                 for (auto& language : info.totals)
                 {
+                    if (language.second.language == "Totals")
+                    {
+                        continue; // print totals at the end of the info separate from other langs
+                    }
+
                     print_language_entry(language.second, columns);
                 }
+
+                print_table_end(columns);
+
+                print_language_entry(info.totals.at("Totals"), columns);
             }
             else
             {

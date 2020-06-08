@@ -153,6 +153,16 @@
             "name": "INI",
             "extensions": [ "ini" ],
             "lineComment": ";"
+        },
+        {
+            "name": "Plain Text",
+            "extensions": [ "txt", "text" ]
+        },
+        {
+            "name": "XML",
+            "extensions": [ "xml" ],
+            "blockCommentBegin": "<!--",
+            "blockCommentEnd":  "-->"
         }
     ]
 }

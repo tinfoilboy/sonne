@@ -328,7 +328,7 @@ TEST_CASE("directory counter works properly")
                 1, // files
                 5, // total lines
                 1, // empty lines
-                0, // code lines
+                4, // code lines (technically, lines that are not empty in plain text count as code)
                 0 // comment lines
             }),
             std::make_pair("Totals", CountInfo {
@@ -336,7 +336,7 @@ TEST_CASE("directory counter works properly")
                 6, // files
                 84, // total lines
                 18, // empty lines
-                32, // code lines
+                36, // code lines
                 30 // comment lines
             })
         };

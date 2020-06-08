@@ -42,6 +42,8 @@ DirectoryInfo DirectoryCounter::Run()
     std::vector<std::string> paths;
 
     WalkForPaths(entries, paths, newConfigs, ignoredFiles);
+    
+    std::vector<std::future<CountInfo>> countFutures;
 
     for (size_t index = 0; index < paths.size(); index++)
     {
@@ -49,7 +51,25 @@ DirectoryInfo DirectoryCounter::Run()
 
         Counter counter(path);
 
-        CountInfo count = counter.Count(m_config);
+        countFutures.push_back(std::async(std::launch::async, &Counter::Count, counter, m_config));
+    }
+
+    // go through each async future that is currently in the vector and try and tally the counts together
+    //
+    // main thread acts as a tally for all the counters on the other async threads.
+    while (!countFutures.empty())
+    {
+        auto& future = countFutures.begin();
+
+        // little hack to check if future is ready immediately rather than in the future
+        if (future->wait_for(std::chrono::seconds(1)) != std::future_status::ready && future->valid())
+        {
+            std::swap(*future, countFutures.back()); // swap the beginning with the end to get a new entry and continue
+
+            continue;
+        }
+
+        CountInfo count = future->get();
 
         // if this language has occurred before in the counter, just append to the counts for that language
         if (info.totals.count(count.language) > 0)
@@ -69,6 +89,9 @@ DirectoryInfo DirectoryCounter::Run()
 
         // tally up the totals
         total += count;
+
+        std::swap(*future, countFutures.back());
+        countFutures.pop_back();
     }
 
     info.totals.insert(std::make_pair("Totals", total));
@@ -139,9 +162,11 @@ void DirectoryCounter::WalkForPaths(
             
             continue; // continue as we cannot count a directory
         }
-
-        // we've already accounted for directories, so this has to be a file to count from
-        paths.push_back(entry.fullPath);
+        else if (!entry.isDirectory)
+        {
+            // we've already accounted for directories, so this has to be a file to count from
+            paths.push_back(entry.fullPath);
+        }
     }
 }
 

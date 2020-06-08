@@ -354,5 +354,28 @@ std::shared_ptr<Config> Sonne::GenerateDefaultConfig()
 
     config->AddLanguage(INI);
 
+    std::shared_ptr<Language> PlainText = std::make_shared<Language>();
+
+    PlainText->name = "Plain Text";
+    PlainText->extensions = {
+        "txt",
+        "text"
+    };
+
+
+    config->AddLanguage(PlainText);
+
+    std::shared_ptr<Language> XML = std::make_shared<Language>();
+
+    XML->name = "XML";
+    XML->extensions = {
+        "xml"
+    };
+
+    XML->blockCommentBegin = "<!--";
+    XML->blockCommentEnd = "-->";
+
+    config->AddLanguage(XML);
+
     return config;
 }

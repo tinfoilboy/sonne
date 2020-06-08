@@ -39,7 +39,6 @@ namespace Sonne
 
 #ifdef _WIN32
     void SetEntryFromHandle(
-        HANDLE file,
         const std::string& path,
         Entry& entry,
         WIN32_FIND_DATA& data,

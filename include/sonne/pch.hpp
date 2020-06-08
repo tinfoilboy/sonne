@@ -12,6 +12,7 @@
 #include <cmath>
 #include <iomanip>
 #include <climits>
+#include <future>
 
 #include <fmt/format.h>
 #include <nlohmann/json.hpp>

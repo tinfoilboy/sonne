@@ -44,12 +44,6 @@ target_include_directories (sonne PUBLIC ${CMAKE_SOURCE_DIR}/include)
 
 target_link_libraries (sonne nlohmann_json::nlohmann_json fmt::fmt cxxopts::cxxopts)
 
-if (MSVC)
-    target_compile_options (sonne PRIVATE "/W4")
-else()
-    target_compile_options (sonne PRIVATE "-Wall")
-endif()
-
 if (SONNE_BUILD_TESTS)
     add_executable (sonne_test
         ${SONNE_BASE_SOURCE}

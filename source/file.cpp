@@ -5,7 +5,6 @@ using namespace Sonne;
 
 #ifdef _WIN32
 void Sonne::SetEntryFromHandle(
-    HANDLE file,
     const std::string& path,
     Entry& entry,
     WIN32_FIND_DATA& data,
@@ -110,7 +109,7 @@ Entry Sonne::GetFSEntry(std::string path, bool shouldClose)
         return entry;
     }
 
-    SetEntryFromHandle(file, path, entry, data);
+    SetEntryFromHandle(path, entry, data);
 
     if (shouldClose)
     {
@@ -201,7 +200,7 @@ Entry Sonne::GetNextEntry(const std::string& rootDir, Entry& previous)
         return next;
     }
 
-    SetEntryFromHandle(next.windowsHandle, rootDir, next, data, false);
+    SetEntryFromHandle(rootDir, next, data, false);
     
     // set the entry to be a special directory for either same folder or up one directory
     if ((strcmp(data.cFileName, ".") == 0) || (strcmp(data.cFileName, "..") == 0))
