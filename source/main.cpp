@@ -32,23 +32,24 @@ size_t get_console_columns()
 void print_info_header(size_t columns)
 {
     // the size of each cell in the header minus four for the seperators and spaces
-    size_t cellWidth = static_cast<size_t>(std::roundf(static_cast<float>(columns) / 5.0f)) - 4;
+    size_t cellWidth = static_cast<size_t>(std::roundf(static_cast<float>(columns) / 6.0f)) - 4;
 
-    fmt::print("{:->{}}\n", "", ((cellWidth + 4) * 5) - 4);
+    fmt::print("{:->{}}\n", "", ((cellWidth + 4) * 6) - 5);
 
     fmt::print("| {: <{}} |", "Language", cellWidth);
     fmt::print(" {: >{}} |", "Files", cellWidth);
     fmt::print(" {: >{}} |", "Empty", cellWidth);
     fmt::print(" {: >{}} |", "Code", cellWidth);
+    fmt::print(" {: >{}} |", "Comment", cellWidth);
     fmt::print(" {: >{}} |\n", "Total", cellWidth);
 
-    fmt::print("{:->{}}\n", "", ((cellWidth + 4) * 5) - 4);
+    fmt::print("{:->{}}\n", "", ((cellWidth + 4) * 6) - 5);
 }
 
 void print_language_entry(Sonne::CountInfo& info, size_t columns)
 {
     // the size of each cell in the header minus four for the seperators and spaces
-    size_t cellWidth = static_cast<size_t>(std::roundf(static_cast<float>(columns) / 5.0f)) - 4;
+    size_t cellWidth = static_cast<size_t>(std::roundf(static_cast<float>(columns) / 6.0f)) - 4;
 
     if (info.language.size() > cellWidth)
     {
@@ -59,15 +60,16 @@ void print_language_entry(Sonne::CountInfo& info, size_t columns)
     fmt::print(" {: >{}} |", info.files, cellWidth);
     fmt::print(" {: >{}} |", info.emptyLines, cellWidth);
     fmt::print(" {: >{}} |", info.codeLines, cellWidth);
+    fmt::print(" {: >{}} |", info.commentLines, cellWidth);
     fmt::print(" {: >{}} |\n", info.totalLines, cellWidth);
 }
 
 void print_table_end(size_t columns)
 {
     // the size of each cell in the header minus four for the seperators and spaces
-    size_t cellWidth = static_cast<size_t>(std::roundf(static_cast<float>(columns) / 5.0f)) - 4;
+    size_t cellWidth = static_cast<size_t>(std::roundf(static_cast<float>(columns) / 6.0f)) - 4;
 
-    fmt::print("{:->{}}\n", "", ((cellWidth + 4) * 5) - 4);
+    fmt::print("{:->{}}\n", "", ((cellWidth + 4) * 6) - 5);
 }
 
 int main(int argc, char** argv)
