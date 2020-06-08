@@ -1,9 +1,12 @@
-cmake_minimum_required(VERSION 3.0)
+cmake_minimum_required(VERSION 3.1)
 
 project (sonne LANGUAGES CXX VERSION 2.0.0)
 
 set (CMAKE_CXX_STANDARD 11)
 set (CMAKE_CXX_STANDARD_REQUIRED ON)
+
+set(THREADS_PREFER_PTHREAD_FLAG ON)
+find_package(Threads REQUIRED)
 
 set (SONNE_BASE_SOURCE 
     ${CMAKE_SOURCE_DIR}/source/pch.cpp
@@ -42,7 +45,7 @@ add_executable (sonne
 
 target_include_directories (sonne PUBLIC ${CMAKE_SOURCE_DIR}/include)
 
-target_link_libraries (sonne nlohmann_json::nlohmann_json fmt::fmt cxxopts::cxxopts)
+target_link_libraries (sonne nlohmann_json::nlohmann_json fmt::fmt cxxopts::cxxopts Threads::Threads)
 
 if (SONNE_BUILD_TESTS)
     add_executable (sonne_test
@@ -51,7 +54,7 @@ if (SONNE_BUILD_TESTS)
 
     target_include_directories (sonne_test PUBLIC ${CMAKE_SOURCE_DIR}/include)
 
-    target_link_libraries (sonne_test fmt::fmt nlohmann_json::nlohmann_json Catch2::Catch2)
+    target_link_libraries (sonne_test fmt::fmt nlohmann_json::nlohmann_json Catch2::Catch2 Threads::Threads)
 
     file (COPY ${CMAKE_SOURCE_DIR}/tests/samples DESTINATION ${CMAKE_CURRENT_BINARY_DIR})
     file (COPY ${CMAKE_SOURCE_DIR}/tests/dir_walk DESTINATION ${CMAKE_CURRENT_BINARY_DIR})
