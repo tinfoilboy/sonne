@@ -1,0 +1,18 @@
+{
+    "ignoreHidden": true,
+
+    "languages": [
+        {
+            "name": "Test Language",
+            "extensions": [ "test", "tst" ],
+            "lineComment": "//",
+            "blockCommentBegin": "/*",
+            "blockCommentEnd": "*/",
+            "stringDelimiters": [ "\"", "'" ]
+        }
+    ],
+    "ignore": [
+        "ignore/this/",
+        "andthis.txt"
+    ]
+}

@@ -37,6 +37,10 @@ namespace Sonne
 
         void Parse(const std::string& path);
 
+        void Write(std::ostream& stream);
+
+        void Write(const std::string& path);
+
         bool HasLanguage(const std::string& extension) const;
 
         std::shared_ptr<Language> GetLanguage(const std::string& extension) const;
@@ -64,6 +68,11 @@ namespace Sonne
             m_ignored.insert(std::make_pair(path, ignore));
         }
 
+        inline std::map<std::string, std::shared_ptr<Language>>& GetLanguages()
+        {
+            return m_languages;
+        }
+
         inline std::map<std::string, bool>& GetIgnored()
         {
             return m_ignored;
@@ -76,6 +85,8 @@ namespace Sonne
         std::map<std::string, bool> m_ignored;
 
         bool m_ignoreHidden = true;
+
+        nlohmann::json _ConstructConfigJSON();
 
     };
 

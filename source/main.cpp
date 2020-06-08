@@ -1,36 +1,27 @@
 #include "sonne/pch.hpp"
 
-/*#include "computare/counter.hpp"
-#include "computare/config.hpp"
-#include "computare/directory_counter.hpp"*/
-#include "sonne/file.hpp"
+#include <cxxopts.hpp>
 
-/*
- * Main command-line entry point for the program.
- */
+#include "sonne/file.hpp"
+#include "sonne/config_generator.hpp"
+#include "sonne/config.hpp"
+#include "sonne/counter.hpp"
+#include "sonne/directory_counter.hpp"
+
 int main(int argc, char** argv)
 {
-    Sonne::Entry entry = Sonne::GetFSEntry("../../../source");
-
-    fmt::print("is valid: {}\n", entry.isValid);
-    fmt::print("{} bytes long\n", entry.fileSize);
-    fmt::print("is directory: {}\n", entry.isDirectory);
-    fmt::print("full path: {}\n", entry.fullPath);
-
-    return 0;
-
-    /*cxxopts::Options options(
-        "computare",
-        "a simple and configurable program for counting lines in files"
+    cxxopts::Options options(
+        "Sonne",
+        "A fast and configurable program for counting lines of code."
     );
+    
+    std::vector<std::string> positional; // positional arguments for the counter
 
     options.add_options()
-        ("f,file", "Pass in a single file for counting lines from", cxxopts::value<std::string>())
-        ("d,dir", "The directory to recursively walk and count", cxxopts::value<std::string>())
-        ("c,config", "A path to the config file to use for computare", cxxopts::value<std::string>())
-        ("b,block-size", "Sets the amount of characters to read per block, may increase speed", cxxopts::value<size_t>())
+        ("c,config", "A path to a config file to load before counting", cxxopts::value<std::string>())
         ("s,skip-hidden", "Determines whether hidden files/directories should be skipped over")
-        ("h,help", "Print help for the program");
+        ("h,help", "Print help for the program")
+        ("positional", "Positional parameters for counting paths", cxxopts::value<std::vector<std::string>>(positional));
 
     auto result = options.parse(argc, argv);
 
@@ -41,60 +32,53 @@ int main(int argc, char** argv)
         return 0;
     }
 
-    fmt::print("computare 2.0.0\n");
-    fmt::print("a simple and configurable program for counting lines in files.\n");
+    fmt::print("Sonne 2.0.0\n");
+    fmt::print("A fast and configurable program for counting lines of code.\n");
     fmt::print("use -h or --help to see how to use.\n\n");
 
-    std::string globalConfig = "";
-    std::string configPath = ".computare.yml";
+    std::shared_ptr<Sonne::Config> config = nullptr;
 
-    Config config;
+    std::string globalConfigPath = "";
 
-    // on linux systems, the config should be placed in the user home directory
-    // which evaluates to ~ in paths, thus place a default config there if one
-    // doesn't exist, as well as load the config at that path
+    // default path for the global config should be the users home directory, or User folder in Windows.
 #ifdef __linux__
-    globalConfig = fmt::format("{}/.computare.yml", getenv("HOME"));
+    globalConfigPath = fmt::format("{}/.computare.yml", getenv("HOME"));
 #elif _WIN32
-    globalConfig = fmt::format("{}/.computare.yml", getenv("USERPROFILE"));
+    globalConfigPath = fmt::format("{}/.computare.yml", getenv("USERPROFILE"));
 #endif
 
-    fmt::print("global computare config location: {}\n", globalConfig);
+    Sonne::Entry configFile = Sonne::GetFSEntry(globalConfigPath);
 
-    if (!fs::exists(globalConfig))
+    // the config file does not exist, thus we should create the default and write the file to the global path
+    if (!configFile.isValid)
     {
-        std::ofstream out(globalConfig);
+        config = Sonne::GenerateDefaultConfig();
 
-        std::string config = "{{ default_config }}";
-
-        out << config;
-
-        out.close();
+        config->Write(globalConfigPath);
     }
-
-    config.Parse(globalConfig);
-
-    if (fs::exists(configPath))
+    else
     {
-        config.Parse(configPath);
+        config->Parse(globalConfigPath);
     }
 
     // parse a custom config from the passed in path if exists
     if (result.count("c"))
     {
-        configPath = result["c"].as<std::string>();
+        const std::string& configPath = result["c"].as<std::string>();
 
-        if (fs::exists(configPath))
-            config.Parse(configPath);
+        Sonne::Entry newConfig = Sonne::GetFSEntry(globalConfigPath);
+
+        if (newConfig.isValid)
+        {
+            config->Parse(configPath);
+        }
     }
 
     // set in the configuration whether to ignore hidden files
     if (result.count("s"))
-        config.SetIgnoreHidden(result["s"].as<bool>());
-
-    // set the processing block size in the config
-    if (result.count("b"))
-        config.SetBlockSize(result["b"].as<size_t>());
+    {
+        config->SetIgnoreHidden(result["s"].as<bool>());
+    }
 
     // run counter on a single file and exit when done
     if (result.count("f"))

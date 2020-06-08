@@ -67,6 +67,88 @@ TEST_CASE("filesystem custom functions work correctly")
     }
 }
 
+TEST_CASE("config works properly")
+{
+    SECTION("test parsing test config")
+    {
+        std::shared_ptr<Config> config = std::make_shared<Config>();
+
+        config->Parse("test_config.json"); // grab the test config to compare against
+
+        REQUIRE(config->GetIgnoreHidden() == true);
+
+        std::vector<std::string> expectedIgnore = {
+            "ignore/this/",
+            "andthis.txt"
+        };
+
+        std::map<std::string, bool>& configIgnored = config->GetIgnored();
+
+        REQUIRE(configIgnored.size() == 2);
+
+        for (auto& expected : expectedIgnore)
+        {
+            REQUIRE(configIgnored.count(expected) > 0); // make sure that the current expected value is found
+        }
+
+        // config stores languages by extension as key to make it easier for the counter to find languages
+        // thus, create one language definition and make sure that there are enough in the array of the same
+        // parameters that match the extensions
+        Language language;
+
+        language.name = "Test Language";
+        language.extensions = { "test", "tst" };
+        language.lineComment = "//";
+        language.blockCommentBegin = "/*";
+        language.blockCommentEnd = "*/";
+        language.stringDelimiters = { "\"", "'" };
+
+        for (auto& configLang : config->GetLanguages())
+        {
+            // make sure that current key (a language extension) is contained in the expected language extensions
+            REQUIRE(std::count(language.extensions.begin(), language.extensions.end(), configLang.first) > 0);
+
+            // finally make sure that all elements of the language struct match
+            REQUIRE(configLang.second->name == language.name);
+            REQUIRE(configLang.second->extensions == language.extensions);
+            REQUIRE(configLang.second->lineComment == language.lineComment);
+            REQUIRE(configLang.second->blockCommentBegin == language.blockCommentBegin);
+            REQUIRE(configLang.second->blockCommentEnd == language.blockCommentEnd);
+            REQUIRE(configLang.second->stringDelimiters == language.stringDelimiters);
+        }
+    }
+
+    SECTION("test writing works correctly")
+    {
+        std::shared_ptr<Config> config = std::make_shared<Config>();
+
+        config->SetIgnoreHidden(true);
+
+        std::shared_ptr<Language> language = std::make_shared<Language>();
+
+        language->name = "Test Language";
+        language->extensions = { "test", "tst" };
+        language->lineComment = "//";
+        language->blockCommentBegin = "/*";
+        language->blockCommentEnd = "*/";
+        language->stringDelimiters = { "\"", "'" };
+
+        config->AddLanguage(language);
+
+        config->AddIgnored("test/ignore/", true);
+        config->AddIgnored("another/ignore/", true);
+
+        std::ostringstream stream;
+
+        config->Write(stream);
+
+        std::string expected =
+            R"({"ignore":["another/ignore/","test/ignore/"],"ignoreHidden":true,"languages":[{"blockCommentBegin":"/*","blockCommentEnd":"*/","extensions":["test","tst"],"lineComment":"//","name":"Test Language","stringDelimiters":["\"","'"]}]})";
+
+        REQUIRE(stream.str() == expected);
+    }
+}
+
 TEST_CASE("counter works properly")
 {
     std::shared_ptr<Config> config = GenerateDefaultConfig();
@@ -267,6 +349,7 @@ TEST_CASE("directory counter works properly")
             
             CountInfo& expectInfo = expected.totals.at(entry.first);
 
+            // check each attribute of the two info structs and make sure they match
             REQUIRE(expectInfo.language == entry.second.language);
             REQUIRE(expectInfo.files == entry.second.files);
             REQUIRE(expectInfo.totalLines == entry.second.totalLines);

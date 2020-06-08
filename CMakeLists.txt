@@ -13,6 +13,8 @@ set (SONNE_BASE_SOURCE
     ${CMAKE_SOURCE_DIR}/source/counter.cpp
     ${CMAKE_SOURCE_DIR}/source/config.cpp)
 
+set(CXXOPTS_BUILD_EXAMPLES OFF CACHE BOOL "disable cxxopts examples")
+set(CXXOPTS_BUILD_TESTS OFF CACHE BOOL "disable cxxopts tests")
 set (YAML_CPP_BUILD_TESTS OFF CACHE BOOL "disable yaml tests")
 set (YAML_CPP_BUILD_TOOLS OFF CACHE BOOL "disable yaml tools")
 set (YAML_CPP_BUILD_CONTRIB OFF CACHE BOOL "disable yaml contrib")
@@ -25,6 +27,7 @@ option (SONNE_BUILD_TESTS "Whether to enable the test suite for sonne" ON)
 add_subdirectory (extern/fmt)
 add_subdirectory (extern/Catch2)
 add_subdirectory (extern/json)
+add_subdirectory (extern/cxxopts)
 
 # execute the embed config script at configure time to keep up to date with default config
 execute_process(
@@ -39,7 +42,7 @@ add_executable (sonne
 
 target_include_directories (sonne PUBLIC ${CMAKE_SOURCE_DIR}/include)
 
-target_link_libraries (sonne nlohmann_json::nlohmann_json fmt::fmt)
+target_link_libraries (sonne nlohmann_json::nlohmann_json fmt::fmt cxxopts::cxxopts)
 
 if (MSVC)
     target_compile_options (sonne PRIVATE "/W4")
@@ -59,4 +62,5 @@ if (SONNE_BUILD_TESTS)
     file (COPY ${CMAKE_SOURCE_DIR}/tests/samples DESTINATION ${CMAKE_CURRENT_BINARY_DIR})
     file (COPY ${CMAKE_SOURCE_DIR}/tests/dir_walk DESTINATION ${CMAKE_CURRENT_BINARY_DIR})
     file (COPY ${CMAKE_SOURCE_DIR}/tests/ignore_test DESTINATION ${CMAKE_CURRENT_BINARY_DIR})
+    file (COPY ${CMAKE_SOURCE_DIR}/tests/test_config.json DESTINATION ${CMAKE_CURRENT_BINARY_DIR})
 endif()

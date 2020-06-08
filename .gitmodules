@@ -7,3 +7,6 @@
 [submodule "extern/json"]
 	path = extern/json
 	url = git@github.com:nlohmann/json.git
+[submodule "extern/cxxopts"]
+	path = extern/cxxopts
+	url = git@github.com:jarro2783/cxxopts.git

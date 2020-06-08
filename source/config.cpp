@@ -32,7 +32,7 @@ void Config::Parse(const std::string& path)
 
             std::shared_ptr<Language> language = std::make_shared<Language>();
 
-            language->name = languageNode["language"].get<std::string>();
+            language->name = languageNode["name"].get<std::string>();
 
             if (languageNode.contains("lineComment"))
             {
@@ -90,6 +90,24 @@ void Config::Parse(const std::string& path)
     }
 }
 
+void Config::Write(std::ostream& stream)
+{
+    nlohmann::json configObject = _ConstructConfigJSON();
+
+    stream << configObject;
+}
+
+void Config::Write(const std::string& path)
+{
+    nlohmann::json configObject = _ConstructConfigJSON();
+
+    std::ofstream out(path);
+
+    out << std::setw(4) << configObject;
+
+    out.close();
+}
+
 bool Config::HasLanguage(const std::string& extension) const
 {
     return m_languages.count(extension) > 0;
@@ -98,4 +116,74 @@ bool Config::HasLanguage(const std::string& extension) const
 std::shared_ptr<Language> Config::GetLanguage(const std::string& extension) const
 {
     return m_languages.at(extension);
+}
+
+nlohmann::json Config::_ConstructConfigJSON()
+{
+    nlohmann::json configObject;
+
+    configObject["ignoreHidden"] = m_ignoreHidden;
+
+    nlohmann::json languageArray = nlohmann::json::array();
+
+    size_t index = 0;
+
+    std::vector<std::string> alreadyInsertedLanguages;
+
+    for (auto& language : m_languages)
+    {
+        nlohmann::json langObject;
+
+        // don't add a language that we've already added to the array
+        if (std::count(alreadyInsertedLanguages.begin(), alreadyInsertedLanguages.end(), language.second->name) > 0)
+        {
+            continue;
+        }
+
+        langObject["name"] = language.second->name;
+        langObject["extensions"] = language.second->extensions;
+
+        if (!language.second->lineComment.empty())
+        {
+            langObject["lineComment"] = language.second->lineComment;
+        }
+
+        if (!language.second->blockCommentBegin.empty())
+        {
+            langObject["blockCommentBegin"] = language.second->blockCommentBegin;
+        }
+
+        if (!language.second->blockCommentEnd.empty())
+        {
+            langObject["blockCommentEnd"] = language.second->blockCommentEnd;
+        }
+
+        if (!language.second->stringDelimiters.empty())
+        {
+            langObject["stringDelimiters"] = language.second->stringDelimiters;
+        }
+
+        languageArray[index] = langObject;
+
+        index++;
+
+        alreadyInsertedLanguages.push_back(language.second->name);
+    }
+
+    configObject["languages"] = languageArray;
+
+    nlohmann::json ignoreArray = nlohmann::json::array();
+
+    index = 0;
+
+    for (auto& ignore : m_ignored)
+    {
+        ignoreArray[index] = ignore.first;
+
+        index++;
+    }
+
+    configObject["ignore"] = ignoreArray;
+
+    return configObject;
 }
