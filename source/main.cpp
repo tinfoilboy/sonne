@@ -23,7 +23,7 @@ size_t get_console_columns()
 
     ioctl(STDOUT_FILENO, TIOCGWINSZ, &size);
 
-    columns = static_cast<size_t>(w.ws_col);
+    columns = static_cast<size_t>(size.ws_col);
 #endif
 
     return columns;
