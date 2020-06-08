@@ -20,6 +20,11 @@ void Sonne::SetEntryFromHandle(
     fileSizeLarge.HighPart = data.nFileSizeHigh;
     fileSizeLarge.LowPart = data.nFileSizeLow;
 
+    if (data.cFileName[0] == '.')
+    {
+        entry.isHidden = true; // treat any dot file/directory as a hidden directory akin to unix
+    }
+
     entry.fileSize = static_cast<size_t>(fileSizeLarge.QuadPart);
 
     // grab the full path for the file to save in the entry
@@ -81,9 +86,14 @@ std::string Sonne::GetRunningPath()
     return path;
 }
 
-Entry Sonne::GetFSEntry(const std::string& path, bool shouldClose)
+Entry Sonne::GetFSEntry(std::string path, bool shouldClose)
 {
     Entry entry;
+
+    if (path.back() == '/' || path.back() == '\\')
+    {
+        path = path.substr(0, path.size() - 1); // pop the trailing slash off of the path
+    }
 
 #ifdef _WIN32
     WIN32_FIND_DATA data = {0};
@@ -137,6 +147,16 @@ Entry Sonne::GetFSEntry(const std::string& path, bool shouldClose)
     }
 
     entry.fullPath = std::string(canonicalPath);
+
+    // grab only the file name and check if the first character of it is a dot, and therefore if it is a hidden file
+    size_t lastSlash = entry.fullPath.find_last_of(Separator);
+
+    std::string fileName = entry.fullPath.substr(lastSlash);
+
+    if (fileName[0] == '.')
+    {
+        entry.isHidden = true; // dot files/directories are hidden files or directories
+    }
 
     // if close is disabled, open the dir through dirent and set the dir handle in the entry
     if (!shouldClose)
@@ -247,7 +267,7 @@ Entry Sonne::GetNextEntry(const std::string& rootDir, Entry& previous)
     return next;
 }
 
-std::vector<Entry> Sonne::WalkDirectory(const std::string& path)
+std::vector<Entry> Sonne::WalkDirectory(std::string path)
 {
     std::vector<Entry> entries;
 

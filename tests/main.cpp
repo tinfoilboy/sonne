@@ -76,6 +76,7 @@ TEST_CASE("config works properly")
         config->Parse("test_config.json"); // grab the test config to compare against
 
         REQUIRE(config->GetIgnoreHidden() == true);
+        REQUIRE(config->GetColumns() == 80);
 
         std::vector<std::string> expectedIgnore = {
             "ignore/this/",
@@ -123,6 +124,7 @@ TEST_CASE("config works properly")
         std::shared_ptr<Config> config = std::make_shared<Config>();
 
         config->SetIgnoreHidden(true);
+        config->SetColumns(80);
 
         std::shared_ptr<Language> language = std::make_shared<Language>();
 
@@ -143,7 +145,7 @@ TEST_CASE("config works properly")
         config->Write(stream);
 
         std::string expected =
-            R"({"ignore":["another/ignore/","test/ignore/"],"ignoreHidden":true,"languages":[{"blockCommentBegin":"/*","blockCommentEnd":"*/","extensions":["test","tst"],"lineComment":"//","name":"Test Language","stringDelimiters":["\"","'"]}]})";
+            R"({"columns":80,"ignore":["another/ignore/","test/ignore/"],"ignoreHidden":true,"languages":[{"blockCommentBegin":"/*","blockCommentEnd":"*/","extensions":["test","tst"],"lineComment":"//","name":"Test Language","stringDelimiters":["\"","'"]}]})";
 
         REQUIRE(stream.str() == expected);
     }

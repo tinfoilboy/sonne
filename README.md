@@ -24,6 +24,8 @@ To use sonne, just provide the path to the file or folder you wish to run it on.
 
     sonne <path>
 
+You may also add flags before the path such as `-c` to specify columns or `-i` for ignoring hidden files.
+
 ## Configuration
 
 sonne is meant to be configured to change languages supported or files to ignore. These options are configured with a file named `.sonne.json`. These are the supported options. A default configuration is placed into your home directory at `~/.sonne.json` with language definitions and default settings.
@@ -32,6 +34,11 @@ sonne is meant to be configured to change languages supported or files to ignore
 
 Specifies whether or not hidden files and directories should be ignored.
 Default is true.
+
+### `columns`
+
+Specifies the amount of columns that should be used at max to print the table.
+Default is 80.
 
 ### `languages`
 

@@ -35,8 +35,6 @@ DirectoryInfo DirectoryCounter::Run()
 
     m_path = dir.fullPath; // set the base path to the full canonical path
 
-    fmt::print("Counting recursively in '{}'...\n", m_path);
-
     ParseConfigAtEntry(dir, newConfigs); // attempt to parse a config at the root before walking paths
 
     std::vector<Entry> entries = WalkDirectory(m_path);
@@ -161,8 +159,6 @@ void DirectoryCounter::ParseConfigAtEntry(Entry& entry, size_t& configs)
 
     if (potentialConfig.isValid)
     {
-        fmt::print("Loading configuration file at: {}\n", potentialConfig.fullPath);
-
         m_config->Parse(potentialConfig.fullPath);
 
         configs++;

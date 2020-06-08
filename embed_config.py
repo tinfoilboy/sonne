@@ -54,6 +54,9 @@ def get_cpp_bool(bool):
 if "ignoreHidden" in config:
     GENERATOR_FILE_CONTENTS += FUNCTION_INDENT + "config->SetIgnoreHidden({});\n".format(get_cpp_bool(config["ignoreHidden"]))
 
+if "columns" in config:
+    GENERATOR_FILE_CONTENTS += FUNCTION_INDENT + "config->SetColumns({});\n".format(int(config["columns"]))
+
 if "ignore" in config:
     ignoreArray = config["ignore"]
 

@@ -53,6 +53,16 @@ namespace Sonne
             }
         }
 
+        inline void SetColumns(size_t columns)
+        {
+            this->m_columns = columns;
+        }
+
+        inline size_t GetColumns() const
+        {
+            return m_columns;
+        }
+
         inline void SetIgnoreHidden(bool state)
         {
             this->m_ignoreHidden = state;
@@ -85,6 +95,8 @@ namespace Sonne
         std::map<std::string, bool> m_ignored;
 
         bool m_ignoreHidden = true;
+
+        size_t m_columns = 80;
 
         nlohmann::json _ConstructConfigJSON();
 

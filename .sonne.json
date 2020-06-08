@@ -7,8 +7,14 @@
         ".vs/",
         "out/",
         "extern/",
+        "tests/dir_walk/",
+        "tests/ignore_test/",
+        "tests/samples/",
+        "tests/test_config.json",
         "LICENSE",
         "README.md",
-        "CMakeLists.txt"
+        "CMakeLists.txt",
+        "default_config.json",
+        "cpp.hint"
     ]
 }

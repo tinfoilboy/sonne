@@ -16,6 +16,7 @@ std::shared_ptr<Config> Sonne::GenerateDefaultConfig()
     std::shared_ptr<Config> config = std::make_shared<Config>();
 
     config->SetIgnoreHidden(true);
+    config->SetColumns(80);
 
     std::shared_ptr<Language> CCSource = std::make_shared<Language>();
 
