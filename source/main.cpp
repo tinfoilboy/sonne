@@ -8,8 +8,72 @@
 #include "sonne/counter.hpp"
 #include "sonne/directory_counter.hpp"
 
+size_t get_console_columns()
+{
+    size_t columns = 0;
+
+#ifdef _WIN32
+    CONSOLE_SCREEN_BUFFER_INFO info = {};
+
+    GetConsoleScreenBufferInfo(GetStdHandle(STD_OUTPUT_HANDLE), &info);
+
+    columns = (static_cast<size_t>(info.srWindow.Right) - static_cast<size_t>(info.srWindow.Left)) + 1;
+#else
+    struct winsize size;
+
+    ioctl(STDOUT_FILENO, TIOCGWINSZ, &size);
+
+    columns = static_cast<size_t>(w.ws_col);
+#endif
+
+    return columns;
+}
+
+void print_info_header(size_t columns)
+{
+    // the size of each cell in the header minus four for the seperators and spaces
+    size_t cellWidth = static_cast<size_t>(std::roundf(static_cast<float>(columns) / 5.0f)) - 4;
+
+    fmt::print("{:->{}}\n", "", ((cellWidth + 4) * 5) - 4);
+
+    fmt::print("| {: <{}} |", "Language", cellWidth);
+    fmt::print(" {: >{}} |", "Files", cellWidth);
+    fmt::print(" {: >{}} |", "Empty", cellWidth);
+    fmt::print(" {: >{}} |", "Code", cellWidth);
+    fmt::print(" {: >{}} |\n", "Total", cellWidth);
+
+    fmt::print("{:->{}}\n", "", ((cellWidth + 4) * 5) - 4);
+}
+
+void print_language_entry(Sonne::CountInfo& info, size_t columns)
+{
+    // the size of each cell in the header minus four for the seperators and spaces
+    size_t cellWidth = static_cast<size_t>(std::roundf(static_cast<float>(columns) / 5.0f)) - 4;
+
+    if (info.language.size() > cellWidth)
+    {
+        info.language = info.language.substr(0, cellWidth); // truncate the language string if it is too long
+    }
+
+    fmt::print("| {: <{}} |", info.language, cellWidth);
+    fmt::print(" {: >{}} |", info.files, cellWidth);
+    fmt::print(" {: >{}} |", info.emptyLines, cellWidth);
+    fmt::print(" {: >{}} |", info.codeLines, cellWidth);
+    fmt::print(" {: >{}} |\n", info.totalLines, cellWidth);
+}
+
+void print_table_end(size_t columns)
+{
+    // the size of each cell in the header minus four for the seperators and spaces
+    size_t cellWidth = static_cast<size_t>(std::roundf(static_cast<float>(columns) / 5.0f)) - 4;
+
+    fmt::print("{:->{}}\n", "", ((cellWidth + 4) * 5) - 4);
+}
+
 int main(int argc, char** argv)
 {
+    fmt::print("\n"); // print a new line to separate from the command input
+
     cxxopts::Options options(
         "Sonne",
         "A fast and configurable program for counting lines of code."
@@ -18,11 +82,13 @@ int main(int argc, char** argv)
     std::vector<std::string> positional; // positional arguments for the counter
 
     options.add_options()
-        ("c,config", "A path to a config file to load before counting", cxxopts::value<std::string>())
-        ("s,skip-hidden", "Determines whether hidden files/directories should be skipped over")
         ("h,help", "Print help for the program")
+        ("i,ignore-hidden", "Determines whether hidden files/directories should be skipped over")
+        ("c,columns", "Amount of columns to base print off of", cxxopts::value<size_t>())
+        ("input", "Input path for the program", cxxopts::value<std::string>())
         ("positional", "Positional parameters for counting paths", cxxopts::value<std::vector<std::string>>(positional));
 
+    options.parse_positional({ "input" });
     auto result = options.parse(argc, argv);
 
     if (result.count("h"))
@@ -32,19 +98,15 @@ int main(int argc, char** argv)
         return 0;
     }
 
-    fmt::print("Sonne 2.0.0\n");
-    fmt::print("A fast and configurable program for counting lines of code.\n");
-    fmt::print("use -h or --help to see how to use.\n\n");
-
     std::shared_ptr<Sonne::Config> config = nullptr;
 
     std::string globalConfigPath = "";
 
     // default path for the global config should be the users home directory, or User folder in Windows.
 #ifdef __linux__
-    globalConfigPath = fmt::format("{}/.computare.yml", getenv("HOME"));
+    globalConfigPath = fmt::format("{}/.somme.json", getenv("HOME"));
 #elif _WIN32
-    globalConfigPath = fmt::format("{}/.computare.yml", getenv("USERPROFILE"));
+    globalConfigPath = fmt::format("{}/.somme.json", getenv("USERPROFILE"));
 #endif
 
     Sonne::Entry configFile = Sonne::GetFSEntry(globalConfigPath);
@@ -58,25 +120,79 @@ int main(int argc, char** argv)
     }
     else
     {
+        config = std::make_shared<Sonne::Config>();
+
         config->Parse(globalConfigPath);
     }
 
-    // parse a custom config from the passed in path if exists
+    // parse column count from command line if specified
     if (result.count("c"))
     {
-        const std::string& configPath = result["c"].as<std::string>();
-
-        Sonne::Entry newConfig = Sonne::GetFSEntry(globalConfigPath);
-
-        if (newConfig.isValid)
-        {
-            config->Parse(configPath);
-        }
+        config->SetColumns(result["columns"].as<size_t>());
     }
+
+    size_t columns = config->GetColumns();
+
+    fmt::print("{: ^{}}\n", "Sonne 2.0.0", columns);
+    fmt::print("{: ^{}}\n\n", "Simple extensible LOC counter.", columns);
 
     // set in the configuration whether to ignore hidden files
     if (result.count("s"))
     {
         config->SetIgnoreHidden(result["s"].as<bool>());
     }
+
+    if (result.count("input"))
+    {
+        std::string input = result["input"].as<std::string>();
+
+        Sonne::Entry entry = Sonne::GetFSEntry(input);
+
+        if (entry.isValid)
+        {
+            fmt::print("{: ^{}}\n\n", entry.fullPath, columns);
+
+            print_info_header(columns);
+
+            if (entry.isDirectory)
+            {
+                Sonne::DirectoryCounter counter(entry.fullPath, config);
+
+                Sonne::DirectoryInfo info = counter.Run();
+
+                for (auto& language : info.totals)
+                {
+                    print_language_entry(language.second, columns);
+                }
+            }
+            else
+            {
+                Sonne::Counter counter(entry.fullPath);
+
+                Sonne::CountInfo info = counter.Count(config);
+
+                print_language_entry(info, columns);
+
+                Sonne::CountInfo totals = info; // create the total counts to print as well
+
+                totals.language = "Total";
+
+                print_language_entry(totals, columns);
+            }
+
+            print_table_end(columns);
+        }
+        else
+        {
+            fmt::print("Invalid file or directory given at: {}\n", input);
+        }
+    }
+    else
+    {
+        fmt::print("{: ^{}}", "Provide a file or directory to count!", columns);
+    }
+
+    fmt::print("\n"); // finish with a new line
+
+    return 0;
 }

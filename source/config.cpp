@@ -67,7 +67,7 @@ void Config::Parse(const std::string& path)
 
                 language->extensions.push_back(extension);
 
-                m_languages.insert(std::pair<std::string, std::shared_ptr<Language>>(extension, language));
+                m_languages.insert(std::make_pair(extension, language));
             }
         }
     }
@@ -87,6 +87,11 @@ void Config::Parse(const std::string& path)
     if (configJSON.contains("ignoreHidden"))
     {
         m_ignoreHidden = configJSON["ignoreHidden"].get<bool>();
+    }
+
+    if (configJSON.contains("columns"))
+    {
+        m_columns = configJSON["columns"].get<size_t>();
     }
 }
 
@@ -123,6 +128,7 @@ nlohmann::json Config::_ConstructConfigJSON()
     nlohmann::json configObject;
 
     configObject["ignoreHidden"] = m_ignoreHidden;
+    configObject["columns"]      = m_columns;
 
     nlohmann::json languageArray = nlohmann::json::array();
 

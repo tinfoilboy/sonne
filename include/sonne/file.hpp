@@ -56,7 +56,7 @@ namespace Sonne
     /**
      Grab an entry from the filesystem, with information about that entry.
      */
-    Entry GetFSEntry(const std::string& path, bool shouldClose=true);
+    Entry GetFSEntry(std::string path, bool shouldClose=true);
 
     /**
      Grab an entry that is in a sequence from a directory.
@@ -66,6 +66,6 @@ namespace Sonne
     /**
      Gets a vector of each entry in a directory, recursing through subfolders and appending to the entry children.
      */
-    std::vector<Entry> WalkDirectory(const std::string& path);
+    std::vector<Entry> WalkDirectory(std::string path);
 
 }
