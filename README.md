@@ -10,7 +10,7 @@ Download the latest binary release in the [releases](https://github.com/tinfoilb
 
 ## Building
 
-First, clone the repository using `--recurse-submodules` to get all of the submoduled dependencies
+First, clone the repository using `--recurse-submodules` to get all of the submoduled dependencies.
 Then create a `build` or `out` folder and run CMake in it.
 Then compile and run!
 
