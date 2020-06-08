@@ -1,5 +1,7 @@
 # sonne
 
+[![Build Status](https://travis-ci.com/tinfoilboy/sonne.svg?branch=master)](https://travis-ci.com/tinfoilboy/sonne)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![Github Releases](https://img.shields.io/github/release/tinfoilboy/sonne.svg)](https://github.com/tinfoilboy/sonne/releases)
 
 sonne is a simple and fast lines of code counter that is very configurable and easy to use. It is able to count plain text lines, as well as code lines including comments using configurable language definitions. These language definitions can be added to any config at will, allowing for custom code counting at any scope.
