@@ -5,7 +5,7 @@ namespace Sonne
     class Config;
 
     /**
-     Generate a completely default configuration for computare.
+     Generate a completely default configuration for sonne.
 
      This is a generated function!
      */
