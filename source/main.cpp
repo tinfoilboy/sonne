@@ -106,9 +106,9 @@ int main(int argc, char** argv)
 
     // default path for the global config should be the users home directory, or User folder in Windows.
 #ifdef __linux__
-    globalConfigPath = fmt::format("{}/.somme.json", getenv("HOME"));
+    globalConfigPath = fmt::format("{}/.sonne.json", getenv("HOME"));
 #elif _WIN32
-    globalConfigPath = fmt::format("{}/.somme.json", getenv("USERPROFILE"));
+    globalConfigPath = fmt::format("{}/.sonne.json", getenv("USERPROFILE"));
 #endif
 
     Sonne::Entry configFile = Sonne::GetFSEntry(globalConfigPath);
@@ -135,7 +135,7 @@ int main(int argc, char** argv)
 
     size_t columns = config->GetColumns();
 
-    fmt::print("{: ^{}}\n", "Sonne 2.1.0", columns);
+    fmt::print("{: ^{}}\n", "Sonne 2.1.1", columns);
     fmt::print("{: ^{}}\n\n", "Simple extensible LOC counter.", columns);
 
     // set in the configuration whether to ignore hidden files
