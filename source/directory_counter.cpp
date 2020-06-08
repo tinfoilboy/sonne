@@ -59,17 +59,17 @@ DirectoryInfo DirectoryCounter::Run()
     // main thread acts as a tally for all the counters on the other async threads.
     while (!countFutures.empty())
     {
-        auto& future = countFutures.begin();
+        auto& future = countFutures.front();
 
         // little hack to check if future is ready immediately rather than in the future
-        if (future->wait_for(std::chrono::seconds(1)) != std::future_status::ready && future->valid())
+        if (future.wait_for(std::chrono::milliseconds(1)) != std::future_status::ready && future.valid())
         {
-            std::swap(*future, countFutures.back()); // swap the beginning with the end to get a new entry and continue
+            std::swap(countFutures.front(), countFutures.back()); // swap the beginning with the end to get a new entry and continue
 
             continue;
         }
 
-        CountInfo count = future->get();
+        CountInfo count = future.get();
 
         // if this language has occurred before in the counter, just append to the counts for that language
         if (info.totals.count(count.language) > 0)
@@ -90,7 +90,7 @@ DirectoryInfo DirectoryCounter::Run()
         // tally up the totals
         total += count;
 
-        std::swap(*future, countFutures.back());
+        std::swap(future, countFutures.back());
         countFutures.pop_back();
     }
 
