@@ -3,10 +3,10 @@
 	url = https://github.com/fmtlib/fmt.git
 [submodule "Catch2"]
 	path = extern/Catch2
-	url = git@github.com:catchorg/Catch2.git
+	url = https://github.com/catchorg/Catch2
 [submodule "extern/json"]
 	path = extern/json
-	url = git@github.com:nlohmann/json.git
+	url = https://github.com/nlohmann/json
 [submodule "extern/cxxopts"]
 	path = extern/cxxopts
-	url = git@github.com:jarro2783/cxxopts.git
+	url = https://github.com/jarro2783/cxxopts
