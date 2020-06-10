@@ -16,6 +16,10 @@ set (SONNE_BASE_SOURCE
     ${CMAKE_SOURCE_DIR}/source/counter.cpp
     ${CMAKE_SOURCE_DIR}/source/config.cpp)
 
+if(MSVC)
+list(APPEND SONNE_BASE_SOURCE ${CMAKE_SOURCE_DIR}/source/sonne.rc)
+endif()
+
 set(CXXOPTS_BUILD_EXAMPLES OFF CACHE BOOL "disable cxxopts examples")
 set(CXXOPTS_BUILD_TESTS OFF CACHE BOOL "disable cxxopts tests")
 set (YAML_CPP_BUILD_TESTS OFF CACHE BOOL "disable yaml tests")

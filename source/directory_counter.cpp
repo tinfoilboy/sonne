@@ -184,6 +184,9 @@ void DirectoryCounter::ParseConfigAtEntry(Entry& entry, size_t& configs)
 
     if (potentialConfig.isValid)
     {
+        // todo: instead of just parsing the config into the same config, maybe create a new config deriving from both?
+        // that way, you could have configs be scoped rather than just modifying the one config that you use
+
         m_config->Parse(potentialConfig.fullPath);
 
         configs++;

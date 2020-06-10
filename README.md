@@ -1,4 +1,7 @@
-# sonne
+<p align="center">
+    <img width="256" height="256" src="images/icon.png">
+    <h1 align="center">sonne</h1>
+</p>
 
 [![Build Status](https://travis-ci.com/tinfoilboy/sonne.svg?branch=master)](https://travis-ci.com/tinfoilboy/sonne)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
@@ -55,3 +58,7 @@ Default is blank.
 ## License
 
 sonne is licensed under the MIT License, the terms of which can be seen [here](https://github.com/tinfoilboy/sonne/blob/master/LICENSE).
+
+## Other Contributors
+
+[Opalmine](https://twitter.com/OpalmineArt) - Icon art for Sonne
