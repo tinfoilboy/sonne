@@ -147,7 +147,7 @@ int main(int argc, char** argv)
 
     size_t columns = config->GetColumns();
 
-    fmt::print("{: ^{}}\n", "Sonne 2.1.1", columns);
+    fmt::print("{: ^{}}\n", "Sonne 2.2.0", columns);
     fmt::print("{: ^{}}\n\n", "Simple extensible LOC counter.", columns);
 
     // set in the configuration whether to ignore hidden files
