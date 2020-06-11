@@ -7,6 +7,7 @@
         ".vs/",
         "out/",
         "extern/",
+        "images/",
         "tests/dir_walk/",
         "tests/ignore_test/",
         "tests/samples/",

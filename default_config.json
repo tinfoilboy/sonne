@@ -162,7 +162,11 @@
             "name": "XML",
             "extensions": [ "xml" ],
             "blockCommentBegin": "<!--",
-            "blockCommentEnd":  "-->"
+            "blockCommentEnd": "-->"
+        },
+        {
+            "name": "Markdown",
+            "extensions":  [ "md", "markdown" ]
         }
     ]
 }

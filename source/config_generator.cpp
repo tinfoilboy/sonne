@@ -379,5 +379,16 @@ std::shared_ptr<Config> Sonne::GenerateDefaultConfig()
 
     config->AddLanguage(XML);
 
+    std::shared_ptr<Language> Markdown = std::make_shared<Language>();
+
+    Markdown->name = "Markdown";
+    Markdown->extensions = {
+        "md",
+        "markdown"
+    };
+
+
+    config->AddLanguage(Markdown);
+
     return config;
 }

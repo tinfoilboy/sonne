@@ -5,3 +5,4 @@ out/
 .editorconfig
 cpp.hint
 *.aps
+CMakeSettings.json
