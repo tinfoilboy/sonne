@@ -1,6 +1,5 @@
 {
     "ignore": [
-        "yaml-cpp/",
         "CMake/",
         "build/",
         ".vscode/",
@@ -13,7 +12,6 @@
         "tests/samples/",
         "tests/test_config.json",
         "LICENSE",
-        "README.md",
         "CMakeLists.txt",
         "default_config.json",
         "cpp.hint"
