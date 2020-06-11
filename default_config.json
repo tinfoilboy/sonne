@@ -55,7 +55,7 @@
             "lineComment": "//",
             "blockCommentBegin": "/*",
             "blockCommentEnd": "*/",
-            "stringDelimiters": [ "\"", "'" ]
+            "stringDelimiters": [ "\"", "'", "`" ]
         },
         {
             "name": "CSS",
@@ -75,7 +75,7 @@
             "lineComment": "//",
             "blockCommentBegin": "/*",
             "blockCommentEnd": "*/",
-            "stringDelimiters": [ "\"", "'" ]
+            "stringDelimiters": [ "\"", "'", "`" ]
         },
         {
             "name": "Ruby",

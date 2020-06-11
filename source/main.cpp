@@ -104,9 +104,21 @@ int main(int argc, char** argv)
 
     std::string globalConfigPath = "";
 
-    // default path for the global config should be the users home directory, or User folder in Windows.
+    // default path for the global config should be the users XDG_CONFIG_HOME under Linux, or if that does not exist
+    // it should just be placed in the top-level home directory with other dotfiles of that nature
+    //
+    // on Windows it should just be under the User folder
 #ifdef __linux__
-    globalConfigPath = fmt::format("{}/.sonne.json", getenv("HOME"));
+    char* xdgConfigHome = getenv("XDG_CONFIG_HOME");
+
+    if (xdgConfigHome == NULL)
+    {
+        globalConfigPath = fmt::format("{}/.sonne.json", getenv("HOME"));
+    }
+    else
+    {
+        globalConfigPath = fmt::format("{}/.sonne.json", xdgConfigHome);
+    }
 #elif _WIN32
     globalConfigPath = fmt::format("{}/.sonne.json", getenv("USERPROFILE"));
 #endif

@@ -323,6 +323,22 @@ TEST_CASE("directory counter works properly")
                 6, // code lines
                 2 // comment lines
             }),
+            std::make_pair("JavaScript", CountInfo {
+                "JavaScript",
+                1, // files
+                18, // total lines
+                3, // empty lines
+                8, // code lines
+                7 // comment lines
+            }),
+            std::make_pair("TypeScript", CountInfo {
+                "TypeScript",
+                1, // files
+                18, // total lines
+                3, // empty lines
+                8, // code lines
+                7 // comment lines
+            }),
             std::make_pair("Plain Text", CountInfo {
                 "Plain Text",
                 1, // files
@@ -333,11 +349,11 @@ TEST_CASE("directory counter works properly")
             }),
             std::make_pair("Totals", CountInfo {
                 "Totals",
-                6, // files
-                84, // total lines
-                18, // empty lines
-                36, // code lines
-                30 // comment lines
+                8, // files
+                120, // total lines
+                24, // empty lines
+                52, // code lines
+                44 // comment lines
             })
         };
 

@@ -132,7 +132,8 @@ std::shared_ptr<Config> Sonne::GenerateDefaultConfig()
     JavaScript->blockCommentEnd = "*/";
     JavaScript->stringDelimiters = {
         "\"",
-        "'"
+        "'",
+        "`"
     };
 
     config->AddLanguage(JavaScript);
@@ -176,7 +177,8 @@ std::shared_ptr<Config> Sonne::GenerateDefaultConfig()
     TypeScript->blockCommentEnd = "*/";
     TypeScript->stringDelimiters = {
         "\"",
-        "'"
+        "'",
+        "`"
     };
 
     config->AddLanguage(TypeScript);

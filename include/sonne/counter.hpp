@@ -71,6 +71,8 @@ namespace Sonne
 
         CountState state = CountState::NORMAL;
 
+        bool countLineComment = false;
+
         bool shouldCountBlockLine = true;
         bool wasBlockComment      = false;
 

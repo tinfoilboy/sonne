@@ -156,7 +156,7 @@ void Counter::_LanguageNewLineCheck(CountData& data)
     // parameters for counting a block comment while state is still block comment
     bool blockCommentParams = (data.state == CountState::BLOCK_COMMENT && data.shouldCountBlockLine);
 
-    if (data.state == CountState::LINE_COMMENT || blockCommentParams || data.wasBlockComment)
+    if ((data.state == CountState::LINE_COMMENT && data.countLineComment) || blockCommentParams || data.wasBlockComment)
     {
         shouldCountAsCode = false;
 
@@ -175,8 +175,10 @@ void Counter::_LanguageNewLineCheck(CountData& data)
     bool isNormalParse = (data.state == CountState::NORMAL || data.state == CountState::STRING);
 
     // add to code lines if we are in a block comments and it should count as code or if normally would be code
-    // the first case is allowing for trailing blockCommentBegin delimiters at the end of a code line.
-    if ((data.state == CountState::BLOCK_COMMENT && shouldCountAsCode) ||
+    // first case is allowing line comments to be added as code lines if the `countLineComment` flag is false
+    // the second case is allowing for trailing blockCommentBegin delimiters at the end of a code line.
+    if ((data.state == CountState::LINE_COMMENT && !data.countLineComment) ||
+        (data.state == CountState::BLOCK_COMMENT && shouldCountAsCode) ||
         (isNormalParse && data.lineLengthWithoutWhitespace > 0 && shouldCountAsCode))
     {
         data.info.codeLines++; // increment the lines of source code if we are not in a comment and if line is not empty
@@ -185,6 +187,11 @@ void Counter::_LanguageNewLineCheck(CountData& data)
     if (data.state == CountState::LINE_COMMENT)
     {
         data.state = CountState::NORMAL; // reset the state of the language count parser to normal text
+    }
+
+    if (data.countLineComment)
+    {
+        data.countLineComment = false; // reset the flag for counting line comments as actual comment lines
     }
 
     if (!data.shouldCountBlockLine)
@@ -283,14 +290,18 @@ bool Counter::_LanguageCommentStringChecks(CountData& data)
             }
         }
 
-        // only check for a line comment only if it occurs at the beginning of the line excluding whitespace
-        if (data.lineLengthWithoutWhitespace == 0 && !data.language->lineComment.empty())
+        // check for a line comment but only set it to count if it is at the beginning of the line
+        //
+        // this is to prevent parsing bugs regarding line comments still parsing characters as code
+        if (!data.language->lineComment.empty())
         {
             bool hasLineComment = _CompareStringToBuffer(data.buffer, data.language->lineComment, data.index);
 
             if (hasLineComment)
             {
                 data.state = CountState::LINE_COMMENT;
+
+                data.countLineComment = (data.lineLengthWithoutWhitespace == 0); // only count if it begins a line
 
                 return true; // skip over this character as we know we are in a line comment
             }
