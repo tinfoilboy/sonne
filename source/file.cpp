@@ -290,6 +290,11 @@ std::vector<Entry> Sonne::WalkDirectory(std::string path)
     Entry first = GetFSEntry(path, false);
 #endif
 
+    if (!first.isValid)
+    {
+        return entries;
+    }
+
     while (true)
     {
         Entry next = GetNextEntry(root.fullPath, ((entries.size() == 0) ? first : entries.back()));
